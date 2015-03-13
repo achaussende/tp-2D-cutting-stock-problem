@@ -71,4 +71,8 @@ public class Vector {
         this.x = x;
         this.y = y;
     }
+
+    public double getArea() {
+        return x * y;
+    }
 }

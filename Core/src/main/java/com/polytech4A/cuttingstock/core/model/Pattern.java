@@ -29,7 +29,7 @@ import java.util.ArrayList;
  *
  * @author Antoine CARON
  * @version 1.0
- *          <p/>
+ *          <p>
  *          Representation of a Pattern  for 2D cutting Stock problem.
  *          A pattern is a vector sized by the number of different Image to pack in the Pattern.
  */
@@ -61,5 +61,15 @@ public class Pattern {
 
     public ArrayList<Box> getAmounts() {
         return boxes;
+    }
+
+    public ArrayList<Box> getBoxes() {
+        ArrayList<Box> result = new ArrayList<Box>();
+        boxes.parallelStream().forEach(b -> {
+            for (int i = 0; i < b.getAmount(); i++) {
+                result.add(new Box(b.getSize(), 1));
+            }
+        });
+        return result;
     }
 }

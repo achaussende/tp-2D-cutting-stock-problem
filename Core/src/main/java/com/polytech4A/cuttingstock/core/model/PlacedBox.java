@@ -43,14 +43,14 @@ public class PlacedBox extends Box {
      */
     private boolean rotation;
 
-    public PlacedBox(@NotNull Vector size, @NotNull Vector position, @NotNull boolean rotation) {
-        super(size);
+    public PlacedBox(@NotNull Vector size, int amount, @NotNull Vector position, @NotNull boolean rotation) {
+        super(size, amount);
         this.position = position;
         this.rotation = rotation;
     }
 
     public PlacedBox(@NotNull Box box, @NotNull Vector position, @NotNull boolean rotation) {
-        super(box.getSize());
+        super(box.getSize(), box.getAmount());
         this.position = position;
         this.rotation = rotation;
     }

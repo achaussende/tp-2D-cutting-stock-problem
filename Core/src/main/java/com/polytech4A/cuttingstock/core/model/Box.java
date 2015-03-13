@@ -22,6 +22,8 @@ package com.polytech4A.cuttingstock.core.model;
 
 import com.sun.istack.internal.NotNull;
 
+import java.util.Comparator;
+
 /**
  * Created by Antoine CARON on 12/03/2015.
  *
@@ -31,15 +33,16 @@ import com.sun.istack.internal.NotNull;
  *          A Box is aa representation of a image to pack in a Pattern.
  * @see com.polytech4A.cuttingstock.core.model.Pattern
  */
-public class Box {
+public class Box implements Comparable<Box> {
 
     @NotNull
     private Vector size;
 
     private int amount;
 
-    public Box(Vector size) {
+    public Box(Vector size, int amount) {
         this.size = size;
+        this.amount = amount;
     }
 
     public int getAmount() {
@@ -57,4 +60,39 @@ public class Box {
     public void setSize(Vector size) {
         this.size = size;
     }
+
+    @Override
+    public int compareTo(Box o) {
+        return Comparators.AREA.compare(this, o);
+    }
+
+    public static class Comparators {
+        public static Comparator<Box> X = new Comparator<Box>() {
+            @Override
+            public int compare(Box o1, Box o2) {
+                return (int) (o1.getSize().getX() - o2.getSize().getX());
+            }
+        };
+        public static Comparator<Box> Y = new Comparator<Box>() {
+            @Override
+            public int compare(Box o1, Box o2) {
+                return (int) (o1.getSize().getY() - o2.getSize().getY());
+            }
+        };
+
+        public static Comparator<Box> AREA = new Comparator<Box>() {
+            @Override
+            public int compare(Box o1, Box o2) {
+                return (int) (o1.getSize().getArea() - o2.getSize().getArea());
+            }
+        };
+
+        public static Comparator<Box> AMOUNT = new Comparator<Box>() {
+            @Override
+            public int compare(Box o1, Box o2) {
+                return (o1.getAmount() - o2.getAmount());
+            }
+        };
+    }
+
 }
