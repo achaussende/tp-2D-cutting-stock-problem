@@ -90,4 +90,13 @@ public class Vector {
     public boolean isSmallerThan(Vector v) {
         return getX() <= v.getX() && getY() <= v.getY();
     }
+
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Vector) {
+            return obj != null && getX() == ((Vector) obj).getX() && getY() == ((Vector) obj).getY();
+        }
+        return false;
+    }
 }

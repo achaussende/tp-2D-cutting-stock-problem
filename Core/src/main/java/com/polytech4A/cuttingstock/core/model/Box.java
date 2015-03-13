@@ -29,17 +29,34 @@ import java.util.Comparator;
  *
  * @author Antoine CARON
  * @version 1.0
- *          <p/>
+ *          <p>
  *          A Box is aa representation of a image to pack in a Pattern.
  * @see com.polytech4A.cuttingstock.core.model.Pattern
  */
 public class Box implements Comparable<Box> {
 
+    /**
+     * Size of the box.
+     *
+     * @see com.polytech4A.cuttingstock.core.model.Vector
+     */
     @NotNull
     private Vector size;
 
+    /**
+     * Amount of boxes in a Pattern.
+     *
+     * @see com.polytech4A.cuttingstock.core.model.Pattern
+     */
     private int amount;
 
+    /**
+     * Create an instance of Box.
+     *
+     * @param size   Vector corresponding of the size of the Box.
+     * @param amount Amount of boxes in the pattern.
+     * @see com.polytech4A.cuttingstock.core.model.Vector
+     */
     public Box(Vector size, int amount) {
         this.size = size;
         this.amount = amount;
@@ -62,17 +79,48 @@ public class Box implements Comparable<Box> {
     }
 
     @Override
+    public boolean equals(Object box) {
+        if (box instanceof Box) {
+            return box != null && getSize().equals(((Box) box).getSize());
+        }
+        return false;
+
+    }
+
+    /**
+     * Default comparator method for a box. Compare current object's area and another box's area.
+     *
+     * @param o Box to be compared.
+     * @return Result of subtraction between the two areas.
+     * @see com.polytech4A.cuttingstock.core.model.Vector
+     */
+    @Override
     public int compareTo(Box o) {
         return Comparators.AREA.compare(this, o);
     }
 
+    /**
+     * Comparators class to add comparator methods for Box class.
+     */
     public static class Comparators {
+
+        /**
+         * Compares the X sizes of the boxes.
+         *
+         * @see com.polytech4A.cuttingstock.core.model.Vector
+         */
         public static Comparator<Box> X = new Comparator<Box>() {
             @Override
             public int compare(Box o1, Box o2) {
                 return (int) (o1.getSize().getX() - o2.getSize().getX());
             }
         };
+
+        /**
+         * Compares the Y sizes of the boxes.
+         *
+         * @see com.polytech4A.cuttingstock.core.model.Vector
+         */
         public static Comparator<Box> Y = new Comparator<Box>() {
             @Override
             public int compare(Box o1, Box o2) {
@@ -80,6 +128,11 @@ public class Box implements Comparable<Box> {
             }
         };
 
+        /**
+         * Compares the areas of the boxes.
+         *
+         * @see com.polytech4A.cuttingstock.core.model.Vector
+         */
         public static Comparator<Box> AREA = new Comparator<Box>() {
             @Override
             public int compare(Box o1, Box o2) {
@@ -87,6 +140,9 @@ public class Box implements Comparable<Box> {
             }
         };
 
+        /**
+         * Compares the amount of the boxes.
+         */
         public static Comparator<Box> AMOUNT = new Comparator<Box>() {
             @Override
             public int compare(Box o1, Box o2) {

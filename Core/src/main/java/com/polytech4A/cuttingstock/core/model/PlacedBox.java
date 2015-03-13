@@ -27,7 +27,7 @@ import com.sun.istack.internal.NotNull;
  *
  * @author Antoine CARON
  * @version 1.0
- *          <p/>
+ *          <p>
  *          Representation of a Box placed on a Pattern.
  */
 public class PlacedBox extends Box {
@@ -39,16 +39,31 @@ public class PlacedBox extends Box {
     private Vector position;
 
     /**
-     * Rotation, if true the place is turned.
+     * Rotation, if true the Box is turned.
      */
     private boolean rotation;
 
+    /**
+     * Create an instance of PlacedBox.
+     *
+     * @param size     Vector corresponding of the size of the Box.
+     * @param amount   Amount of boxes in the pattern.
+     * @param position Vector corresponding of the position of the box on the pattern.
+     * @param rotation Boolean indicating if the Box is turned.
+     */
     public PlacedBox(@NotNull Vector size, int amount, @NotNull Vector position, @NotNull boolean rotation) {
         super(size, amount);
         this.position = position;
         this.rotation = rotation;
     }
 
+    /**
+     * Create an instance of PlacedBox.
+     *
+     * @param box      Box which size and amount will be used to instantiate the PlacedBox.
+     * @param position Vector corresponding of the position of the box on the pattern.
+     * @param rotation Boolean indicating if the Box is turned.²
+     */
     public PlacedBox(@NotNull Box box, @NotNull Vector position, @NotNull boolean rotation) {
         super(box.getSize(), box.getAmount());
         this.position = position;
