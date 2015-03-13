@@ -24,6 +24,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class PatternTest {
 
@@ -49,7 +50,7 @@ public class PatternTest {
         ArrayList<Box> result = pattern.getBoxes();
         TestCase.assertEquals(13, result.size());
         for (Box b : result) {
-            System.out.println(b);
+            TestCase.assertEquals(1, Collections.frequency(result, b));
         }
     }
 }
