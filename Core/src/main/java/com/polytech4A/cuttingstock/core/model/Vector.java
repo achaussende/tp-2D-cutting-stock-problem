@@ -25,7 +25,7 @@ package com.polytech4A.cuttingstock.core.model;
  *
  * @author Antoine CARON
  * @version 1.0
- *          <p/>
+ *          <p>
  *          Representation of a classic mathematical 2D vector for Position of Size.
  */
 public class Vector {
@@ -72,7 +72,22 @@ public class Vector {
         this.y = y;
     }
 
+    /**
+     * Compute rectangular area given by the horizontal and vertical values.
+     *
+     * @return Rectangular area
+     */
     public double getArea() {
         return x * y;
+    }
+
+    /**
+     * Compare horizontal and vertical values between current object and an other vector.
+     *
+     * @param v Vector to compare size.
+     * @return True if horizontal and vertical values are smaller or equals to horizontal and vertical values of Vector v.
+     */
+    public boolean isSmallerThan(Vector v) {
+        return getX() <= v.getX() && getY() <= v.getY();
     }
 }
