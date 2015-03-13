@@ -1,3 +1,7 @@
+Logs/
+
+
+#Parameters for IDE
 # Eclipse
 .classpath
 .project
