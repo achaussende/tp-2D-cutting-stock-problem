@@ -20,6 +20,9 @@
 
 package com.polytech4A.cuttingstock.core.packing;
 
+import com.polytech4A.cuttingstock.core.model.Solution;
+import com.sun.istack.internal.NotNull;
+
 /**
  * Created by Antoine CARON on 12/03/2015.
  *
@@ -29,4 +32,26 @@ package com.polytech4A.cuttingstock.core.packing;
  *          Abstract packer algorithm for 2D cutting stock problem.
  */
 public abstract class Packer {
+
+    /**
+     * Boolean function for getting is a solution is packable in each pattern.
+     *
+     * @param solution a Solution.
+     * @return true if the solution is packable.
+     * @see com.polytech4A.cuttingstock.core.model.Solution
+     * @see com.polytech4A.cuttingstock.core.model.Box
+     * @see com.polytech4A.cuttingstock.core.model.Pattern
+     */
+    public abstract boolean isPackable(@NotNull Solution solution);
+
+    /**
+     * Generating a solution with Patterns composed by
+     *
+     * @param solution a Solution
+     * @return Solution with Patterns composed by PlaceBox.
+     * @see com.polytech4A.cuttingstock.core.model.Solution
+     * @see com.polytech4A.cuttingstock.core.model.PlacedBox
+     * @see com.polytech4A.cuttingstock.core.model.Pattern
+     */
+    public abstract Solution getPlacing(@NotNull Solution solution);
 }
