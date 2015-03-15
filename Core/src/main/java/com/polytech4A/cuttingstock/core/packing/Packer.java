@@ -20,8 +20,12 @@
 
 package com.polytech4A.cuttingstock.core.packing;
 
+import com.polytech4A.cuttingstock.core.model.Box;
 import com.polytech4A.cuttingstock.core.model.Solution;
 import com.sun.istack.internal.NotNull;
+
+import java.util.ArrayList;
+import java.util.Comparator;
 
 /**
  * Created by Antoine CARON on 12/03/2015.
@@ -34,15 +38,13 @@ import com.sun.istack.internal.NotNull;
 public abstract class Packer {
 
     /**
-     * Boolean function for getting is a solution is packable in each pattern.
-     *
-     * @param solution a Solution.
-     * @return true if the solution is packable.
-     * @see com.polytech4A.cuttingstock.core.model.Solution
-     * @see com.polytech4A.cuttingstock.core.model.Box
-     * @see com.polytech4A.cuttingstock.core.model.Pattern
+     * Comparators of
      */
-    public abstract boolean isPackable(@NotNull Solution solution);
+    protected ArrayList<Comparator<Box>> boxComparators;
+
+    public Packer(ArrayList<Comparator<Box>> boxComparators) {
+        this.boxComparators = boxComparators;
+    }
 
     /**
      * Generating a solution with Patterns composed by
