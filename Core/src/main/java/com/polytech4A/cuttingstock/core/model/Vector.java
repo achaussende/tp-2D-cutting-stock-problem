@@ -91,6 +91,14 @@ public class Vector {
         return getX() <= v.getX() && getY() <= v.getY();
     }
 
+    /**
+     * Return the Vector which has x as y and vice versa.
+     *
+     * @return Vector with x equals current Vector's y and y equals current Vector's x.
+     */
+    public Vector getInvertedVector() {
+        return new Vector(getY(), getX());
+    }
 
     @Override
     public boolean equals(Object obj) {
