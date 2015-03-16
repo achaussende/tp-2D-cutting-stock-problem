@@ -18,10 +18,11 @@
  *
  */
 
-package com.polytech4A.cuttingstock.core.model;
+package com.polytech4A.cuttingstock.core.packing;
 
-import com.polytech4A.cuttingstock.core.packing.Bin;
-import com.polytech4A.cuttingstock.core.packing.GuillotineSortBFF;
+import com.polytech4A.cuttingstock.core.model.Box;
+import com.polytech4A.cuttingstock.core.model.PlacedBox;
+import com.polytech4A.cuttingstock.core.model.Vector;
 import junit.framework.TestCase;
 
 import java.util.ArrayList;
