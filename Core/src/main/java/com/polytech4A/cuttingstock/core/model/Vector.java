@@ -100,6 +100,14 @@ public class Vector {
         return new Vector(getY(), getX());
     }
 
+    /**
+     * Check if one of dimensions equals 0.
+     * @return True if one of x or y equals 0.
+     */
+    public boolean isDimensionNull() {
+        return (getX() == 0 || getY() == 0);
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof Vector) {

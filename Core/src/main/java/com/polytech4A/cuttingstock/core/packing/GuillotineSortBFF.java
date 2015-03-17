@@ -120,7 +120,7 @@ public class GuillotineSortBFF extends Packer {
                     //Disable bin borthers from other cutting (Vertical or horizontal
                     bin.disableSubBinFromBin(bins);
                     //Generate subBins and adds it
-                    //TODO Add generation of subinds
+                    generateSubBins(bin, placedBox);
                     return placedBox;
                 }
             }
@@ -146,5 +146,51 @@ public class GuillotineSortBFF extends Packer {
         }
     }
 
+    /**
+     * Generate bins from horizontal and vertical cut of current bin with the box placed on it.
+     *
+     * @param bin Current bin to be cut.
+     * @param placedBox Box placed on the current bin.
+     */
+    public void generateSubBins(Bin bin, PlacedBox placedBox) {
+        Vector sizeBox;
+        boolean perfectFit = false;
+        if (placedBox.isRotation()) {
+            sizeBox = placedBox.getSize().getInvertedVector();
+        } else {
+            sizeBox = placedBox.getSize();
+        }
+        //Vertical cut.
+        //First bin.
+        Vector sizeBin = new Vector(bin.getSize().getX() - sizeBox.getX(), bin.getSize().getY());
+        Vector originBin = new Vector(bin.getOrigin().getX() + sizeBox.getX(), bin.getOrigin().getY());
+        if (!sizeBin.isDimensionNull()) {
+            bin.getVerticalsubBin().add(new Bin(sizeBin, bin.getPattern(), originBin));
+        } else {
+            perfectFit = true;
+        }
+        //Second bin.
+        sizeBin = new Vector(sizeBox.getX(), bin.getSize().getY() - sizeBox.getY());
+        originBin = new Vector(bin.getOrigin().getX(), bin.getOrigin().getY() + sizeBox.getY());
+        if (!sizeBin.isDimensionNull()) {
+            bin.getVerticalsubBin().add(new Bin(sizeBin, bin.getPattern(), originBin));
+        } else {
+            perfectFit = true;
+        }
+
+        //Horizontal cut.
+        //First bin
+        sizeBin = new Vector(bin.getSize().getX(), bin.getSize().getY() - sizeBox.getY());
+        originBin = new Vector(bin.getOrigin().getX(), bin.getOrigin().getY() + sizeBox.getY());
+        if (!sizeBin.isDimensionNull() && !perfectFit) {
+            bin.getHorizontalsubBin().add(new Bin(sizeBin, bin.getPattern(), originBin));
+        }
+        //Second bin
+        sizeBin = new Vector(bin.getSize().getX() - sizeBox.getX(), sizeBox.getY());
+        originBin = new Vector(bin.getOrigin().getX() + placedBox.getPosition().getX(), bin.getOrigin().getY());
+        if (!sizeBin.isDimensionNull() && !perfectFit) {
+            bin.getHorizontalsubBin().add(new Bin(sizeBin, bin.getPattern(), originBin));
+        }
+    }
 
 }

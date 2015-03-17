@@ -69,4 +69,24 @@ public class GuillotineSortBFFTest extends TestCase {
         assertEquals(true, placedBox1.getSize().equals(new Vector(3, 7)));
         assertEquals(false, placedBox1.isRotation());
     }
+
+    public void testGenerateSubBins() {
+        Bin bin = new Bin(new Vector(4, 7), null, new Vector(0, 1));
+        Box box1 = new Box(new Vector(1, 2), 1);
+        Box box2 = new Box(new Vector(3, 7), 1);
+        Box box3 = new Box(new Vector(4, 7), 1);
+        PlacedBox placedBox = guillotineSortBFF.generatePlaceBoxForBin(bin, box3);
+        guillotineSortBFF.generateSubBins(bin, placedBox);
+        assertEquals(0, bin.getHorizontalsubBin().size());
+        assertEquals(0, bin.getVerticalsubBin().size());
+        placedBox = guillotineSortBFF.generatePlaceBoxForBin(bin, box2);
+        guillotineSortBFF.generateSubBins(bin, placedBox);
+        assertEquals(0, bin.getHorizontalsubBin().size());
+        assertEquals(1, bin.getVerticalsubBin().size());
+        bin = new Bin(new Vector(4, 7), null, new Vector(0, 1));
+        placedBox = guillotineSortBFF.generatePlaceBoxForBin(bin, box1);
+        guillotineSortBFF.generateSubBins(bin, placedBox);
+        assertEquals(2, bin.getHorizontalsubBin().size());
+        assertEquals(2, bin.getVerticalsubBin().size());
+    }
 }
