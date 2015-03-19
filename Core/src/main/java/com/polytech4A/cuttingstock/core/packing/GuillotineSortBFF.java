@@ -55,7 +55,8 @@ public class GuillotineSortBFF extends Packer {
             ArrayList<Pattern> patterns = solution.getPatterns();
             patterns.parallelStream().forEach(p -> {
                 Pattern pattern = null;
-                for (Comparator<Box> comparator : boxComparators) {
+                while (boxComparators.listIterator().hasNext()) {
+                    Comparator<Box> comparator = boxComparators.listIterator().next();
                     ArrayList<Box> boxes = p.getBoxes();
                     pattern = generatePattern(p, boxes, comparator);
                     if (pattern != null) { //take the first Pattern Found.
@@ -63,12 +64,9 @@ public class GuillotineSortBFF extends Packer {
                         break;
                     }
                 }
-                if (pattern == null) { // If a pattern has no solution for All Comparators.
-                    return;
-                }
             });
         }
-        return null;
+        return new Solution(retPatterns);
     }
 
     private boolean isBinCompatible(@NotNull Vector binVector, @NotNull Vector boxVector) {
@@ -83,7 +81,7 @@ public class GuillotineSortBFF extends Packer {
         bins.add(bin);
         ArrayList<PlacedBox> placedBoxes = generatePlacedBoxes(p, boxes, bins);
         if (placedBoxes != null) {
-            Pattern retPattern = new Pattern(p.getSize(), (ArrayList<Box>) (ArrayList<?>) placedBoxes); //TODO Test..
+            Pattern retPattern = new Pattern(p.getSize(), (ArrayList<Box>) (ArrayList<?>) placedBoxes);
             return retPattern;
         }
         return null;
