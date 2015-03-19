@@ -36,6 +36,8 @@ import java.util.ArrayList;
  */
 public class Solution {
 
+    //TODO In order to execute the solver we have to implement clone method for Solution to keep best Solution founded
+
     @NotNull
     private ArrayList<Pattern> patterns;
 
@@ -45,9 +47,5 @@ public class Solution {
 
     public ArrayList<Pattern> getPatterns() {
         return patterns;
-    }
-
-    public void setPatterns(@NotNull ArrayList<Pattern> patterns) {
-        this.patterns = patterns;
     }
 }

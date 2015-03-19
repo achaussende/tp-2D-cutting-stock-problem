@@ -46,17 +46,23 @@ public class Pattern {
     @NotNull
     private ArrayList<Box> boxes;
 
+    private ArrayList<PlacedBox> placedBoxes;
+
     public Pattern(@NotNull Vector size, @NotNull ArrayList<Box> boxes) {
         this.size = size;
         this.boxes = boxes;
     }
 
-    public Vector getSize() {
-        return size;
+    public ArrayList<PlacedBox> getPlacedBoxes() {
+        return placedBoxes;
     }
 
-    public void setSize(@NotNull Vector size) {
-        this.size = size;
+    public void setPlacedBoxes(ArrayList<PlacedBox> placedBoxes) {
+        this.placedBoxes = placedBoxes;
+    }
+
+    public Vector getSize() {
+        return size;
     }
 
     public ArrayList<Box> getAmounts() {
@@ -64,7 +70,7 @@ public class Pattern {
     }
 
     public ArrayList<Box> getBoxes() {
-        ArrayList<Box> result = new ArrayList<Box>();
+        ArrayList<Box> result = new ArrayList<>();
         boxes.parallelStream().forEach(b -> {
             for (int i = 0; i < b.getAmount(); i++) {
                 result.add(new Box(b.getSize(), 1));

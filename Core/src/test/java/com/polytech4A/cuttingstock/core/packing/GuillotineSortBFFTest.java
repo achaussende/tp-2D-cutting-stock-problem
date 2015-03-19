@@ -20,10 +20,7 @@
 
 package com.polytech4A.cuttingstock.core.packing;
 
-import com.polytech4A.cuttingstock.core.model.Box;
-import com.polytech4A.cuttingstock.core.model.Pattern;
-import com.polytech4A.cuttingstock.core.model.PlacedBox;
-import com.polytech4A.cuttingstock.core.model.Vector;
+import com.polytech4A.cuttingstock.core.model.*;
 import junit.framework.TestCase;
 
 import java.util.ArrayList;
@@ -45,7 +42,7 @@ public class GuillotineSortBFFTest extends TestCase {
     @Override
     public void setUp() throws Exception {
         super.setUp();
-        boxComparators = new ArrayList<Comparator<Box>>();
+        boxComparators = new ArrayList<>();
         boxComparators.add(Box.Comparators.AREA);
         boxComparators.add(Box.Comparators.X);
         boxComparators.add(Box.Comparators.Y);
@@ -97,7 +94,7 @@ public class GuillotineSortBFFTest extends TestCase {
         ArrayList<Box> boxes = new ArrayList<>();
         boxes.add(new Box(new Vector(16, 4), 1));
         boxes.add(new Box(new Vector(3, 7), 1));
-        Pattern pattern = new Pattern(new Vector(20, 30), boxes);
+
 
         ArrayList<Bin> bins = new ArrayList<>();
         bins.add(new Bin(new Vector(1, 2), null, new Vector(1, 1)));
@@ -105,10 +102,10 @@ public class GuillotineSortBFFTest extends TestCase {
         bins.add(new Bin(new Vector(4, 2), null, new Vector(0, 0)));
         bins.add(new Bin(new Vector(5, 9), null, new Vector(0, 7)));
 
-        PlacedBox placedBox = guillotineSortBFF.generatePlacedBox(pattern, bins, boxes.get(0));
+        PlacedBox placedBox = guillotineSortBFF.generatePlacedBox(bins, boxes.get(0));
         assertNull("A placed box has been created. It must not be.", placedBox);
 
-        placedBox = guillotineSortBFF.generatePlacedBox(pattern, bins, boxes.get(1));
+        placedBox = guillotineSortBFF.generatePlacedBox(bins, boxes.get(1));
         assertNotNull("Null returned for placedBox. Test fails.", placedBox);
         assertEquals("Placed box is bad positioned", new Vector(0, 7), placedBox.getPosition());
         assertFalse("Placed box has been rotated. It must not be in this case.", placedBox.isRotation());
@@ -126,14 +123,14 @@ public class GuillotineSortBFFTest extends TestCase {
         ArrayList<Bin> bins = new ArrayList<>();
         bins.add(new Bin(new Vector(20, 10), pattern, new Vector(0, 0)));
 
-        ArrayList<PlacedBox> placedBoxes = guillotineSortBFF.generatePlacedBoxes(pattern, boxes, bins);
+        ArrayList<PlacedBox> placedBoxes = guillotineSortBFF.generatePlacedBoxes(boxes, bins);
         assertNotNull("There should be boxes in returned list of boxes. 1st case: Bigger pattern.", placedBoxes);
 
         //Not all fitted boxes
         pattern = new Pattern(new Vector(3, 3), boxes);
         bins.removeAll(bins);
         bins.add(new Bin(new Vector(3, 3), pattern, new Vector(0, 0)));
-        placedBoxes = guillotineSortBFF.generatePlacedBoxes(pattern, boxes, bins);
+        placedBoxes = guillotineSortBFF.generatePlacedBoxes(boxes, bins);
         assertNull("There should be no boxes in returned list of boxes. 2nd case : Not all fitted boxes", placedBoxes);
 
         //Just fitted pattern.
@@ -145,8 +142,38 @@ public class GuillotineSortBFFTest extends TestCase {
         pattern = new Pattern(new Vector(7, 7), boxes);
         bins.removeAll(bins);
         bins.add(new Bin(new Vector(7, 7), pattern, new Vector(0, 0)));
-        placedBoxes = guillotineSortBFF.generatePlacedBoxes(pattern, boxes, bins);
+        placedBoxes = guillotineSortBFF.generatePlacedBoxes(boxes, bins);
         assertNotNull("There should be boxes in returned list of boxes. 3rd case: adjusted pattern, boxes all fit", placedBoxes);
 
+    }
+
+    public void testGetPlacing() throws Exception {
+        ArrayList<Box> boxes = new ArrayList<>();
+        boxes.add(new Box(new Vector(1, 2), 1));
+        boxes.add(new Box(new Vector(5, 4), 1));
+        boxes.add(new Box(new Vector(3, 7), 1));
+        boxes.add(new Box(new Vector(2, 2), 1));
+
+        ArrayList<Pattern> patterns = new ArrayList<>();
+        patterns.add(new Pattern(new Vector(10, 20), boxes));
+        patterns.add(new Pattern(new Vector(20, 10), boxes));
+        Solution solution = new Solution(patterns);
+        Solution retSolution = guillotineSortBFF.getPlacing(solution);
+        assertNotNull(retSolution);
+        assertNotNull(retSolution.getPatterns().get(0).getPlacedBoxes().get(0).getPosition());
+    }
+
+    public void testGeneratePattern() throws Exception {
+        ArrayList<Box> boxes = new ArrayList<>();
+        //All fitted boxes
+        boxes.add(new Box(new Vector(1, 2), 1));
+        boxes.add(new Box(new Vector(5, 4), 1));
+        boxes.add(new Box(new Vector(3, 7), 1));
+        boxes.add(new Box(new Vector(2, 2), 1));
+        Pattern pattern = new Pattern(new Vector(20, 10), boxes);
+        for (Comparator<Box> comparator : boxComparators) {
+            Pattern retPattern = guillotineSortBFF.generatePattern(pattern, boxes, comparator);
+            assertNotNull(retPattern);
+        }
     }
 }

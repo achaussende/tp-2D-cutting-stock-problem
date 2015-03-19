@@ -51,21 +51,19 @@ public class GuillotineSortBFF extends Packer {
     @Override
     public Solution getPlacing(@NotNull Solution solution) {
         ArrayList<Pattern> retPatterns = new ArrayList<>();
-        synchronized (retPatterns) {
-            ArrayList<Pattern> patterns = solution.getPatterns();
-            patterns.parallelStream().forEach(p -> {
-                Pattern pattern = null;
-                while (boxComparators.listIterator().hasNext()) {
-                    Comparator<Box> comparator = boxComparators.listIterator().next();
-                    ArrayList<Box> boxes = p.getBoxes();
-                    pattern = generatePattern(p, boxes, comparator);
-                    if (pattern != null) { //take the first Pattern Found.
-                        retPatterns.add(pattern);
-                        break;
-                    }
+        ArrayList<Pattern> patterns = solution.getPatterns();
+        patterns.parallelStream().forEach(p -> {
+            Pattern pattern = null;
+            while (boxComparators.listIterator().hasNext()) {
+                Comparator<Box> comparator = boxComparators.listIterator().next();
+                ArrayList<Box> boxes = p.getBoxes();
+                pattern = generatePattern(p, boxes, comparator);
+                if (pattern != null) { //take the first Pattern Found.
+                    retPatterns.add(pattern);
+                    break;
                 }
-            });
-        }
+            }
+        });
         return new Solution(retPatterns);
     }
 
@@ -90,35 +88,35 @@ public class GuillotineSortBFF extends Packer {
      */
     @Nullable
     public Pattern generatePattern(@NotNull Pattern p, @NotNull ArrayList<Box> boxes, @NotNull Comparator<Box> comparator) {
-        Collections.sort(boxes, comparator);
+        Collections.sort(boxes, Collections.reverseOrder(comparator));
         Bin bin = new Bin(p.getSize(), p, new Vector(0, 0));
         ArrayList<Bin> bins = new ArrayList<>();
         bins.add(bin);
-        ArrayList<PlacedBox> placedBoxes = generatePlacedBoxes(p, boxes, bins);
+        ArrayList<PlacedBox> placedBoxes = generatePlacedBoxes(boxes, bins);
         if (placedBoxes != null) {
-            Pattern retPattern = new Pattern(p.getSize(), (ArrayList<Box>) (ArrayList<?>) placedBoxes);
+            Pattern retPattern = new Pattern(p.getSize(), p.getAmounts());
+            retPattern.setPlacedBoxes(placedBoxes);
             return retPattern;
         }
-        return null;
+        return p;
     }
 
     /**
      * Place the boxes on the pattern.
      *
-     * @param p     Kind of pattern where the boxes will be placed.
      * @param boxes Boxes that will be placed.
      * @param bins  List of bins that will be generated.
      * @return List of placed boxes.
      */
     @Nullable
-    public ArrayList<PlacedBox> generatePlacedBoxes(@NotNull Pattern p, @NotNull ArrayList<Box> boxes, @NotNull ArrayList<Bin> bins) {
-        ArrayList<PlacedBox> placedBoxes = new ArrayList<PlacedBox>();
+    public ArrayList<PlacedBox> generatePlacedBoxes(@NotNull ArrayList<Box> boxes, @NotNull ArrayList<Bin> bins) {
+        ArrayList<PlacedBox> placedBoxes = new ArrayList<>();
         ListIterator<Box> iterator = boxes.listIterator();
         boolean boxPacked = false;
         while (iterator.hasNext() && !boxPacked) {
             Box b = iterator.next();
             boxPacked = false;
-            PlacedBox placedBox = generatePlacedBox(p, bins, b);
+            PlacedBox placedBox = generatePlacedBox(bins, b);
             if (placedBox != null) {
                 placedBoxes.add(placedBox);
             } else {
@@ -134,15 +132,14 @@ public class GuillotineSortBFF extends Packer {
     /**
      * Place the box on the pattern.
      *
-     * @param p    Kind of pattern where the boxes will be placed.
      * @param bins List of bins that will be generated.
      * @param box  Box to be placed.
      * @return The box that is now placed. Return null if it can't be placed.
      */
     @Nullable
-    public PlacedBox generatePlacedBox(@NotNull Pattern p, @NotNull ArrayList<Bin> bins, @NotNull Box box) {
+    public PlacedBox generatePlacedBox(@NotNull ArrayList<Bin> bins, @NotNull Box box) {
         for (Bin bin : bins) {
-            if (bin.isActive() == true && (isBinCompatible(bin.getSize(), box.getSize()) || isBinCompatible(bin.getSize(), box.getSize().getInvertedVector()))) {
+            if (bin.isActive() && (isBinCompatible(bin.getSize(), box.getSize()) || isBinCompatible(bin.getSize(), box.getSize().getInvertedVector()))) {
                 PlacedBox placedBox = generatePlaceBoxForBin(bin, box);
                 if (placedBox != null) {
                     //mark Current Bin
@@ -163,7 +160,7 @@ public class GuillotineSortBFF extends Packer {
      *
      * @param bin        Current bin where to place the box.
      * @param boxToPlace Box to place.
-     * @return
+     * @return placebox or null if no place is found.
      */
     @Nullable
     public PlacedBox generatePlaceBoxForBin(@NotNull Bin bin, @NotNull Box boxToPlace) {
