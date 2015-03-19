@@ -97,8 +97,9 @@ public class GuillotineSortBFF extends Packer {
             boxPacked = false;
             PlacedBox placedBox = generatePlacedBox(p, bins, b);
             if (placedBox != null) {
-                boxPacked = true;
                 placedBoxes.add(placedBox);
+            } else {
+                boxPacked = true;
             }
         }
         if (placedBoxes.size() == boxes.size()) {
@@ -118,7 +119,7 @@ public class GuillotineSortBFF extends Packer {
                     //Disable bin borthers from other cutting (Vertical or horizontal
                     bin.disableSubBinFromBin(bins);
                     //Generate subBins and adds it
-                    generateSubBins(bin, placedBox);
+                    generateSubBins(bin, placedBox, bins);
                     return placedBox;
                 }
             }
@@ -150,9 +151,10 @@ public class GuillotineSortBFF extends Packer {
      * @param bin Current bin to be cut.
      * @param placedBox Box placed on the current bin.
      */
-    public void generateSubBins(Bin bin, PlacedBox placedBox) {
+    public void generateSubBins(Bin bin, PlacedBox placedBox, ArrayList<Bin> bins) {
         Vector sizeBox;
         boolean perfectFit = false;
+        Bin bintoCreate;
         if (placedBox.isRotation()) {
             sizeBox = placedBox.getSize().getInvertedVector();
         } else {
@@ -163,7 +165,9 @@ public class GuillotineSortBFF extends Packer {
         Vector sizeBin = new Vector(bin.getSize().getX() - sizeBox.getX(), bin.getSize().getY());
         Vector originBin = new Vector(bin.getOrigin().getX() + sizeBox.getX(), bin.getOrigin().getY());
         if (!sizeBin.isDimensionNull()) {
-            bin.getVerticalsubBin().add(new Bin(sizeBin, bin.getPattern(), originBin));
+            bintoCreate = new Bin(sizeBin, bin.getPattern(), originBin);
+            bin.getVerticalsubBin().add(bintoCreate);
+            bins.add(bintoCreate);
         } else {
             perfectFit = true;
         }
@@ -171,7 +175,9 @@ public class GuillotineSortBFF extends Packer {
         sizeBin = new Vector(sizeBox.getX(), bin.getSize().getY() - sizeBox.getY());
         originBin = new Vector(bin.getOrigin().getX(), bin.getOrigin().getY() + sizeBox.getY());
         if (!sizeBin.isDimensionNull()) {
-            bin.getVerticalsubBin().add(new Bin(sizeBin, bin.getPattern(), originBin));
+            bintoCreate = new Bin(sizeBin, bin.getPattern(), originBin);
+            bin.getVerticalsubBin().add(bintoCreate);
+            bins.add(bintoCreate);
         } else {
             perfectFit = true;
         }
@@ -181,13 +187,17 @@ public class GuillotineSortBFF extends Packer {
         sizeBin = new Vector(bin.getSize().getX(), bin.getSize().getY() - sizeBox.getY());
         originBin = new Vector(bin.getOrigin().getX(), bin.getOrigin().getY() + sizeBox.getY());
         if (!sizeBin.isDimensionNull() && !perfectFit) {
-            bin.getHorizontalsubBin().add(new Bin(sizeBin, bin.getPattern(), originBin));
+            bintoCreate = new Bin(sizeBin, bin.getPattern(), originBin);
+            bin.getHorizontalsubBin().add(bintoCreate);
+            bins.add(bintoCreate);
         }
         //Second bin
         sizeBin = new Vector(bin.getSize().getX() - sizeBox.getX(), sizeBox.getY());
         originBin = new Vector(bin.getOrigin().getX() + placedBox.getPosition().getX(), bin.getOrigin().getY());
         if (!sizeBin.isDimensionNull() && !perfectFit) {
-            bin.getHorizontalsubBin().add(new Bin(sizeBin, bin.getPattern(), originBin));
+            bintoCreate = new Bin(sizeBin, bin.getPattern(), originBin);
+            bin.getHorizontalsubBin().add(bintoCreate);
+            bins.add(bintoCreate);
         }
     }
 
