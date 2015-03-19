@@ -82,8 +82,9 @@ public class GuillotineSortBFF extends Packer {
 
     /**
      * Generate pattern with placed boxes on it.
-     * @param p Kind of pattern where the boxes will be placed.
-     * @param boxes Boxes that will be placed.
+     *
+     * @param p          Kind of pattern where the boxes will be placed.
+     * @param boxes      Boxes that will be placed.
      * @param comparator Comparator to use when sorting boxes.
      * @return A new pattern with the boxes placed on it. Return null if there is no boxes to place.
      */
@@ -103,9 +104,10 @@ public class GuillotineSortBFF extends Packer {
 
     /**
      * Place the boxes on the pattern.
-     * @param p Kind of pattern where the boxes will be placed.
+     *
+     * @param p     Kind of pattern where the boxes will be placed.
      * @param boxes Boxes that will be placed.
-     * @param bins List of bins that will be generated.
+     * @param bins  List of bins that will be generated.
      * @return List of placed boxes.
      */
     @Nullable
@@ -131,10 +133,11 @@ public class GuillotineSortBFF extends Packer {
 
     /**
      * Place the box on the pattern.
-     * @param p Kind of pattern where the boxes will be placed.
+     *
+     * @param p    Kind of pattern where the boxes will be placed.
      * @param bins List of bins that will be generated.
-     * @param box Box to be placed.
-     * @return The box that is now placed.
+     * @param box  Box to be placed.
+     * @return The box that is now placed. Return null if it can't be placed.
      */
     @Nullable
     public PlacedBox generatePlacedBox(@NotNull Pattern p, @NotNull ArrayList<Bin> bins, @NotNull Box box) {
@@ -158,8 +161,8 @@ public class GuillotineSortBFF extends Packer {
     /**
      * Check if the Box in parameters can be placed into the Bin.
      *
-     * @param bin
-     * @param boxToPlace
+     * @param bin        Current bin where to place the box.
+     * @param boxToPlace Box to place.
      * @return
      */
     @Nullable
