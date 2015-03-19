@@ -69,10 +69,24 @@ public class GuillotineSortBFF extends Packer {
         return new Solution(retPatterns);
     }
 
+    /**
+     * Check if a box can be placed in the bin.
+     *
+     * @param binVector Vector of the bin.
+     * @param boxVector Box to be placed in the bin.
+     * @return True if the box can be placed in the bin.
+     */
     private boolean isBinCompatible(@NotNull Vector binVector, @NotNull Vector boxVector) {
         return boxVector.isSmallerThan(binVector);
     }
 
+    /**
+     * Generate pattern with placed boxes on it.
+     * @param p Kind of pattern where the boxes will be placed.
+     * @param boxes Boxes that will be placed.
+     * @param comparator Comparator to use when sorting boxes.
+     * @return A new pattern with the boxes placed on it. Return null if there is no boxes to place.
+     */
     @Nullable
     public Pattern generatePattern(@NotNull Pattern p, @NotNull ArrayList<Box> boxes, @NotNull Comparator<Box> comparator) {
         Collections.sort(boxes, comparator);
@@ -87,6 +101,13 @@ public class GuillotineSortBFF extends Packer {
         return null;
     }
 
+    /**
+     * Place the boxes on the pattern.
+     * @param p Kind of pattern where the boxes will be placed.
+     * @param boxes Boxes that will be placed.
+     * @param bins List of bins that will be generated.
+     * @return List of placed boxes.
+     */
     @Nullable
     public ArrayList<PlacedBox> generatePlacedBoxes(@NotNull Pattern p, @NotNull ArrayList<Box> boxes, @NotNull ArrayList<Bin> bins) {
         ArrayList<PlacedBox> placedBoxes = new ArrayList<PlacedBox>();
@@ -108,6 +129,13 @@ public class GuillotineSortBFF extends Packer {
         return null;
     }
 
+    /**
+     * Place the box on the pattern.
+     * @param p Kind of pattern where the boxes will be placed.
+     * @param bins List of bins that will be generated.
+     * @param box Box to be placed.
+     * @return The box that is now placed.
+     */
     @Nullable
     public PlacedBox generatePlacedBox(@NotNull Pattern p, @NotNull ArrayList<Bin> bins, @NotNull Box box) {
         for (Bin bin : bins) {
@@ -148,7 +176,7 @@ public class GuillotineSortBFF extends Packer {
     /**
      * Generate bins from horizontal and vertical cut of current bin with the box placed on it.
      *
-     * @param bin Current bin to be cut.
+     * @param bin       Current bin to be cut.
      * @param placedBox Box placed on the current bin.
      */
     public void generateSubBins(Bin bin, PlacedBox placedBox, ArrayList<Bin> bins) {
