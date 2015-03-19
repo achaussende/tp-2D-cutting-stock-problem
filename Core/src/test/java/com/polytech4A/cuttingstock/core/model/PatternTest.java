@@ -30,11 +30,14 @@ public class PatternTest {
 
     private Pattern pattern;
 
+    private Box boxeToTest;
+
     @Before
     public void setUp() throws Exception {
         ArrayList<Box> boxes = new ArrayList<Box>();
         pattern = new Pattern(new Vector(1, 1), boxes);
-        boxes.add(new Box(new Vector(933.0, 372.0), 6));
+        boxeToTest = new Box(new Vector(933.0, 372.0), 6);
+        boxes.add(boxeToTest);
         boxes.add(new Box(new Vector(893.0, 307.0), 2));
         boxes.add(new Box(new Vector(727.0, 333.0), 5));
     }
@@ -43,14 +46,13 @@ public class PatternTest {
     public void tearDown() throws Exception {
         pattern.getAmounts().clear();
         pattern = null;
+        boxeToTest = null;
     }
 
     @Test
     public void testGetBoxes() throws Exception {
         ArrayList<Box> result = pattern.getBoxes();
         TestCase.assertEquals(13, result.size());
-        for (Box b : result) {
-            TestCase.assertEquals(1, Collections.frequency(result, b));
-        }
+        TestCase.assertEquals(6, Collections.frequency(result, boxeToTest));
     }
 }
