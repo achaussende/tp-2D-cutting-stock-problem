@@ -18,29 +18,29 @@
  *
  */
 
-package com.polytech4A.cuttingstock.core.resolution.util;
-
-import com.polytech4A.cuttingstock.core.model.Solution;
-import com.polytech4A.cuttingstock.core.resolution.util.context.Context;
-import com.polytech4A.cuttingstock.core.resolution.util.context.ContextLoaderUtils;
-import com.polytech4A.cuttingstock.core.resolution.util.context.MalformedContextFileException;
-
-import java.io.IOException;
+package com.polytech4A.cuttingstock.core.resolution.util.context;
 
 /**
- * Created by Antoine CARON on 12/03/2015.
+ * Created by Antoine CARON on 21/03/2015.
  *
  * @author Antoine CARON
  * @version 1.0
- *          <p/>
- *          Utils for Loading, Saving and Initialising Resolutions of the problem in order to launch many tests in once execution.
  */
-public interface IResolutionUtils {
-
-    public default Context loadContext(String path) throws IOException, MalformedContextFileException {
-        return ContextLoaderUtils.loadContext(path);
+public class MalformedContextFileException extends Exception {
+    /**
+     * Constructs a new exception with the specified detail message.  The
+     * cause is not initialized, and may subsequently be initialized by
+     * a call to {@link #initCause}.
+     *
+     * @param message the detail message. The detail message is saved for
+     *                later retrieval by the {@link #getMessage()} method.
+     */
+    public MalformedContextFileException(String message) {
+        super(message);
     }
 
-    public Solution generateFirstSolution(Context context);
 
+    public MalformedContextFileException() {
+        super("Error Context File don't have the write structure");
+    }
 }

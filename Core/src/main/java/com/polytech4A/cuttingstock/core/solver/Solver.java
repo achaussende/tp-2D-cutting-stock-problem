@@ -21,7 +21,7 @@
 package com.polytech4A.cuttingstock.core.solver;
 
 import com.polytech4A.cuttingstock.core.model.Solution;
-import com.polytech4A.cuttingstock.core.resolution.util.Context;
+import com.polytech4A.cuttingstock.core.resolution.util.context.Context;
 import com.sun.istack.internal.NotNull;
 
 /**

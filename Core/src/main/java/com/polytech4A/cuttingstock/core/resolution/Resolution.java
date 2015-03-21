@@ -20,7 +20,7 @@
 
 package com.polytech4A.cuttingstock.core.resolution;
 
-import com.polytech4A.cuttingstock.core.resolution.util.Context;
+import com.polytech4A.cuttingstock.core.resolution.util.context.Context;
 import com.polytech4A.cuttingstock.core.solver.Solver;
 
 import java.util.ArrayList;

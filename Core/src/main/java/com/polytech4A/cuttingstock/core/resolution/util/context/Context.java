@@ -18,10 +18,10 @@
  *
  */
 
-package com.polytech4A.cuttingstock.core.resolution.util;
+package com.polytech4A.cuttingstock.core.resolution.util.context;
 
 import com.polytech4A.cuttingstock.core.model.Box;
-import com.polytech4A.cuttingstock.core.model.Pattern;
+import com.polytech4A.cuttingstock.core.model.Vector;
 import com.sun.istack.internal.NotNull;
 
 import java.util.ArrayList;
@@ -31,72 +31,53 @@ import java.util.ArrayList;
  *
  * @author Antoine CARON
  * @version 1.0
- *          <p/>
+ *          <p>
  *          Context Objet for Serialization in XML file.
  */
 public class Context {
 
-    private int id;
+    /**
+     * Id of the context
+     */
+    private String id;
 
     private int patternCost;
 
     private int sheetCost;
 
+    private Vector patternSize;
+
+    /**
+     * Boxes with size and amount to print, not the amount per pattern.
+     */
     @NotNull
     private ArrayList<Box> boxes;
 
-    @NotNull
-    private Pattern pattern;
-
-
-    public Context() {
-    }
-
-    public Context(int id, int patternCost, int sheetCost, @NotNull ArrayList<Box> boxes, @NotNull Pattern pattern) {
+    public Context(String id, int patternCost, int sheetCost, @NotNull ArrayList<Box> boxes,Vector patternSize) {
         this.id = id;
         this.patternCost = patternCost;
         this.sheetCost = sheetCost;
         this.boxes = boxes;
-        this.pattern = pattern;
+        this.patternSize=patternSize;
     }
 
-    public Pattern getPattern() {
-        return pattern;
-    }
-
-    public void setPattern(@NotNull Pattern pattern) {
-        this.pattern = pattern;
-    }
-
-    public int getId() {
+    public String getId() {
         return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public int getPatternCost() {
         return patternCost;
     }
 
-    public void setPatternCost(int patternCost) {
-        this.patternCost = patternCost;
-    }
-
     public int getSheetCost() {
         return sheetCost;
-    }
-
-    public void setSheetCost(int sheetCost) {
-        this.sheetCost = sheetCost;
     }
 
     public ArrayList<Box> getBoxes() {
         return boxes;
     }
 
-    public void setBoxes(@NotNull ArrayList<Box> boxes) {
-        this.boxes = boxes;
+    public Vector getPatternSize() {
+        return patternSize;
     }
 }
