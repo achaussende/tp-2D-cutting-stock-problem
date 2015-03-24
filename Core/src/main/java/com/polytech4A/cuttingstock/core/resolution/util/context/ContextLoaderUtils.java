@@ -34,9 +34,19 @@ import java.util.ArrayList;
  *
  * @author Antoine CARON
  * @version 1.0
+ *          <p>
+ *          Loader of Context files.
  */
 public class ContextLoaderUtils {
 
+    /**
+     * Load the content of the context file.
+     *
+     * @param path path of the context File.
+     * @return Context loaded.
+     * @throws IOException                   if file not found.
+     * @throws MalformedContextFileException if the Context file don't have the right structure.
+     */
     public static Context loadContext(String path) throws IOException, MalformedContextFileException {
         File file = new File(path);
         LineIterator it = FileUtils.lineIterator(file, "UTF-8");
@@ -46,10 +56,10 @@ public class ContextLoaderUtils {
             Double y = loadLine(it, "LY=[0-9]{1,13}(\\.[0-9]*)?");
             int cost = loadLine(it, "m=[0-9]{1,13}(\\.[0-9]*)?").intValue();
             while (it.hasNext()) {
-                boxes.add(loadBoxe(it.nextLine()));
+                boxes.add(loadBox(it.nextLine()));
             }
             LineIterator.closeQuietly(it);
-            return new Context(path, cost, 1, boxes, new Vector(x, y));
+            return new Context(file.getName(), cost, 1, boxes, new Vector(x, y));
         } catch (MalformedContextFileException mctx) {
             throw mctx;
         } finally {
@@ -57,6 +67,14 @@ public class ContextLoaderUtils {
         }
     }
 
+    /**
+     * Line Parser of global first infomrations.
+     *
+     * @param iterator iterator of the openfile.
+     * @param regex    regex of the line.
+     * @return value loaded.
+     * @throws MalformedContextFileException if the Context file don't have the right structure.
+     */
     private static Double loadLine(LineIterator iterator, String regex) throws MalformedContextFileException {
         MalformedContextFileException mctx = new MalformedContextFileException();
         if (iterator.hasNext()) {
@@ -71,7 +89,14 @@ public class ContextLoaderUtils {
         }
     }
 
-    private static Box loadBoxe(String line) throws MalformedContextFileException {
+    /**
+     * Load a box form the file.
+     *
+     * @param line line in the file.
+     * @return Box loaded of the line
+     * @throws MalformedContextFileException if the Context file don't have the right structure.
+     */
+    private static Box loadBox(String line) throws MalformedContextFileException {
         MalformedContextFileException mctx = new MalformedContextFileException();
         if (line.matches("[0-9]{1,13}(\\.[0-9]*)?\\t[0-9]{1,13}(\\.[0-9]*)?\\t\\d{1,5}")) {
             String[] array = line.split("\\t");

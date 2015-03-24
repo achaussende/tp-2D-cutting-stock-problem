@@ -41,10 +41,19 @@ public class Context {
      */
     private String id;
 
+    /**
+     * Cost of a Pattern in €.
+     */
     private int patternCost;
 
+    /**
+     * Cost of a sheet in €.
+     */
     private int sheetCost;
 
+    /**
+     * Size of a Pattern.
+     */
     private Vector patternSize;
 
     /**
