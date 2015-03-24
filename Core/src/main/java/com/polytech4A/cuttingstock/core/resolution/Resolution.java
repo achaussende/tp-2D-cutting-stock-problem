@@ -21,9 +21,11 @@
 package com.polytech4A.cuttingstock.core.resolution;
 
 import com.polytech4A.cuttingstock.core.resolution.util.context.Context;
+import com.polytech4A.cuttingstock.core.save.Save;
 import com.polytech4A.cuttingstock.core.solver.Solver;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Antoine on 12/03/2015.
@@ -40,4 +42,7 @@ public class Resolution extends Thread {
     private ArrayList<Resolution> resolutions; //TODO réfléchir sur l'utilité réelle et/ou la complexité d'implémentation
 
     private Solver solver;
+
+    private List<Save> saveMethods;
+
 }
