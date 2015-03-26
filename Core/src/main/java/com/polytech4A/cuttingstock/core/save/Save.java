@@ -37,7 +37,7 @@ public abstract class Save {
     /**
      * Output directory.
      */
-    protected final static String OUTPUT_PATH = "OUTPUT/";
+    protected final static String OUTPUT_PATH = "../../OUTPUT/";
 
     /**
      * Save Method.

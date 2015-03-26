@@ -20,11 +20,19 @@
 
 package com.polytech4A.cuttingstock.core.save;
 
+import com.polytech4A.cuttingstock.core.model.Pattern;
+import com.polytech4A.cuttingstock.core.model.PlacedBox;
 import com.polytech4A.cuttingstock.core.model.Solution;
+import com.polytech4A.cuttingstock.core.model.Vector;
+import org.apache.log4j.Logger;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
 
 /**
  * Created by Antoine CARON on 24/03/2015.
@@ -36,10 +44,11 @@ import java.awt.image.BufferedImage;
  */
 public class ToImg extends Save {
 
+    private static final Logger logger = Logger.getLogger(ToImg.class);
     /**
      * Font size for legend.
      */
-    public static int mFontSize = 90;
+    public static int mFontSize = 30;
     /**
      * Draw border on images or not.
      */
@@ -190,7 +199,7 @@ public class ToImg extends Save {
         int start_x = width / 2 - stringLen / 2;
 
         graph.setPaint(getTextColor(color));
-        graph.drawString(label, x + start_x, y + (height / 2) + 20);
+        graph.drawString(label, x + start_x, y + (height / 2) + 30);
 
         graph.dispose();
     }
@@ -204,7 +213,46 @@ public class ToImg extends Save {
      */
     @Override
     public void save(String contextId, Solution solution) {
-        //TODO Clean teacher code and make it more linked to our project.
+        ArrayList<Pattern> patterns = solution.getPatterns();
+        int coeff = (int) Math.ceil(800 / Math.max(patterns.get(0).getSize().getX(), patterns.get(0).getSize().getY()));
+        int y = 0;
+        for (Pattern cur_patt : patterns) {
+            BufferedImage img = new BufferedImage(
+                    (int) (patterns.get(0).getSize().getX() * coeff),
+                    (int) (patterns.get(0).getSize().getY() * coeff),
+                    BufferedImage.TYPE_INT_RGB);
+            Graphics2D graphics = img.createGraphics();
+            graphics.setPaint(BACKGROUND);
+            graphics.fillRect(0, 0, img.getWidth(), img.getHeight());
+            int i = 0;
+            for (PlacedBox placedBox : cur_patt.getPlacedBoxes()) {
+                Vector position = placedBox.getPosition();
+                Vector size = placedBox.getSize();
+                if (!placedBox.isRotation()) {
+                    drawRectangle(img, (int) (position.getX() * coeff), (int) (position.getY() * coeff),
+                            (int) (size.getX() * coeff), (int) (size.getY() * coeff), String.valueOf(i),
+                            getColor(i, cur_patt.getPlacedBoxes().size()));
+                } else {
+                    drawRectangle(img, (int) (position.getX() * coeff), (int) (position.getY() * coeff),
+                            (int) (size.getY() * coeff), (int) (size.getX() * coeff), String.valueOf(i),
+                            getColor(i, cur_patt.getPlacedBoxes().size()));
+                }
+                i++;
+            }
+            String filename = OUTPUT_PATH + contextId + "_pattern_" + y + ".png";
+            try {
+                File file = new File(filename);
+                if (!file.exists()) {
+                    file.mkdirs();
+                    file.createNewFile();
+                }
+                ImageIO.write(img, "png", file);
+                logger.info("Create new file " + file.getAbsolutePath());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            y++;
+        }
     }
 
 
