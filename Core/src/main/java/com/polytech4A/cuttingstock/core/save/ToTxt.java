@@ -18,36 +18,30 @@
  *
  */
 
-package com.polytech4A.cuttingstock.core.model;
+package com.polytech4A.cuttingstock.core.save;
 
-import com.sun.istack.internal.NotNull;
-
-import java.util.ArrayList;
+import com.polytech4A.cuttingstock.core.model.Solution;
 
 /**
- * Created by Antoine CARON on 12/03/2015.
+ * Created by Antoine CARON on 24/03/2015.
  *
  * @author Antoine CARON
  * @version 1.0
- *          <p/>
- *          Representation of a solution for 2D cutting stock problem.
- *          It's a representation of a vector sized by the number of pattern.
- * @see Pattern  for information about structure of a Pattern.
  */
-public class Solution {
+public class ToTxt extends Save {
 
-    //TODO In order to execute the solver we have to implement clone method for Solution to keep best Solution founded
-
-    @NotNull
-    private ArrayList<Pattern> patterns;
-
-    public Solution(@NotNull ArrayList<Pattern> patterns) {
-        this.patterns = patterns;
+    public ToTxt() {
     }
 
-    public ArrayList<Pattern> getPatterns() {
-        return patterns;
+    /**
+     * Save Method.
+     *
+     * @param contextId Name of the file.
+     * @param solution  Final Solution.
+     */
+    @Override
+    public void save(String contextId, Solution solution) {
+
     }
 
-    //TODO Add To String method to Solution
 }
