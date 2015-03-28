@@ -40,6 +40,7 @@ public class PatternTest {
         boxes.add(boxeToTest);
         boxes.add(new Box(new Vector(893.0, 307.0), 2));
         boxes.add(new Box(new Vector(727.0, 333.0), 5));
+        boxes.add(new Box(new Vector(5, 7), 0));
     }
 
     @After
