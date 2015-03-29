@@ -87,6 +87,14 @@ public class PlacedBox extends Box {
         this.rotation = rotation;
     }
 
+    public double getWidth() {
+        return (rotation) ? position.getY() : position.getX();
+    }
+
+    public double getHeight() {
+        return (rotation) ? position.getX() : position.getY();
+    }
+
     @Override
     protected PlacedBox clone() throws CloneNotSupportedException {
         return new PlacedBox(getSize().clone(), getAmount(), getPosition().clone(), rotation);
