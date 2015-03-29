@@ -66,7 +66,7 @@ public class Pattern {
      */
     public Pattern(Pattern p) {
         try {
-            Pattern pattern = (Pattern) p.clone();
+            Pattern pattern = p.clone();
             this.size = p.getSize();
             this.boxes = p.getAmounts();
             this.placedBoxes = p.getPlacedBoxes();
@@ -103,23 +103,25 @@ public class Pattern {
     }
 
     @Override
-    protected Object clone() throws CloneNotSupportedException {
+    protected Pattern clone() throws CloneNotSupportedException {
         ArrayList<Box> clonedBoxes = new ArrayList<Box>();
         for (Box b : boxes) {
-            clonedBoxes.add((Box) b.clone());
+            clonedBoxes.add(b.clone());
         }
         ArrayList<PlacedBox> clonedPlacedBoxes = new ArrayList<PlacedBox>();
-        for (PlacedBox placedBox : placedBoxes) {
-            clonedBoxes.add((PlacedBox) placedBox.clone());
+        if (placedBoxes != null) {
+            for (PlacedBox placedBox : placedBoxes) {
+                clonedBoxes.add(placedBox.clone());
+            }
         }
-        return new Pattern((Vector) size.clone(), clonedBoxes, clonedPlacedBoxes);
+        return new Pattern(size.clone(), clonedBoxes, clonedPlacedBoxes);
     }
 
     @Override
     public String toString() {
         StringBuffer buffer = new StringBuffer();
         buffer.append("(");
-        for(Box b : getAmounts()) {
+        for (Box b : getAmounts()) {
             buffer.append(b.getAmount());
             buffer.append(",");
         }

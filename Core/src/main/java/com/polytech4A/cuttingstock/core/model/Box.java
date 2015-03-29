@@ -88,8 +88,8 @@ public class Box implements Comparable<Box> {
     }
 
     @Override
-    protected Object clone() throws CloneNotSupportedException {
-        return new Box((Vector) size.clone(), amount);
+    protected Box clone() throws CloneNotSupportedException {
+        return new Box(size.clone(), amount);
     }
 
     /**

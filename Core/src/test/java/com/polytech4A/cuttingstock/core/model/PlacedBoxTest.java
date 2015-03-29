@@ -21,40 +21,24 @@
 package com.polytech4A.cuttingstock.core.model;
 
 import junit.framework.TestCase;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-
-import java.util.ArrayList;
 
 /**
- * Created by Adrien CHAUSSENDE on 29/03/2015.
+ * Created by Antoine CARON on 29/03/2015.
  *
- * @author Adrien CHAUSSENDE
+ * @author Antoine CARON
  * @version 1.0
+ *          <p>
+ *          TestCase for PlacedBox Class.
  */
-public class SolutionTest extends TestCase {
+public class PlacedBoxTest extends TestCase {
 
-    private Solution solution;
-
-    @Before
-    public void setUp() {
-        ArrayList<Pattern> patterns = new ArrayList<Pattern>();
-        ArrayList<Box> solutionBoxes = new ArrayList<Box>();
-        solutionBoxes.add(new Box(new Vector(4, 2), 2));
-        solutionBoxes.add(new Box(new Vector(4,5), 1));
-        patterns.add(new Pattern(new Vector(4, 9), solutionBoxes));
-        solution = new Solution(patterns);
+    public void testClone() throws Exception {
+        PlacedBox p = new PlacedBox(new Vector(1, 2), 2, new Vector(1, 5), true),
+                p1 = p.clone();
+        assertFalse(p == p1);
+        assertEquals(p.getPosition(), p1.getPosition());
+        assertEquals(p.getAmount(), p1.getAmount());
+        assertEquals(p.getSize(), p1.getSize());
+        assertEquals(p.isRotation(), p1.isRotation());
     }
-
-    @After
-    public void tearDown() {
-        solution = null;
-    }
-
-    @Test
-    public void testToString() {
-        assertEquals("Solution = {(2,1)}", solution.toString());
-    }
-    
 }
