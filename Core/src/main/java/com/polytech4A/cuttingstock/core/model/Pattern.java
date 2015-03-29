@@ -53,6 +53,29 @@ public class Pattern {
         this.boxes = boxes;
     }
 
+    public Pattern(@NotNull Vector size, @NotNull ArrayList<Box> boxes, @NotNull ArrayList<PlacedBox> placedBoxes) {
+        this.size = size;
+        this.boxes = boxes;
+        this.placedBoxes = placedBoxes;
+    }
+
+    /**
+     * Clone the pattern in parameters.
+     *
+     * @param p pattern to be cloned.
+     */
+    public Pattern(Pattern p) {
+        try {
+            Pattern pattern = (Pattern) p.clone();
+            this.size = p.getSize();
+            this.boxes = p.getAmounts();
+            this.placedBoxes = p.getPlacedBoxes();
+        } catch (CloneNotSupportedException e) {
+            //TODO : handle in a logger ?
+            e.printStackTrace();
+        }
+    }
+
     public ArrayList<PlacedBox> getPlacedBoxes() {
         return placedBoxes;
     }
@@ -77,5 +100,31 @@ public class Pattern {
             }
         });
         return result;
+    }
+
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        ArrayList<Box> clonedBoxes = new ArrayList<Box>();
+        for (Box b : boxes) {
+            clonedBoxes.add((Box) b.clone());
+        }
+        ArrayList<PlacedBox> clonedPlacedBoxes = new ArrayList<PlacedBox>();
+        for (PlacedBox placedBox : placedBoxes) {
+            clonedBoxes.add((PlacedBox) placedBox.clone());
+        }
+        return new Pattern((Vector) size.clone(), clonedBoxes, clonedPlacedBoxes);
+    }
+
+    @Override
+    public String toString() {
+        StringBuffer buffer = new StringBuffer();
+        buffer.append("(");
+        for(Box b : getAmounts()) {
+            buffer.append(b.getAmount());
+            buffer.append(",");
+        }
+        buffer.deleteCharAt(buffer.toString().length() - 1);
+        buffer.append(")");
+        return buffer.toString();
     }
 }

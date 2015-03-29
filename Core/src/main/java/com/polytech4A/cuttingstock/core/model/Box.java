@@ -87,6 +87,11 @@ public class Box implements Comparable<Box> {
 
     }
 
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        return new Box((Vector) size.clone(), amount);
+    }
+
     /**
      * Default comparator method for a box. Compare current object's area and another box's area.
      *

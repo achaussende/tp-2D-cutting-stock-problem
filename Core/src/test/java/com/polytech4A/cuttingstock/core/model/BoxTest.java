@@ -23,43 +23,24 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.Collections;
+/**
+ * Created by Adrien CHAUSSENDE on 29/03/2015.
+ *
+ * @author Adrien CHAUSSENDE
+ * @version 1.0
+ */
+public class BoxTest extends TestCase {
 
-public class PatternTest extends TestCase {
-
-    private Pattern pattern;
-
-    private Box boxeToTest;
+    private Box box;
 
     @Before
-    public void setUp() throws Exception {
-        ArrayList<Box> boxes = new ArrayList<Box>();
-        pattern = new Pattern(new Vector(1, 1), boxes);
-        boxeToTest = new Box(new Vector(933.0, 372.0), 6);
-        boxes.add(boxeToTest);
-        boxes.add(new Box(new Vector(893.0, 307.0), 2));
-        boxes.add(new Box(new Vector(727.0, 333.0), 5));
-        boxes.add(new Box(new Vector(5, 7), 0));
+    public void setUp() {
+        box = new Box(new Vector(1,5), 2);
     }
 
     @After
-    public void tearDown() throws Exception {
-        pattern.getAmounts().clear();
-        pattern = null;
-        boxeToTest = null;
-    }
-
-    @Test
-    public void testGetBoxes() throws Exception {
-        ArrayList<Box> result = pattern.getBoxes();
-        assertEquals(13, result.size());
-        assertEquals(6, Collections.frequency(result, boxeToTest));
-    }
-
-    @Test
-    public void testToString() {
-        System.out.println(pattern.toString());
+    public void tearDown() {
+        box = null;
     }
 
 }

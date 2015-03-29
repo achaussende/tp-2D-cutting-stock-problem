@@ -36,8 +36,6 @@ import java.util.ArrayList;
  */
 public class Solution {
 
-    //TODO In order to execute the solver we have to implement clone method for Solution to keep best Solution founded
-
     @NotNull
     private ArrayList<Pattern> patterns;
 
@@ -49,5 +47,26 @@ public class Solution {
         return patterns;
     }
 
-    //TODO Add To String method to Solution
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        ArrayList<Pattern> clonedPatterns = new ArrayList<Pattern>();
+        for(Pattern p : patterns) {
+            clonedPatterns.add((Pattern) p.clone());
+        }
+        return new Solution(clonedPatterns);
+    }
+
+    @Override
+    public String toString() {
+        StringBuffer buffer = new StringBuffer();
+        buffer.append("Solution = {");
+        for (Pattern p : patterns) {
+            buffer.append(p.toString());
+            buffer.append(",");
+        }
+        buffer.deleteCharAt(buffer.toString().length() - 1);
+        buffer.append("}");
+        return buffer.toString();
+    }
+
 }

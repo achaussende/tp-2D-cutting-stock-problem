@@ -86,4 +86,9 @@ public class PlacedBox extends Box {
     public void setRotation(@NotNull boolean rotation) {
         this.rotation = rotation;
     }
+
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        return new PlacedBox((Vector) getSize().clone(), getAmount(), (Vector) getPosition().clone(), rotation);
+    }
 }

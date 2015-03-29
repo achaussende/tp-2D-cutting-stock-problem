@@ -115,4 +115,9 @@ public class Vector {
         }
         return false;
     }
+
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        return new Vector(getX(), getY());
+    }
 }

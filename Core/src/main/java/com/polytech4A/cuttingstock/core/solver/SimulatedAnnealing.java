@@ -41,7 +41,7 @@ import java.util.Arrays;
  *          Implementation of Simulated Annealing algorithm for the Cutting Stock problem. See more about the algorithm :
  *          http://en.wikipedia.org/wiki/Simulated_annealing
  */
-public class SimulatedAnnealing extends Solver {
+public class SimulatedAnnealing extends NeighbourSolver {
 
     /**
      * Limit number of iterations of the algorithm.
