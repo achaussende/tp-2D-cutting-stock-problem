@@ -111,12 +111,14 @@ public class GuillotineSortBFFRM extends GuillotineSortBFF {
                     if (v.equals(bin.getOrigin())) {
                         mBin = new Bin(new Vector(yBin.getSize().getX() + bin.getSize().getX(), yBin.getSize().getY()), bin.getPattern(), yBin.getOrigin());
                         merge(bins, mBin, yBin, bin, binMerged);
+                        break;
                     }
                     //ybin is at left
                     v.set(yBin.getOrigin().getX() + yBin.getSize().getX(), bin.getOrigin().getY());
                     if (!binMerged && v.equals(bin.getOrigin())) {
                         mBin = new Bin(new Vector(yBin.getSize().getX() + bin.getSize().getX(), yBin.getSize().getY()), bin.getPattern(), bin.getOrigin());
                         merge(bins, mBin, yBin, bin, binMerged);
+                        break;
                     }
                 }
                 if (!binMerged) {
@@ -126,12 +128,14 @@ public class GuillotineSortBFFRM extends GuillotineSortBFF {
                         if (v.equals(bin.getOrigin())) {
                             mBin = new Bin(new Vector(xBin.getSize().getX(), xBin.getSize().getY() + bin.getSize().getY()), bin.getPattern(), xBin.getOrigin());
                             merge(bins, mBin, xBin, bin, binMerged);
+                            break;
                         }
                         //xBin is at bottom
                         v.set(xBin.getOrigin().getX(), xBin.getOrigin().getY() - bin.getSize().getY());
                         if (!binMerged && v.equals(bin.getOrigin())) {
                             mBin = new Bin(new Vector(xBin.getSize().getX(), xBin.getSize().getY() + bin.getSize().getY()), bin.getPattern(), bin.getOrigin());
                             merge(bins, mBin, xBin, bin, binMerged);
+                            break;
                         }
                     }
                 }
