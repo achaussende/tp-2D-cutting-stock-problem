@@ -74,7 +74,7 @@ public class GuillotineSortBFF extends Packer {
      * @param boxVector Box to be placed in the bin.
      * @return True if the box can be placed in the bin.
      */
-    private boolean isBinCompatible(@NotNull Vector binVector, @NotNull Vector boxVector) {
+    public boolean isBinCompatible(@NotNull Vector binVector, @NotNull Vector boxVector) {
         return boxVector.isSmallerThan(binVector);
     }
 
