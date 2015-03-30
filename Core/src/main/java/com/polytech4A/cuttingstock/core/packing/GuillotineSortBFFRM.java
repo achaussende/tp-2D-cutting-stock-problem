@@ -97,56 +97,47 @@ public class GuillotineSortBFFRM extends GuillotineSortBFF {
      * @param bins List of Bins to Merge.
      */
     public void rectangleMerge(ArrayList<Bin> bins) {
+        ArrayList<Bin> mergedBins = new ArrayList<>();
         for (Bin bin : bins) {
             if (bin.isActive()) {
-                Stream<Bin> sameXBins = bins.parallelStream().filter(b -> (b != bin && (b.getSize().getX() == bin.getSize().getX())));
-                Stream<Bin> sameYBins = bins.parallelStream().filter(b -> (b != bin && (b.getSize().getY() == bin.getSize().getY())));
+                Stream<Bin> sameXBins = bins.parallelStream().filter(b -> (b != bin && b.isActive() && (b.getSize().getX() == bin.getSize().getX())));
+                Stream<Bin> sameYBins = bins.parallelStream().filter(b -> (b != bin && b.isActive() && (b.getSize().getY() == bin.getSize().getY())));
                 Vector v = new Vector(0, 0);
-                //yBin at right
                 Boolean binMerged = sameYBins.anyMatch(yBin -> {
+                    //yBin at right
                     v.set(yBin.getOrigin().getX() - bin.getSize().getX(), yBin.getOrigin().getY());
                     if (v.equals(bin.getOrigin())) {
                         Bin mBin = new Bin(new Vector(yBin.getSize().getX() + bin.getSize().getX(),
+                                yBin.getSize().getY()), bin.getPattern(), bin.getOrigin());
+                        merge(mergedBins, mBin, yBin, bin);
+                        return true;
+                    }
+                    //yBin at left
+                    v.set(yBin.getOrigin().getX() + yBin.getSize().getX(), bin.getOrigin().getY());
+                    if (v.equals(bin.getOrigin())) {
+                        Bin mBin = new Bin(new Vector(yBin.getSize().getX() + bin.getSize().getX(),
                                 yBin.getSize().getY()), bin.getPattern(), yBin.getOrigin());
-                        merge(bins, mBin, yBin, bin);
+                        merge(mergedBins, mBin, yBin, bin);
                         return true;
                     }
                     return false;
                 });
                 if (!binMerged) {
-                    //yBin at left
-                    binMerged = sameYBins.anyMatch(yBin -> {
-                        v.set(yBin.getOrigin().getX() + yBin.getSize().getX(), bin.getOrigin().getY());
-                        if (v.equals(bin.getOrigin())) {
-                            Bin mBin = new Bin(new Vector(yBin.getSize().getX() + bin.getSize().getX(),
-                                    yBin.getSize().getY()), bin.getPattern(), bin.getOrigin());
-                            merge(bins, mBin, yBin, bin);
-                            return true;
-                        }
-                        return false;
-                    });
-                }
-                if (!binMerged) {
-                    //xBin is at Top
-                    binMerged = sameXBins.anyMatch(xBin -> {
+                    sameXBins.anyMatch(xBin -> {
                         v.set(xBin.getOrigin().getX(), xBin.getOrigin().getY() + xBin.getSize().getY());
+                        //xBin is at Top
                         if (v.equals(bin.getOrigin())) {
                             Bin mBin = new Bin(new Vector(xBin.getSize().getX(), xBin.getSize().getY() + bin.getSize().getY()),
                                     bin.getPattern(), xBin.getOrigin());
-                            merge(bins, mBin, xBin, bin);
+                            merge(mergedBins, mBin, xBin, bin);
                             return true;
                         }
-                        return false;
-                    });
-                }
-                if (!binMerged) {
-                    //xBin is at bottom
-                    sameXBins.anyMatch(xBin -> {
+                        //xBin is at bottom
                         v.set(xBin.getOrigin().getX(), xBin.getOrigin().getY() - bin.getSize().getY());
                         if (v.equals(bin.getOrigin())) {
                             Bin mBin = new Bin(new Vector(xBin.getSize().getX(), xBin.getSize().getY() + bin.getSize().getY()),
                                     bin.getPattern(), bin.getOrigin());
-                            merge(bins, mBin, xBin, bin);
+                            merge(mergedBins, mBin, xBin, bin);
                             return true;
                         }
                         return false;
@@ -154,5 +145,6 @@ public class GuillotineSortBFFRM extends GuillotineSortBFF {
                 }
             }
         }
+        bins.addAll(mergedBins);
     }
 }
