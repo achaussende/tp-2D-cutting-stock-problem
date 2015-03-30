@@ -27,8 +27,8 @@ import com.sun.istack.internal.NotNull;
 
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Created by Antoine CARON on 22/03/2015.
@@ -57,11 +57,10 @@ public class GuillotineSortBFFRM extends GuillotineSortBFF {
      * @param bin1       Bin to disable.
      * @param bin2       Bin to disable.
      */
-    private static void merge(@NotNull ArrayList<Bin> bins, @NotNull Bin createdBin, @NotNull Bin bin1, @NotNull Bin bin2, Boolean binMerged) {
+    private static void merge(@NotNull ArrayList<Bin> bins, @NotNull Bin createdBin, @NotNull Bin bin1, @NotNull Bin bin2) {
         bins.add(createdBin);
         bin1.setActive(false);
         bin2.setActive(false);
-        binMerged = true;
     }
 
     /**
@@ -100,46 +99,59 @@ public class GuillotineSortBFFRM extends GuillotineSortBFF {
     public void rectangleMerge(ArrayList<Bin> bins) {
         for (Bin bin : bins) {
             if (bin.isActive()) {
-                List<Bin> sameXBins = bins.parallelStream().filter(b -> (b != bin && (b.getSize().getX() == bin.getSize().getX()))).collect(Collectors.toList());
-                List<Bin> sameYBins = bins.parallelStream().filter(b -> (b != bin && (b.getSize().getY() == bin.getSize().getY()))).collect(Collectors.toList());
+                Stream<Bin> sameXBins = bins.parallelStream().filter(b -> (b != bin && (b.getSize().getX() == bin.getSize().getX())));
+                Stream<Bin> sameYBins = bins.parallelStream().filter(b -> (b != bin && (b.getSize().getY() == bin.getSize().getY())));
                 Vector v = new Vector(0, 0);
-                Boolean binMerged = false;
-                Bin mBin;
-                for (Bin yBin : sameYBins) {
-                    //ybin is at right
+                //yBin at right
+                Boolean binMerged = sameYBins.anyMatch(yBin -> {
                     v.set(yBin.getOrigin().getX() - bin.getSize().getX(), yBin.getOrigin().getY());
                     if (v.equals(bin.getOrigin())) {
-                        mBin = new Bin(new Vector(yBin.getSize().getX() + bin.getSize().getX(), yBin.getSize().getY()), bin.getPattern(), yBin.getOrigin());
-                        merge(bins, mBin, yBin, bin, binMerged);
-                        break;
+                        Bin mBin = new Bin(new Vector(yBin.getSize().getX() + bin.getSize().getX(),
+                                yBin.getSize().getY()), bin.getPattern(), yBin.getOrigin());
+                        merge(bins, mBin, yBin, bin);
+                        return true;
                     }
-                    //ybin is at left
-                    v.set(yBin.getOrigin().getX() + yBin.getSize().getX(), bin.getOrigin().getY());
-                    if (!binMerged && v.equals(bin.getOrigin())) {
-                        mBin = new Bin(new Vector(yBin.getSize().getX() + bin.getSize().getX(), yBin.getSize().getY()), bin.getPattern(), bin.getOrigin());
-                        merge(bins, mBin, yBin, bin, binMerged);
-                        break;
-                    }
+                    return false;
+                });
+                if (!binMerged) {
+                    //yBin at left
+                    binMerged = sameYBins.anyMatch(yBin -> {
+                        v.set(yBin.getOrigin().getX() + yBin.getSize().getX(), bin.getOrigin().getY());
+                        if (v.equals(bin.getOrigin())) {
+                            Bin mBin = new Bin(new Vector(yBin.getSize().getX() + bin.getSize().getX(),
+                                    yBin.getSize().getY()), bin.getPattern(), bin.getOrigin());
+                            merge(bins, mBin, yBin, bin);
+                            return true;
+                        }
+                        return false;
+                    });
                 }
                 if (!binMerged) {
-                    for (Bin xBin : sameXBins) {
-                        //xBin is at top
+                    //xBin is at Top
+                    binMerged = sameXBins.anyMatch(xBin -> {
                         v.set(xBin.getOrigin().getX(), xBin.getOrigin().getY() + xBin.getSize().getY());
                         if (v.equals(bin.getOrigin())) {
-                            mBin = new Bin(new Vector(xBin.getSize().getX(), xBin.getSize().getY() + bin.getSize().getY()), bin.getPattern(), xBin.getOrigin());
-                            merge(bins, mBin, xBin, bin, binMerged);
-                            break;
+                            Bin mBin = new Bin(new Vector(xBin.getSize().getX(), xBin.getSize().getY() + bin.getSize().getY()),
+                                    bin.getPattern(), xBin.getOrigin());
+                            merge(bins, mBin, xBin, bin);
+                            return true;
                         }
-                        //xBin is at bottom
-                        v.set(xBin.getOrigin().getX(), xBin.getOrigin().getY() - bin.getSize().getY());
-                        if (!binMerged && v.equals(bin.getOrigin())) {
-                            mBin = new Bin(new Vector(xBin.getSize().getX(), xBin.getSize().getY() + bin.getSize().getY()), bin.getPattern(), bin.getOrigin());
-                            merge(bins, mBin, xBin, bin, binMerged);
-                            break;
-                        }
-                    }
+                        return false;
+                    });
                 }
-                binMerged = false;
+                if (!binMerged) {
+                    //xBin is at bottom
+                    sameXBins.anyMatch(xBin -> {
+                        v.set(xBin.getOrigin().getX(), xBin.getOrigin().getY() - bin.getSize().getY());
+                        if (v.equals(bin.getOrigin())) {
+                            Bin mBin = new Bin(new Vector(xBin.getSize().getX(), xBin.getSize().getY() + bin.getSize().getY()),
+                                    bin.getPattern(), bin.getOrigin());
+                            merge(bins, mBin, xBin, bin);
+                            return true;
+                        }
+                        return false;
+                    });
+                }
             }
         }
     }
