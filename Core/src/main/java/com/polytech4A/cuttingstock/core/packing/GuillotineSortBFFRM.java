@@ -60,7 +60,9 @@ public class GuillotineSortBFFRM extends GuillotineSortBFF {
     private static void merge(@NotNull ArrayList<Bin> bins, @NotNull Bin createdBin, @NotNull Bin bin1, @NotNull Bin bin2) {
         bins.add(createdBin);
         bin1.setActive(false);
+        bin1.disableSubBinFromBin(bins);
         bin2.setActive(false);
+        bin2.disableSubBinFromBin(bins);
     }
 
     /**
@@ -97,6 +99,21 @@ public class GuillotineSortBFFRM extends GuillotineSortBFF {
      * @param bins List of Bins to Merge.
      */
     public void rectangleMerge(ArrayList<Bin> bins) {
+        ArrayList<Bin> mergedBins;
+        do {
+            mergedBins = recurseMerging(bins);
+            bins.addAll(mergedBins);
+        }
+        while (mergedBins.size() > 0);
+    }
+
+    /**
+     * Recurse function for merging bins.
+     *
+     * @param bins bins to Merge.
+     * @return List of merged Bins.
+     */
+    private ArrayList<Bin> recurseMerging(ArrayList<Bin> bins) {
         ArrayList<Bin> mergedBins = new ArrayList<>();
         for (Bin bin : bins) {
             if (bin.isActive()) {
@@ -145,6 +162,6 @@ public class GuillotineSortBFFRM extends GuillotineSortBFF {
                 }
             }
         }
-        bins.addAll(mergedBins);
+        return mergedBins;
     }
 }
