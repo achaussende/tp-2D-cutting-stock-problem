@@ -39,15 +39,15 @@ public class Context {
     /**
      * Id of the context
      */
-    private String id;
+    private String label;
 
     /**
-     * Cost of a Pattern in €.
+     * Cost of a Pattern in ï¿½.
      */
     private int patternCost;
 
     /**
-     * Cost of a sheet in €.
+     * Cost of a sheet in ï¿½.
      */
     private int sheetCost;
 
@@ -62,16 +62,16 @@ public class Context {
     @NotNull
     private ArrayList<Box> boxes;
 
-    public Context(String id, int patternCost, int sheetCost, @NotNull ArrayList<Box> boxes,Vector patternSize) {
-        this.id = id;
+    public Context(String label, int patternCost, int sheetCost, @NotNull ArrayList<Box> boxes, Vector patternSize) {
+        this.label = label;
         this.patternCost = patternCost;
         this.sheetCost = sheetCost;
         this.boxes = boxes;
         this.patternSize=patternSize;
     }
 
-    public String getId() {
-        return id;
+    public String getLabel() {
+        return label;
     }
 
     public int getPatternCost() {
