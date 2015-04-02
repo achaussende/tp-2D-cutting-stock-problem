@@ -20,27 +20,14 @@
 
 package com.polytech4A.cuttingstock.core.resolution.util;
 
-import com.polytech4A.cuttingstock.core.model.Solution;
-import com.polytech4A.cuttingstock.core.resolution.util.context.Context;
-import com.polytech4A.cuttingstock.core.resolution.util.context.ContextLoaderUtils;
-import com.polytech4A.cuttingstock.core.resolution.util.context.MalformedContextFileException;
-
-import java.io.IOException;
-
 /**
  * Created by Antoine CARON on 12/03/2015.
  *
  * @author Antoine CARON
  * @version 1.0
- *          <p/>
+ *          <p>
  *          Utils for Loading, Saving and Initialising Resolutions of the problem in order to launch many tests in once execution.
  */
 public interface IResolutionUtils {
-
-    public default Context loadContext(String path) throws IOException, MalformedContextFileException {
-        return ContextLoaderUtils.loadContext(path);
-    }
-
-    public Solution generateFirstSolution(Context context);
 
 }

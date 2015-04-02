@@ -20,10 +20,17 @@
 
 package com.polytech4A.cuttingstock.core.resolution;
 
+import com.polytech4A.cuttingstock.core.model.Box;
+import com.polytech4A.cuttingstock.core.model.Pattern;
+import com.polytech4A.cuttingstock.core.model.Solution;
+import com.polytech4A.cuttingstock.core.resolution.util.IResolutionUtils;
 import com.polytech4A.cuttingstock.core.resolution.util.context.Context;
+import com.polytech4A.cuttingstock.core.resolution.util.context.ContextLoaderUtils;
+import com.polytech4A.cuttingstock.core.resolution.util.context.MalformedContextFileException;
 import com.polytech4A.cuttingstock.core.save.Save;
 import com.polytech4A.cuttingstock.core.solver.Solver;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,10 +46,45 @@ public class Resolution extends Thread {
 
     private Context context;
 
-    private ArrayList<Resolution> resolutions; //TODO réfléchir sur l'utilité réelle et/ou la complexité d'implémentation
+    private ArrayList<Resolution> resolutions;
+    //TODO réfléchir sur l'utilité réelle et/ou la complexité d'implémentation
 
     private Solver solver;
 
     private List<Save> saveMethods;
 
+    private IResolutionUtils resolutionUtils;
+
+    /**
+     * Load context function.
+     *
+     * @param path Path to the Context file.
+     * @return Context instance.
+     * @throws java.io.IOException                                                                    If the file opening throw exception.
+     * @throws com.polytech4A.cuttingstock.core.resolution.util.context.MalformedContextFileException If teh file don't have the good structure.
+     */
+    public static Context loadContext(String path) throws IOException, MalformedContextFileException {
+        return ContextLoaderUtils.loadContext(path);
+    }
+
+    /**
+     * Generate the first Solution from a NotNull Context in attribut.
+     *
+     * @return Solution with pattern and Boxes.
+     * @see com.polytech4A.cuttingstock.core.resolution.util.context.Context
+     * @see com.polytech4A.cuttingstock.core.model.Pattern
+     * @see com.polytech4A.cuttingstock.core.model.Box
+     */
+    public static Solution generateFirstSolution(Context context) {
+        double pattern_area = context.getPatternSize().getArea();
+        double boxes_totalArea = context.getBoxes().parallelStream().mapToDouble(b -> b.getSize().getArea()).sum();
+        double nbPatterns = Math.ceil(boxes_totalArea / pattern_area);
+        ArrayList<Pattern> patterns = new ArrayList<>();
+        for (int i = 0; i < nbPatterns; i++) {
+            ArrayList<Box> boxes = (ArrayList<Box>) context.getBoxes().clone();
+            boxes.parallelStream().forEach(b -> b.setAmount(1));
+            patterns.add(new Pattern(context.getPatternSize(), boxes));
+        }
+        return new Solution(patterns);
+    }
 }
