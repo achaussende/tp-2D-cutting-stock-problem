@@ -22,15 +22,8 @@ package com.polytech4A.cuttingstock.core.solver;
 
 import com.polytech4A.cuttingstock.core.method.LinearResolutionMethod;
 import com.polytech4A.cuttingstock.core.model.Solution;
-import com.polytech4A.cuttingstock.core.resolution.Resolution;
 import com.polytech4A.cuttingstock.core.resolution.util.context.Context;
 import com.sun.istack.internal.NotNull;
-import org.apache.commons.math.optimization.linear.LinearConstraint;
-import org.apache.commons.math.optimization.linear.LinearObjectiveFunction;
-
-import javax.sound.sampled.Line;
-import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  * Created by Adrien CHAUSSENDE on 13/03/2015.

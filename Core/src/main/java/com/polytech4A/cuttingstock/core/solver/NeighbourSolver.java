@@ -18,6 +18,8 @@
 
 package com.polytech4A.cuttingstock.core.solver;
 
+import com.polytech4A.cuttingstock.core.solver.neighbour.INeighbourUtils;
+
 import java.util.ArrayList;
 
 /**

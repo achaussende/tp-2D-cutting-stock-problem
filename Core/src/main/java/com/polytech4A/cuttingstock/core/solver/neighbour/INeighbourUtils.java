@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.polytech4A.cuttingstock.core.solver;
+package com.polytech4A.cuttingstock.core.solver.neighbour;
 
 import com.polytech4A.cuttingstock.core.model.Solution;
 
@@ -28,14 +28,15 @@ import java.util.ArrayList;
  * @author Adrien CHAUSSENDE
  * @version 1.0
  *          <p>
- *          Generator of neighbours using a box move from a pattern to an other.
+ *          Utils for generating neighbours of a solution following a certain method.
  */
-public class MoveNeighbour implements INeighbourUtils {
+public interface INeighbourUtils {
+
     /**
-     * {@inheritDoc}
+     * Get neighbours for this solution.
+     *
+     * @param s current solution.
+     * @return Generated neighbours for this solution.
      */
-    @Override
-    public ArrayList<Solution> getNeighbourhood(Solution s) {
-        return null;
-    }
+    public ArrayList<Solution> getNeighbourhood(Solution s);
 }

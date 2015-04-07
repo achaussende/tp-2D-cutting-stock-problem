@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.polytech4A.cuttingstock.core.solver;
+package com.polytech4A.cuttingstock.core.solver.neighbour;
 
 import com.polytech4A.cuttingstock.core.model.Solution;
 
