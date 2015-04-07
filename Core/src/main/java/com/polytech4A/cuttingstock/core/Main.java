@@ -20,10 +20,6 @@
 
 package com.polytech4A.cuttingstock.core;
 
-import org.apache.log4j.*;
-
-import java.io.IOException;
-
 /**
  * Created by Antoine on 12/03/2015.
  *
@@ -45,26 +41,7 @@ public class Main {
      * @param args arg0 = port, arg1 = nbConnection, arg2 = boolDeleteMsg
      */
     public static void main(String[] args) {
-        defineLogger();
-    }
-
-    /**
-     * Define the Logger Appender for LOG4j
-     */
-    private static void defineLogger() {
-        HTMLLayout layout = new HTMLLayout();
-        DailyRollingFileAppender appender = null;
-        try {
-            appender = new DailyRollingFileAppender(layout, "./Logs/log.html", "'.'yyyy-MM-dd");
-            appender.activateOptions();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        ConsoleAppender ca = new ConsoleAppender();
-        ca.setLayout(new SimpleLayout());
-        ca.activateOptions();
-        logger.addAppender(appender);
-        logger.addAppender(ca);
-        logger.setLevel(Level.DEBUG);
+        logger.info("STARTED");
+        logger.info("STOPPED");
     }
 }
