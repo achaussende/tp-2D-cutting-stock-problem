@@ -22,8 +22,12 @@ package com.polytech4A.cuttingstock.core.solver;
 
 import com.polytech4A.cuttingstock.core.method.LinearResolutionMethod;
 import com.polytech4A.cuttingstock.core.model.Solution;
+import com.polytech4A.cuttingstock.core.packing.Packer;
 import com.polytech4A.cuttingstock.core.resolution.util.context.Context;
+import com.polytech4A.cuttingstock.core.solver.neighbour.INeighbourUtils;
 import com.sun.istack.internal.NotNull;
+
+import java.util.ArrayList;
 
 /**
  * Created by Adrien CHAUSSENDE on 13/03/2015.
@@ -56,6 +60,16 @@ public class SimulatedAnnealing extends NeighbourSolver {
      * Method to resolve linear programming problem.
      */
     private LinearResolutionMethod method;
+
+
+    public SimulatedAnnealing(Packer packer, LinearResolutionMethod simplex, ArrayList<INeighbourUtils> neighbourGenerator,
+                              long nbIterations, double mu, double temperature, LinearResolutionMethod method) {
+        super(packer, simplex, neighbourGenerator);
+        this.nbIterations = nbIterations;
+        this.mu = mu;
+        this.temperature = temperature;
+        this.method = method;
+    }
 
     @Override
     public Solution getSolution(@NotNull Solution solution, @NotNull Context context) {

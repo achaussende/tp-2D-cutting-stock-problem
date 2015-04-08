@@ -20,7 +20,9 @@
 
 package com.polytech4A.cuttingstock.core.solver;
 
+import com.polytech4A.cuttingstock.core.method.LinearResolutionMethod;
 import com.polytech4A.cuttingstock.core.model.Solution;
+import com.polytech4A.cuttingstock.core.packing.Packer;
 import com.polytech4A.cuttingstock.core.resolution.util.context.Context;
 import com.sun.istack.internal.NotNull;
 
@@ -33,6 +35,22 @@ import com.sun.istack.internal.NotNull;
  *          Generic solver for 2D cutting stock problem.
  */
 public abstract class Solver {
+
+    /**
+     * Packer Algorithm for packing boxes in Patterns.
+     */
+    protected Packer packer;
+
+    /**
+     * Simplex resolution for calculating objective function (See Simplex Algorithm).
+     */
+    protected LinearResolutionMethod simplex;
+
+
+    public Solver(Packer packer, LinearResolutionMethod simplex) {
+        this.packer = packer;
+        this.simplex = simplex;
+    }
 
     /**
      * @param solution Initial solution for Solver starting.
