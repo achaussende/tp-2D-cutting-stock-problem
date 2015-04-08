@@ -48,7 +48,7 @@ public class Solution {
     }
 
     @Override
-    protected Object clone() throws CloneNotSupportedException {
+    public Solution clone() {
         ArrayList<Pattern> clonedPatterns = new ArrayList<Pattern>();
         for(Pattern p : patterns) {
             clonedPatterns.add((Pattern) p.clone());

@@ -59,23 +59,6 @@ public class Pattern {
         this.placedBoxes = placedBoxes;
     }
 
-    /**
-     * Clone the pattern in parameters.
-     *
-     * @param p pattern to be cloned.
-     */
-    public Pattern(Pattern p) {
-        try {
-            Pattern pattern = p.clone();
-            this.size = p.getSize();
-            this.boxes = p.getAmounts();
-            this.placedBoxes = p.getPlacedBoxes();
-        } catch (CloneNotSupportedException e) {
-            //TODO : handle in a logger ?
-            e.printStackTrace();
-        }
-    }
-
     public ArrayList<PlacedBox> getPlacedBoxes() {
         return placedBoxes;
     }
@@ -103,7 +86,7 @@ public class Pattern {
     }
 
     @Override
-    protected Pattern clone() throws CloneNotSupportedException {
+    public Pattern clone() {
         ArrayList<Box> clonedBoxes = new ArrayList<Box>();
         for (Box b : boxes) {
             clonedBoxes.add(b.clone());

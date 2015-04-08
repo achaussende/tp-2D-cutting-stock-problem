@@ -96,7 +96,7 @@ public class PlacedBox extends Box {
     }
 
     @Override
-    protected PlacedBox clone() throws CloneNotSupportedException {
+    public PlacedBox clone() {
         return new PlacedBox(getSize().clone(), getAmount(), getPosition().clone(), rotation);
     }
 }

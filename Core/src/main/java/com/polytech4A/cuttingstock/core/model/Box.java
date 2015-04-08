@@ -88,7 +88,7 @@ public class Box implements Comparable<Box> {
     }
 
     @Override
-    protected Box clone() throws CloneNotSupportedException {
+    public Box clone() {
         return new Box(size.clone(), amount);
     }
 
