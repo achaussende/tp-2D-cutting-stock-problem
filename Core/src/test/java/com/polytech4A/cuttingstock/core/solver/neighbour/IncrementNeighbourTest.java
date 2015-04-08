@@ -18,13 +18,12 @@
  *
  */
 
-package com.polytech4A.cuttingstock.core.solver;
+package com.polytech4A.cuttingstock.core.solver.neighbour;
 
 import com.polytech4A.cuttingstock.core.model.Box;
 import com.polytech4A.cuttingstock.core.model.Pattern;
 import com.polytech4A.cuttingstock.core.model.Solution;
 import com.polytech4A.cuttingstock.core.model.Vector;
-import com.polytech4A.cuttingstock.core.solver.neighbour.IncrementNeighbour;
 import junit.framework.TestCase;
 import org.junit.After;
 import org.junit.Before;
