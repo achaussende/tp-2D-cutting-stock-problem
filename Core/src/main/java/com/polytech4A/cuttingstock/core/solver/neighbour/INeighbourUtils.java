@@ -18,6 +18,7 @@
 
 package com.polytech4A.cuttingstock.core.solver.neighbour;
 
+import com.polytech4A.cuttingstock.core.model.Pattern;
 import com.polytech4A.cuttingstock.core.model.Solution;
 
 import java.util.ArrayList;
@@ -39,4 +40,12 @@ public interface INeighbourUtils {
      * @return Generated neighbours for this solution.
      */
     public ArrayList<Solution> getNeighbourhood(Solution s);
+
+    /**
+     * Get a list of patterns which boxes' amounts are 1 or 0 to specify the modifications to do in the neighbours generator.
+     * @param solution Solution containing patterns which will be modified.
+     * @return Solution containing an ArrayList of patterns which boxes amounts are 1 or 0.
+     */
+    public Solution getModifications(Solution solution);
+
 }
