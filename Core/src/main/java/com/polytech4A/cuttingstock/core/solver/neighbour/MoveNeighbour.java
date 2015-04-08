@@ -18,9 +18,13 @@
 
 package com.polytech4A.cuttingstock.core.solver.neighbour;
 
+import com.polytech4A.cuttingstock.core.model.Pattern;
 import com.polytech4A.cuttingstock.core.model.Solution;
+import com.polytech4A.cuttingstock.core.model.Box;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by Adrien CHAUSSENDE on 28/03/2015.
@@ -36,6 +40,49 @@ public class MoveNeighbour implements INeighbourUtils {
      */
     @Override
     public ArrayList<Solution> getNeighbourhood(Solution s) {
-        return null;
+        Solution solution = s.clone();
+        ArrayList<Solution> solutions = new ArrayList<Solution>();
+        ArrayList<Pattern> modifications = getModifications(solution).getPatterns();
+        final int[] count = {0, 0, 0};
+        for (count[0] = 0; count[0] < modifications.size(); ++count[0]) {
+            ArrayList<Box> modificationAmounts = modifications.get(count[0]).getAmounts();
+            ArrayList<Box> patternAmounts = solution.getPatterns().get(count[0]).getAmounts();
+            for (count[1] = 0; count[1] < modificationAmounts.size(); ++count[1]) {
+                Box mBox = modificationAmounts.get(count[1]);
+                Box pBox = patternAmounts.get(count[1]);
+                if (mBox.getAmount() == 1 && mBox.equals(pBox)) {
+                    pBox.setAmount(pBox.getAmount() - 1);
+                    //Do the thing on other patterns.
+                      solution.getPatterns().stream().filter(p -> count[2]++ != count[0]).forEach(p -> {
+                        p.getAmounts().stream().forEach(b -> {
+                            if (b.equals(pBox)) {
+                                b.setAmount(b.getAmount() + 1);
+                                solutions.add(solution.clone());
+                                b.setAmount(b.getAmount() - 1);
+                            }
+                        });
+                    });
+                    pBox.setAmount(pBox.getAmount() + 1);
+                    count[2] = 0;
+                }
+            }
+
+        }
+        return solutions;
+    }
+
+    @Override
+    public Solution getModifications(Solution solution) {
+        ArrayList<Pattern> modifications = new ArrayList<Pattern>();
+        solution.getPatterns().parallelStream().forEach(p -> {
+            Pattern clonedP = p.clone();
+            modifications.add(clonedP);
+            clonedP.getAmounts().parallelStream().forEach(b -> {
+                if (b.getAmount() != 0) {
+                    b.setAmount(1);
+                }
+            });
+        });
+        return new Solution(modifications);
     }
 }
