@@ -112,4 +112,13 @@ public class Pattern {
         buffer.append(")");
         return buffer.toString();
     }
+
+    /**
+     * Boolean Function to know if a pattern is empty i.e. if all his boxes have an amount at 0.
+     *
+     * @return true/false
+     */
+    public boolean isPatternEmpty() {
+        return (this.boxes.parallelStream().mapToInt(b -> b.getAmount()).sum() == 0);
+    }
 }

@@ -42,7 +42,7 @@ public class SolutionTest extends TestCase {
         ArrayList<Pattern> patterns = new ArrayList<Pattern>();
         ArrayList<Box> solutionBoxes = new ArrayList<Box>();
         solutionBoxes.add(new Box(new Vector(4, 2), 2));
-        solutionBoxes.add(new Box(new Vector(4,5), 1));
+        solutionBoxes.add(new Box(new Vector(4, 5), 1));
         patterns.add(new Pattern(new Vector(4, 9), solutionBoxes));
         solution = new Solution(patterns);
     }
@@ -56,5 +56,23 @@ public class SolutionTest extends TestCase {
     public void testToString() {
         assertEquals("Solution = {(2,1)}", solution.toString());
     }
-    
+
+    public void testRemoveEmpty() throws Exception {
+        ArrayList<Pattern> patterns = new ArrayList<Pattern>();
+        ArrayList<Box> solutionBoxes = new ArrayList<Box>();
+        solutionBoxes.add(new Box(new Vector(4, 2), 2));
+        solutionBoxes.add(new Box(new Vector(4, 5), 1));
+        ArrayList<Box> solutionBoxes2 = new ArrayList<Box>();
+        solutionBoxes2.add(new Box(new Vector(4, 2), 0));
+        solutionBoxes2.add(new Box(new Vector(4, 5), 28));
+        ArrayList<Box> solutionBoxes3 = new ArrayList<Box>();
+        solutionBoxes3.add(new Box(new Vector(4, 2), 0));
+        solutionBoxes3.add(new Box(new Vector(4, 5), 0));
+        patterns.add(new Pattern(new Vector(4, 9), solutionBoxes));
+        patterns.add(new Pattern(new Vector(4, 9), solutionBoxes2));
+        patterns.add(new Pattern(new Vector(4, 9), solutionBoxes3));
+        Solution solution1 = new Solution(patterns);
+        solution1.removeEmpty();
+        assertEquals(2, solution1.getPatterns().size());
+    }
 }

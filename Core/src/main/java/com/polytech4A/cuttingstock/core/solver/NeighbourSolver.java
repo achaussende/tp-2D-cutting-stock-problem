@@ -61,6 +61,7 @@ public abstract class NeighbourSolver extends Solver {
                 packedSolution = null;
                 Random random = new Random(System.currentTimeMillis());
                 retSolution = solutions.get(random.nextInt(solutions.size()));
+                retSolution.removeEmpty();
                 packedSolution = packer.getPlacing(retSolution);
             }
             while (packedSolution != null && packedSolution.getPatterns().size() == retSolution.getPatterns().size());

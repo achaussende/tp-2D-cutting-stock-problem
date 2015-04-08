@@ -51,7 +51,7 @@ public class Solution {
     public Solution clone() {
         ArrayList<Pattern> clonedPatterns = new ArrayList<Pattern>();
         for(Pattern p : patterns) {
-            clonedPatterns.add((Pattern) p.clone());
+            clonedPatterns.add(p.clone());
         }
         return new Solution(clonedPatterns);
     }
@@ -69,4 +69,10 @@ public class Solution {
         return buffer.toString();
     }
 
+    /**
+     * Remove Empty Patterns of the solution.
+     */
+    public void removeEmpty() {
+        patterns.removeIf(p -> p.isPatternEmpty());
+    }
 }
