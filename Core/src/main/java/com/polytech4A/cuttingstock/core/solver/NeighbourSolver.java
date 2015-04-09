@@ -75,7 +75,7 @@ public abstract class NeighbourSolver extends Solver {
      * @param solution solution onto generate neighbour.
      * @return ArrayList of solution
      */
-    private ArrayList<Solution> generateNeighbour(final Solution solution) {
+    protected ArrayList<Solution> generateNeighbour(final Solution solution) {
         ArrayList<Solution> solutions = new ArrayList<>();
         for (INeighbourUtils generator : neighbourGenerator) {
             solutions.addAll(generator.getNeighbourhood(solution));

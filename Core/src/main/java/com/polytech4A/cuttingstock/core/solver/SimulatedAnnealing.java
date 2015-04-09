@@ -26,20 +26,33 @@ import com.polytech4A.cuttingstock.core.packing.Packer;
 import com.polytech4A.cuttingstock.core.resolution.util.context.Context;
 import com.polytech4A.cuttingstock.core.solver.neighbour.INeighbourUtils;
 import com.sun.istack.internal.NotNull;
+import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
+import java.util.NoSuchElementException;
+
+import static java.lang.Math.ceil;
 
 /**
  * Created by Adrien CHAUSSENDE on 13/03/2015.
  *
  * @author Adrien CHAUSSENDE
  * @version 1.0
- *          <p/>
+ *          <p>
  *          Implementation of Simulated Annealing algorithm for the Cutting Stock problem. See more about the algorithm :
  *          http://en.wikipedia.org/wiki/Simulated_annealing
  */
 public class SimulatedAnnealing extends NeighbourSolver {
 
+    /**
+     * Logger.
+     */
+    private static final Logger logger = Logger.getLogger(SimulatedAnnealing.class);
+
+    /**
+     * Coefficient of multiplication for generation of the first solution.
+     */
+    private static final double temp_coef = 1.1;
     /**
      * Limit number of iterations of the algorithm.
      */
@@ -54,7 +67,7 @@ public class SimulatedAnnealing extends NeighbourSolver {
      * Global time-varying parameter used in the algorithm.
      * See : http://en.wikipedia.org/wiki/Simulated_annealing#Acceptance_probabilities
      */
-    private double temperature;
+    private double temperature = -1;
 
     /**
      * Method to resolve linear programming problem.
@@ -63,11 +76,9 @@ public class SimulatedAnnealing extends NeighbourSolver {
 
 
     public SimulatedAnnealing(Packer packer, LinearResolutionMethod simplex, ArrayList<INeighbourUtils> neighbourGenerator,
-                              long nbIterations, double mu, double temperature, LinearResolutionMethod method) {
+                              long nbIterations, LinearResolutionMethod method) {
         super(packer, simplex, neighbourGenerator);
         this.nbIterations = nbIterations;
-        this.mu = mu;
-        this.temperature = temperature;
         this.method = method;
     }
 
@@ -76,5 +87,43 @@ public class SimulatedAnnealing extends NeighbourSolver {
         return null;
     }
 
+    /**
+     * Set Temperature of SimulateAnnealing Algorithm.
+     *
+     * @param solution solution onto generate temperature.
+     * @return -1 if definition of the first temperature failed.
+     * Temperature generated.
+     */
+    public int setFirstTemperature(Solution solution) {
+        ArrayList<Solution> solutions = generateNeighbour(solution);
+        try {
+            int temperature = (int) Math.ceil(solutions
+                    .parallelStream()
+                    .filter(s -> s.getPatterns().size() == solution.getPatterns().size())
+                    .mapToInt(s -> (int) ceil(method.minimize(s).getCost()))
+                    .max()
+                    .getAsInt() * temp_coef);
+            this.temperature = temperature;
+            return temperature;
+        } catch (NoSuchElementException ex) {
+            logger.error("Generation of first temperature", ex);
+        }
+        temperature = -1;
+        return -1;
+    }
 
+    /**
+     * Generate Mu from temperature and nbIterations.
+     *
+     * @return mu generated value.
+     */
+    public double setMu() {
+        if (temperature != -1) {
+            double mu = Math.floor(temperature / nbIterations);
+            this.mu = mu;
+            return mu;
+        } else {
+            throw new NullPointerException("Temperature isn't defined");
+        }
+    }
 }
