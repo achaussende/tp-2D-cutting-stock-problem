@@ -24,28 +24,19 @@ import com.polytech4A.cuttingstock.core.model.Solution;
 import java.util.ArrayList;
 
 /**
- * Created by Adrien CHAUSSENDE on 28/03/2015.
+ * Created by Adrien CHAUSSENDE on 09/04/2015.
  *
  * @author Adrien CHAUSSENDE
  * @version 1.0
  *          <p>
- *          Utils for generating neighbours of a solution following a certain method.
+ *          Generator of neighbours using box addition to a pattern. This one adds an empty pattern to generate more neighbours.
  */
-public interface INeighbourUtils {
-
-    /**
-     * Get neighbours for this solution.
-     *
-     * @param s current solution.
-     * @return Generated neighbours for this solution.
-     */
-    public ArrayList<Solution> getNeighbourhood(final Solution s);
-
-    /**
-     * Get a list of patterns which boxes' amounts are 1 or 0 to specify the modifications to do in the neighbours generator.
-     * @param solution Solution containing patterns which will be modified.
-     * @return Solution containing an ArrayList of patterns which boxes amounts are 1 or 0.
-     */
-    public Solution getModifications(final Solution solution);
-
+public class DynPatternIncrementNeighbour extends IncrementNeighbour {
+    @Override
+    public ArrayList<Solution> getNeighbourhood(final Solution s) {
+        Pattern emptyPattern = s.getPatterns().get(0).clone();
+        emptyPattern.getAmounts().parallelStream().forEach(b -> b.setAmount(0));
+        s.getPatterns().add(emptyPattern);
+        return super.getNeighbourhood(s);
+    }
 }

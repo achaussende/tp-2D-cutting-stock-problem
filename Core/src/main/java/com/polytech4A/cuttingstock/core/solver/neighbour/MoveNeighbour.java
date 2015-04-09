@@ -39,7 +39,7 @@ public class MoveNeighbour implements INeighbourUtils {
      * {@inheritDoc}
      */
     @Override
-    public ArrayList<Solution> getNeighbourhood(Solution s) {
+    public ArrayList<Solution> getNeighbourhood(final Solution s) {
         Solution solution = s.clone();
         ArrayList<Solution> solutions = new ArrayList<Solution>();
         ArrayList<Pattern> modifications = getModifications(solution).getPatterns();
@@ -72,17 +72,17 @@ public class MoveNeighbour implements INeighbourUtils {
     }
 
     @Override
-    public Solution getModifications(Solution solution) {
+    public Solution getModifications(final Solution solution) {
         ArrayList<Pattern> modifications = new ArrayList<Pattern>();
-        solution.getPatterns().parallelStream().forEach(p -> {
+        for(Pattern p : solution.getPatterns()) {
             Pattern clonedP = p.clone();
             modifications.add(clonedP);
-            clonedP.getAmounts().parallelStream().forEach(b -> {
-                if (b.getAmount() != 0) {
+            for(Box b : clonedP.getAmounts()) {
+                if(b.getAmount() != 0) {
                     b.setAmount(1);
                 }
-            });
-        });
+            }
+        }
         return new Solution(modifications);
     }
 }
