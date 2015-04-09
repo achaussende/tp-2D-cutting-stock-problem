@@ -49,24 +49,64 @@ public abstract class NeighbourSolver extends Solver {
         this.neighbourGenerator = neighbourGenerator;
     }
 
+    /**
+     * Get a random neighbour from a solution in parameter.
+     *
+     * @param solutions solutions to generate neighbour.
+     * @return a packable solution neighbour of the solution in parameter.
+     */
+    public Solution getRandomSolutionFromNeighbour(final ArrayList<Solution> solutions) {
+        Solution packedSolution;
+        Solution retSolution;
+        do {
+            packedSolution = null;
+            retSolution = null;
+            Random random = new Random(System.currentTimeMillis());
+            retSolution = solutions.get(random.nextInt(solutions.size()));
+            retSolution.removeEmpty();
+            packedSolution = packer.getPlacing(retSolution);
+        } while (packedSolution == null || packedSolution.getPatterns().size() != retSolution.getPatterns().size());
+        return (retSolution != null) ? retSolution : retSolution;
+    }
+
+    /**
+     * Get list of generated neighbour form a solution.
+     *
+     * @param solution solution onto generate neighbour.
+     * @return ArrayList of solution
+     */
+    private ArrayList<Solution> generateNeighbour(final Solution solution) {
+        ArrayList<Solution> solutions = new ArrayList<>();
+        for (INeighbourUtils generator : neighbourGenerator) {
+            solutions.addAll(generator.getNeighbourhood(solution));
+        }
+        return solutions;
+    }
+
+    /**
+     * Generate a random solution from a solution in parameter.
+     * (iterate random choice on neighbour of the solution)
+     *
+     * @param solution First solution of the solver.
+     * @return Random solution generated form neighbour.
+     */
     public Solution getRandomSolution(final Solution solution) {
         Solution retSolution = solution.clone();
         for (int i = 0; i < RANDOM_SOLUTION_NB; i++) {
-            ArrayList<Solution> solutions = new ArrayList<>();
-            for (INeighbourUtils generator : neighbourGenerator) {
-                solutions.addAll(generator.getNeighbourhood(retSolution));
-            }
-            Solution packedSolution;
-            do {
-                packedSolution = null;
-                Random random = new Random(System.currentTimeMillis());
-                retSolution = solutions.get(random.nextInt(solutions.size()));
-                retSolution.removeEmpty();
-                packedSolution = packer.getPlacing(retSolution);
-            }
-            while (packedSolution != null && packedSolution.getPatterns().size() == retSolution.getPatterns().size());
+            ArrayList<Solution> solutions = this.generateNeighbour(retSolution);
+            retSolution = getRandomSolutionFromNeighbour(solutions);
             solutions = null;
         }
         return retSolution;
+    }
+
+    /**
+     * Get a random packable solution form neighbours of a solutions.
+     *
+     * @param solution solution to extract packable neighbours.
+     * @return a Random Packable solution from neighbour of a solution.
+     */
+    public Solution getRandomSolutionFromSolution(final Solution solution) {
+        return getRandomSolutionFromNeighbour(generateNeighbour(solution));
     }
 }
