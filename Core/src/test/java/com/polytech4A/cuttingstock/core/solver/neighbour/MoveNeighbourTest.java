@@ -36,9 +36,13 @@ import java.util.ArrayList;
  */
 public class MoveNeighbourTest extends TestCase {
 
-    public Solution solution;
+    private Solution solution;
 
-    public MoveNeighbour generator;
+    private MoveNeighbour generator;
+
+    public void setGenerator(MoveNeighbour generator) {
+        this.generator = generator;
+    }
 
     public void setUp() {
         ArrayList<Pattern> patterns = new ArrayList<Pattern>();
@@ -57,6 +61,7 @@ public class MoveNeighbourTest extends TestCase {
 
     public void tearDown() {
         solution = null;
+        generator = null;
     }
 
     public void testGetModifications() {
@@ -72,8 +77,12 @@ public class MoveNeighbourTest extends TestCase {
 
     public void testGetNeighbourhood() {
         ArrayList<Solution> solutions = generator.getNeighbourhood(solution);
-        int nbImages = (int) solutions.get(0).getPatterns().get(0).getAmounts().parallelStream().filter(b -> b.getAmount() > 0).count();
+        int totalImages = solution.getPatterns().parallelStream().mapToInt(p -> (int) p.getAmounts().parallelStream().filter(b -> b.getAmount() != 0).count()).sum();
         int nbPattern = solutions.get(0).getPatterns().size();
-        assertEquals(nbImages * (nbPattern * (nbPattern - 1)), solutions.size());
+        int nbSolutions = 0;
+        for(int i = 0; i < totalImages; ++i) {
+            nbSolutions += (nbPattern - 1);
+        }
+        assertEquals(nbSolutions, solutions.size());
     }
 }

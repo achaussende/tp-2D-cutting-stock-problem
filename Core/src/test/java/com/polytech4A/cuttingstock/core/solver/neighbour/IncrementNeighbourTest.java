@@ -45,6 +45,10 @@ public class IncrementNeighbourTest {
 
     private IncrementNeighbour generator;
 
+    public void setGenerator(IncrementNeighbour generator) {
+        this.generator = generator;
+    }
+
     @Before
     public void setUp() throws Exception {
         ArrayList<Pattern> patterns = new ArrayList<Pattern>();
@@ -83,7 +87,7 @@ public class IncrementNeighbourTest {
     @Test
     public void testGetNeighbourhood() throws Exception {
         ArrayList<Solution> solutions = generator.getNeighbourhood(solution);
-        int count = solution.getPatterns().parallelStream().mapToInt(p -> p.getAmounts().size()).sum();
+        int count = solutions.get(0).getPatterns().parallelStream().mapToInt(p -> p.getAmounts().size()).sum();
         count += solution.getPatterns().parallelStream().mapToInt(p -> (int) p.getAmounts().parallelStream().filter(b -> b.getAmount() > 0).count()).sum();
         TestCase.assertEquals(count, solutions.size());
     }

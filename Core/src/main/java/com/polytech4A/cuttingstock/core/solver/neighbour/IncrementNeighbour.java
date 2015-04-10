@@ -37,8 +37,6 @@ import java.util.ArrayList;
  */
 public class IncrementNeighbour implements INeighbourUtils {
 
-    private static final Logger logger = Logger.getLogger(IncrementNeighbour.class);
-
     /**
      * {@inheritDoc}
      */

@@ -19,17 +19,16 @@
 package com.polytech4A.cuttingstock.core.solver.neighbour;
 
 /**
- * Created by Adrien CHAUSSENDE on 09/04/2015.
+ * Created by Adrien CHAUSSENDE on 10/04/2015.
  *
  * @author Adrien CHAUSSENDE
  * @version 1.0
  */
-public class DynPatternMoveNeighbourTest extends MoveNeighbourTest {
+public class DynPatternIncrementNeighbourTest extends IncrementNeighbourTest {
 
     @Override
-    public void setUp() {
+    public void setUp() throws Exception {
         super.setUp();
-        setGenerator(new DynPatternMoveNeighbour());
+        setGenerator(new DynPatternIncrementNeighbour());
     }
-
 }
