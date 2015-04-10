@@ -149,7 +149,7 @@ public class GuillotineSortBFFTest extends TestCase {
 
     public void testGetPlacing() throws Exception {
         ArrayList<Box> boxes = new ArrayList<>();
-        boxes.add(new Box(new Vector(1, 2), 1));
+        boxes.add(new Box(new Vector(1, 2), 2));
         boxes.add(new Box(new Vector(5, 4), 1));
         boxes.add(new Box(new Vector(3, 7), 1));
         boxes.add(new Box(new Vector(2, 2), 1));
@@ -161,6 +161,7 @@ public class GuillotineSortBFFTest extends TestCase {
         Solution retSolution = guillotineSortBFF.getPlacing(solution);
         assertNotNull(retSolution);
         assertNotNull(retSolution.getPatterns().get(0).getPlacedBoxes().get(0).getPosition());
+        assertTrue(retSolution.isPackable());
     }
 
     public void testGeneratePattern() throws Exception {

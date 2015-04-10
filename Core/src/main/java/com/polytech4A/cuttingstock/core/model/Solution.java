@@ -75,4 +75,13 @@ public class Solution {
     public void removeEmpty() {
         patterns.removeIf(p -> p.isPatternEmpty());
     }
+
+    public boolean isPackable() {
+        int nbBoxes = patterns.parallelStream()
+                .mapToInt(p -> {
+                    return p.getAmounts().parallelStream().mapToInt(b -> b.getAmount()).sum();
+                }).sum();
+        int nbPlacedBox = patterns.parallelStream().mapToInt(p -> p.getPlacedBoxes().size()).sum();
+        return (nbBoxes == nbPlacedBox);
+    }
 }
