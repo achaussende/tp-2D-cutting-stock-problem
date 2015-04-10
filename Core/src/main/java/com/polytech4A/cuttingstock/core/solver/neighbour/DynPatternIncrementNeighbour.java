@@ -34,9 +34,10 @@ import java.util.ArrayList;
 public class DynPatternIncrementNeighbour extends IncrementNeighbour {
     @Override
     public ArrayList<Solution> getNeighbourhood(final Solution s) {
-        Pattern emptyPattern = s.getPatterns().get(0).clone();
+        Solution solution = s.clone();
+        Pattern emptyPattern = solution.getPatterns().get(0).clone();
         emptyPattern.getAmounts().parallelStream().forEach(b -> b.setAmount(0));
-        s.getPatterns().add(emptyPattern);
-        return super.getNeighbourhood(s);
+        solution.getPatterns().add(emptyPattern);
+        return super.getNeighbourhood(solution);
     }
 }
