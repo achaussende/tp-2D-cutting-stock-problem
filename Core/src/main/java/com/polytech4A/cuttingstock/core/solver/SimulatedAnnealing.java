@@ -119,7 +119,7 @@ public class SimulatedAnnealing extends NeighbourSolver {
      */
     public double setMu() {
         if (temperature != -1) {
-            double mu = Math.floor(temperature / nbIterations);
+            double mu = temperature / (double) nbIterations;
             this.mu = mu;
             return mu;
         } else {
