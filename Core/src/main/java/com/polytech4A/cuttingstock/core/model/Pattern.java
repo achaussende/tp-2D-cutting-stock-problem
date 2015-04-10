@@ -94,7 +94,7 @@ public class Pattern {
         ArrayList<PlacedBox> clonedPlacedBoxes = new ArrayList<PlacedBox>();
         if (placedBoxes != null) {
             for (PlacedBox placedBox : placedBoxes) {
-                clonedBoxes.add(placedBox.clone());
+                clonedPlacedBoxes.add(placedBox.clone());
             }
         }
         return new Pattern(size.clone(), clonedBoxes, clonedPlacedBoxes);
