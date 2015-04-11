@@ -59,7 +59,7 @@ public class ContextLoaderUtils {
                 boxes.add(loadBox(it.nextLine()));
             }
             LineIterator.closeQuietly(it);
-            return new Context(file.getName(), cost, 1, boxes, new Vector(x, y));
+            return new Context(file.getName(), 20, 1, boxes, new Vector(x, y));
         } catch (MalformedContextFileException mctx) {
             throw mctx;
         } finally {
