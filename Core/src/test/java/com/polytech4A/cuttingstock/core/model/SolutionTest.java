@@ -23,7 +23,6 @@ package com.polytech4A.cuttingstock.core.model;
 import junit.framework.TestCase;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Test;
 
 import java.util.ArrayList;
 
@@ -52,10 +51,6 @@ public class SolutionTest extends TestCase {
         solution = null;
     }
 
-    @Test
-    public void testToString() {
-        assertEquals("Solution = {(2,1)}", solution.toString());
-    }
 
     public void testRemoveEmpty() throws Exception {
         ArrayList<Pattern> patterns = new ArrayList<Pattern>();
