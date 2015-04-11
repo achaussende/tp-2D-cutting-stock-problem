@@ -88,15 +88,30 @@ public class PlacedBox extends Box {
     }
 
     public double getWidth() {
-        return (rotation) ? position.getY() : position.getX();
+        return (rotation) ? getSize().getY() : getSize().getX();
     }
 
     public double getHeight() {
-        return (rotation) ? position.getX() : position.getY();
+        return (rotation) ? getSize().getX() : getSize().getY();
     }
 
     @Override
     public PlacedBox clone() {
         return new PlacedBox(getSize().clone(), getAmount(), getPosition().clone(), rotation);
+    }
+
+    @Override
+    public String toString() {
+        StringBuffer stbf = new StringBuffer();
+        stbf.append("{(");
+        stbf.append(getPosition().getX());
+        stbf.append(",");
+        stbf.append(getPosition().getY());
+        stbf.append("),(");
+        stbf.append(getWidth());
+        stbf.append(",");
+        stbf.append(getHeight());
+        stbf.append(")}");
+        return stbf.toString();
     }
 }

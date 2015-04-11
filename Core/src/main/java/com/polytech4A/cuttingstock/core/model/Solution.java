@@ -66,6 +66,15 @@ public class Solution {
         }
         buffer.deleteCharAt(buffer.toString().length() - 1);
         buffer.append("}");
+        for (Pattern p : patterns) {
+            if (p.getPlacedBoxes().size() > 0) {
+                buffer.append("\n");
+                buffer.append("Placebox for Pattern nb:" + patterns.indexOf(p) + "\n");
+                for (PlacedBox placedBox : p.getPlacedBoxes()) {
+                    buffer.append(placedBox.toString());
+                }
+            }
+        }
         return buffer.toString();
     }
 
@@ -73,14 +82,14 @@ public class Solution {
      * Remove Empty Patterns of the solution.
      */
     public void removeEmpty() {
-        patterns.removeIf(p -> p.isPatternEmpty());
+        if (patterns.size() > 1) {
+            patterns.removeIf(p -> p.isPatternEmpty());
+        }
     }
 
     public boolean isPackable() {
         int nbBoxes = patterns.parallelStream()
-                .mapToInt(p -> {
-                    return p.getAmounts().parallelStream().mapToInt(b -> b.getAmount()).sum();
-                }).sum();
+                .mapToInt(p -> (int) p.getBoxes().parallelStream().count()).sum();
         int nbPlacedBox = patterns.parallelStream().mapToInt(p -> p.getPlacedBoxes().size()).sum();
         return (nbBoxes == nbPlacedBox);
     }
