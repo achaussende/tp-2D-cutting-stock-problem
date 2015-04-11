@@ -65,8 +65,8 @@ public abstract class NeighbourSolver extends Solver {
             retSolution = solutions.get(random.nextInt(solutions.size()));
             retSolution.removeEmpty();
             packedSolution = packer.getPlacing(retSolution);
-        } while (packedSolution == null || packedSolution.getPatterns().size() != retSolution.getPatterns().size());
-        return (retSolution != null) ? retSolution : retSolution;
+        } while (packedSolution == null || !packedSolution.isPackable());
+        return packedSolution;
     }
 
     /**
@@ -92,7 +92,7 @@ public abstract class NeighbourSolver extends Solver {
      */
     public Solution getRandomSolution(final Solution solution) {
         Solution retSolution = solution.clone();
-        for (int i = 0; i < RANDOM_SOLUTION_NB; i++) {
+        for (int i = 0; i < RANDOM_SOLUTION_NB && !retSolution.isPackable(); i++) {
             ArrayList<Solution> solutions = this.generateNeighbour(retSolution);
             retSolution = getRandomSolutionFromNeighbour(solutions);
             solutions = null;

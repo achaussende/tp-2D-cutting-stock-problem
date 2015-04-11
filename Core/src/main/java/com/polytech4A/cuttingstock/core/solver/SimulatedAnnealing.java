@@ -69,22 +69,49 @@ public class SimulatedAnnealing extends NeighbourSolver {
      */
     private double temperature = -1;
 
-    /**
-     * Method to resolve linear programming problem.
-     */
-    private LinearResolutionMethod method;
-
-
     public SimulatedAnnealing(Packer packer, LinearResolutionMethod simplex, ArrayList<INeighbourUtils> neighbourGenerator,
-                              long nbIterations, LinearResolutionMethod method) {
+                              long nbIterations) {
         super(packer, simplex, neighbourGenerator);
         this.nbIterations = nbIterations;
-        this.method = method;
+    }
+
+    public double getTemperature() {
+        return temperature;
+    }
+
+    public double getMu() {
+        return mu;
     }
 
     @Override
     public Solution getSolution(@NotNull Solution solution, @NotNull Context context) {
-        return null;
+        Solution rdomSolution = this.getRandomSolution(solution);
+        this.setFirstTemperature(rdomSolution);
+        this.setMu();
+        Solution bestSolution = rdomSolution;
+        int i = 0;
+        double bestCost = this.simplex.minimize(rdomSolution).getCost();
+        Solution currentSo = rdomSolution;
+        double currentCost = bestCost;
+        for (i = 0; i < nbIterations; i++) {
+            Solution peekedSo;
+            ArrayList<Solution> neighbours = generateNeighbour(currentSo);
+            do {
+                peekedSo = this.getRandomSolutionFromNeighbour(neighbours);
+            } while (!peekedSo.isPackable());
+            double peekFunction = this.simplex.minimize(peekedSo).getCost();
+            double deltaF = peekFunction - currentCost;
+            if (deltaF <= 0) {
+                currentSo = peekedSo;
+                if (peekFunction < bestCost) {
+                    bestCost = peekFunction;
+                    bestSolution = peekedSo;
+                }
+            } else {
+
+            }
+        }
+        return bestSolution;
     }
 
     /**
@@ -94,15 +121,15 @@ public class SimulatedAnnealing extends NeighbourSolver {
      * @return -1 if definition of the first temperature failed.
      * Temperature generated.
      */
-    public int setFirstTemperature(Solution solution) {
+    public double setFirstTemperature(Solution solution) {
         ArrayList<Solution> solutions = generateNeighbour(solution);
         try {
-            int temperature = (int) Math.ceil(solutions
+            double temperature = solutions
                     .parallelStream()
-                    .filter(s -> s.getPatterns().size() == solution.getPatterns().size())
-                    .mapToInt(s -> (int) ceil(method.minimize(s).getCost()))
+                    .filter(s -> s.isPackable())
+                    .mapToDouble(s -> ceil(simplex.minimize(s).getCost()))
                     .max()
-                    .getAsInt() * temp_coef);
+                    .getAsDouble() * temp_coef;
             this.temperature = temperature;
             return temperature;
         } catch (NoSuchElementException ex) {

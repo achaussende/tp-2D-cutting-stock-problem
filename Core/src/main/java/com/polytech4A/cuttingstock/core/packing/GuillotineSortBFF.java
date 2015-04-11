@@ -23,6 +23,7 @@ package com.polytech4A.cuttingstock.core.packing;
 import com.polytech4A.cuttingstock.core.model.*;
 import com.sun.istack.internal.NotNull;
 import com.sun.istack.internal.Nullable;
+import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -44,27 +45,28 @@ import java.util.ListIterator;
  */
 public class GuillotineSortBFF extends Packer {
 
+    private static final Logger logger = Logger.getLogger(GuillotineSortBFF.class);
+
     public GuillotineSortBFF(ArrayList<Comparator<Box>> boxComparators) {
         super(boxComparators);
     }
 
     @Override
     public Solution getPlacing(@NotNull Solution solution) {
-        ArrayList<Pattern> retPatterns = new ArrayList<>();
         ArrayList<Pattern> patterns = solution.getPatterns();
         patterns.parallelStream().forEach(p -> {
             Pattern pattern = null;
-            while (boxComparators.listIterator().hasNext()) {
-                Comparator<Box> comparator = boxComparators.listIterator().next();
+            for (Comparator<Box> comparator : boxComparators) {
                 ArrayList<Box> boxes = p.getBoxes();
                 pattern = generatePattern(p, boxes, comparator);
                 if (pattern != null) { //take the first Pattern Found.
-                    retPatterns.add(pattern);
+                    p.setPlacedBoxes(pattern.getPlacedBoxes());
                     break;
                 }
             }
         });
-        return new Solution(retPatterns);
+        logger.debug("Solution packed " + solution);
+        return solution;
     }
 
     /**
