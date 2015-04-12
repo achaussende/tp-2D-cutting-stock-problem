@@ -47,26 +47,31 @@ public class GuillotineSortBFF extends Packer {
 
     private static final Logger logger = Logger.getLogger(GuillotineSortBFF.class);
 
+    private Solution solution;
+
     public GuillotineSortBFF(ArrayList<Comparator<Box>> boxComparators) {
         super(boxComparators);
     }
 
     @Override
     public Solution getPlacing(@NotNull Solution solution) {
-        ArrayList<Pattern> patterns = solution.getPatterns();
+        Solution clSolution = solution.clone();
+        clSolution.getPatterns().parallelStream().forEach(p -> p.getPlacedBoxes().clear());
+        ArrayList<Pattern> patterns = clSolution.getPatterns();
+        logger.debug("Solution to pack " + clSolution);
+        this.solution = clSolution;
         patterns.parallelStream().forEach(p -> {
             Pattern pattern = null;
             for (Comparator<Box> comparator : boxComparators) {
-                ArrayList<Box> boxes = p.getBoxes();
-                pattern = generatePattern(p, boxes, comparator);
-                if (pattern != null) { //take the first Pattern Found.
+                pattern = generatePattern(p, comparator);
+                if (pattern != null && pattern != p) { //take the first Pattern Found.
                     p.setPlacedBoxes(pattern.getPlacedBoxes());
                     break;
                 }
             }
         });
-        logger.debug("Solution packed " + solution);
-        return solution;
+        logger.debug("Solution packed " + clSolution);
+        return clSolution;
     }
 
     /**
@@ -84,12 +89,12 @@ public class GuillotineSortBFF extends Packer {
      * Generate pattern with placed boxes on it.
      *
      * @param p          Kind of pattern where the boxes will be placed.
-     * @param boxes      Boxes that will be placed.
      * @param comparator Comparator to use when sorting boxes.
      * @return A new pattern with the boxes placed on it. Return null if there is no boxes to place.
      */
     @Nullable
-    public Pattern generatePattern(@NotNull Pattern p, @NotNull ArrayList<Box> boxes, @NotNull Comparator<Box> comparator) {
+    public Pattern generatePattern(@NotNull Pattern p, @NotNull Comparator<Box> comparator) {
+        ArrayList<Box> boxes = p.getBoxes();
         Collections.sort(boxes, Collections.reverseOrder(comparator));
         Bin bin = new Bin(p.getSize(), p, new Vector(0, 0));
         ArrayList<Bin> bins = new ArrayList<>();

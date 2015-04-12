@@ -77,7 +77,7 @@ public class Pattern {
 
     public ArrayList<Box> getBoxes() {
         ArrayList<Box> result = new ArrayList<>();
-        boxes.parallelStream().forEach(b -> {
+        boxes.stream().forEach(b -> {
             for (int i = 0; i < b.getAmount(); i++) {
                 result.add(new Box(b.getSize(), 1));
             }

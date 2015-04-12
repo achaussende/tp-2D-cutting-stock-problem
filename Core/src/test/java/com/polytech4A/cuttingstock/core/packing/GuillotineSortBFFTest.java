@@ -173,7 +173,7 @@ public class GuillotineSortBFFTest extends TestCase {
         boxes.add(new Box(new Vector(2, 2), 1));
         Pattern pattern = new Pattern(new Vector(20, 10), boxes);
         for (Comparator<Box> comparator : boxComparators) {
-            Pattern retPattern = guillotineSortBFF.generatePattern(pattern, boxes, comparator);
+            Pattern retPattern = guillotineSortBFF.generatePattern(pattern, comparator);
             assertNotNull(retPattern);
         }
     }

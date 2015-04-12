@@ -24,6 +24,7 @@ import com.polytech4A.cuttingstock.core.method.LinearResolutionMethod;
 import com.polytech4A.cuttingstock.core.model.Solution;
 import com.polytech4A.cuttingstock.core.packing.Packer;
 import com.polytech4A.cuttingstock.core.solver.neighbour.INeighbourUtils;
+import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -39,6 +40,9 @@ import java.util.Random;
 public abstract class NeighbourSolver extends Solver {
 
     private static final int RANDOM_SOLUTION_NB = 100;
+
+    private static final Logger logger = Logger.getLogger(NeighbourSolver.class);
+
     /**
      * List containing neighbours generator objects.
      */
@@ -92,11 +96,12 @@ public abstract class NeighbourSolver extends Solver {
      */
     public Solution getRandomSolution(final Solution solution) {
         Solution retSolution = solution.clone();
-        for (int i = 0; i < RANDOM_SOLUTION_NB && !retSolution.isPackable(); i++) {
+        for (int i = 0; i < RANDOM_SOLUTION_NB || !retSolution.isPackable(); i++) {
             ArrayList<Solution> solutions = this.generateNeighbour(retSolution);
             retSolution = getRandomSolutionFromNeighbour(solutions);
             solutions = null;
         }
+        logger.info("Random starting Solution: " + retSolution);
         return retSolution;
     }
 
