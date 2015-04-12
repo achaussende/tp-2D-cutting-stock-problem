@@ -26,6 +26,7 @@ import com.polytech4A.cuttingstock.core.model.Solution;
 import com.polytech4A.cuttingstock.core.resolution.util.IResolutionUtils;
 import com.polytech4A.cuttingstock.core.resolution.util.context.Context;
 import com.polytech4A.cuttingstock.core.resolution.util.context.ContextLoaderUtils;
+import com.polytech4A.cuttingstock.core.resolution.util.context.IllogicalContextException;
 import com.polytech4A.cuttingstock.core.resolution.util.context.MalformedContextFileException;
 import com.polytech4A.cuttingstock.core.save.Save;
 import com.polytech4A.cuttingstock.core.solver.Solver;
@@ -39,7 +40,7 @@ import java.util.List;
  *
  * @author Antoine
  * @version 1.0
- *          <p/>
+ *          <p>
  *          Representation of a resolution for the 2d cutting stock problem.
  */
 public class Resolution extends Thread {
@@ -61,9 +62,10 @@ public class Resolution extends Thread {
      * @param path Path to the Context file.
      * @return Context instance.
      * @throws java.io.IOException                                                                    If the file opening throw exception.
-     * @throws com.polytech4A.cuttingstock.core.resolution.util.context.MalformedContextFileException If teh file don't have the good structure.
+     * @throws com.polytech4A.cuttingstock.core.resolution.util.context.MalformedContextFileException If the file don't have the good structure.
+     * @throws IllogicalContextException                                                              if an image is bigger than pattern size defined in the file.
      */
-    public static Context loadContext(String path) throws IOException, MalformedContextFileException {
+    public static Context loadContext(String path) throws IOException, MalformedContextFileException, IllogicalContextException {
         return ContextLoaderUtils.loadContext(path);
     }
 

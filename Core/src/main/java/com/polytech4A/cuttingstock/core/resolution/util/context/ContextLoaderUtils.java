@@ -46,8 +46,9 @@ public class ContextLoaderUtils {
      * @return Context loaded.
      * @throws IOException                   if file not found.
      * @throws MalformedContextFileException if the Context file don't have the right structure.
+     * @throws IllogicalContextException     if an image is bigger than pattern max size.
      */
-    public static Context loadContext(String path) throws IOException, MalformedContextFileException {
+    public static Context loadContext(String path) throws IOException, MalformedContextFileException, IllogicalContextException {
         File file = new File(path);
         LineIterator it = FileUtils.lineIterator(file, "UTF-8");
         ArrayList<Box> boxes = new ArrayList<>();
@@ -59,6 +60,11 @@ public class ContextLoaderUtils {
                 boxes.add(loadBox(it.nextLine()));
             }
             LineIterator.closeQuietly(it);
+            double max = Math.max(x, y);
+            if (boxes.parallelStream().anyMatch(b -> b.getSize().getX() > max) ||
+                    boxes.parallelStream().anyMatch(b -> b.getSize().getY() > max)) {
+                throw new IllogicalContextException("There is an image which is bigger than the pattern.");
+            }
             return new Context(file.getName(), 20, 1, boxes, new Vector(x, y));
         } catch (MalformedContextFileException mctx) {
             throw mctx;

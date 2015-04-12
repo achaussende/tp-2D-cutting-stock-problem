@@ -52,4 +52,16 @@ public class ContextLoaderUtilsTest {
         TestCase.assertEquals(1, context.getSheetCost());
         TestCase.assertEquals(new Vector(1400, 700), context.getPatternSize());
     }
+
+    @Test(expected = IllogicalContextException.class)
+    public void testFail1() throws Exception {
+        File file = FileUtils.getFile("src", "test", "java", "resources", "ContextTestFail1.txt");
+        Context context = ContextLoaderUtils.loadContext(file.getPath());
+    }
+
+    @Test(expected = IllogicalContextException.class)
+    public void testFail2() throws Exception {
+        File file = FileUtils.getFile("src", "test", "java", "resources", "ContextTestFail2.txt");
+        Context context = ContextLoaderUtils.loadContext(file.getPath());
+    }
 }
