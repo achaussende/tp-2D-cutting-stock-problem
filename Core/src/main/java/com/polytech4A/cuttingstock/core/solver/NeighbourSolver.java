@@ -56,10 +56,11 @@ public abstract class NeighbourSolver extends Solver {
     /**
      * Get a random neighbour from a solution in parameter.
      *
-     * @param solutions solutions to generate neighbour.
+     * @param solutions   solutions to generate neighbour.
+     * @param removeEmpty if true, removes empty pattern from solution.
      * @return a packable solution neighbour of the solution in parameter.
      */
-    public Solution getRandomSolutionFromNeighbour(final ArrayList<Solution> solutions) {
+    public Solution getRandomSolutionFromNeighbour(final ArrayList<Solution> solutions, final boolean removeEmpty) {
         Solution packedSolution;
         Solution retSolution;
         do {
@@ -67,7 +68,9 @@ public abstract class NeighbourSolver extends Solver {
             retSolution = null;
             Random random = new Random(System.currentTimeMillis());
             retSolution = solutions.get(random.nextInt(solutions.size()));
-            retSolution.removeEmpty();
+            if (removeEmpty) {
+                retSolution.removeEmpty();
+            }
             packedSolution = packer.getPlacing(retSolution);
         } while (packedSolution == null || !packedSolution.isPackable());
         return packedSolution;
@@ -91,14 +94,15 @@ public abstract class NeighbourSolver extends Solver {
      * Generate a random solution from a solution in parameter.
      * (iterate random choice on neighbour of the solution)
      *
-     * @param solution First solution of the solver.
+     * @param solution    First solution of the solver.
+     * @param removeEmpty if true, removes empty pattern from solution.
      * @return Random solution generated form neighbour.
      */
-    public Solution getRandomSolution(final Solution solution) {
+    public Solution getRandomSolution(final Solution solution, final boolean removeEmpty) {
         Solution retSolution = solution.clone();
         for (int i = 0; i < RANDOM_SOLUTION_NB || !retSolution.isPackable(); i++) {
             ArrayList<Solution> solutions = this.generateNeighbour(retSolution);
-            retSolution = getRandomSolutionFromNeighbour(solutions);
+            retSolution = getRandomSolutionFromNeighbour(solutions, removeEmpty);
             solutions = null;
         }
         logger.info("Random starting Solution: " + retSolution);
@@ -108,10 +112,11 @@ public abstract class NeighbourSolver extends Solver {
     /**
      * Get a random packable solution form neighbours of a solutions.
      *
-     * @param solution solution to extract packable neighbours.
+     * @param solution    solution to extract packable neighbours.
+     * @param removeEmpty if true, removes empty pattern from solution.
      * @return a Random Packable solution from neighbour of a solution.
      */
-    public Solution getRandomSolutionFromSolution(final Solution solution) {
-        return getRandomSolutionFromNeighbour(generateNeighbour(solution));
+    public Solution getRandomSolutionFromSolution(final Solution solution, final boolean removeEmpty) {
+        return getRandomSolutionFromNeighbour(generateNeighbour(solution), removeEmpty);
     }
 }

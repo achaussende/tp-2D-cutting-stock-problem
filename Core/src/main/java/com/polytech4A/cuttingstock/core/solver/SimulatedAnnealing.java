@@ -85,33 +85,7 @@ public class SimulatedAnnealing extends NeighbourSolver {
 
     @Override
     public Solution getSolution(@NotNull Solution solution, @NotNull Context context) {
-        Solution rdomSolution = this.getRandomSolution(solution);
-        this.setFirstTemperature(rdomSolution);
-        this.setMu();
-        Solution bestSolution = rdomSolution;
-        int i = 0;
-        double bestCost = this.simplex.minimize(rdomSolution).getCost();
-        Solution currentSo = rdomSolution;
-        double currentCost = bestCost;
-        for (i = 0; i < nbIterations; i++) {
-            Solution peekedSo;
-            ArrayList<Solution> neighbours = generateNeighbour(currentSo);
-            do {
-                peekedSo = this.getRandomSolutionFromNeighbour(neighbours);
-            } while (!peekedSo.isPackable());
-            double peekFunction = this.simplex.minimize(peekedSo).getCost();
-            double deltaF = peekFunction - currentCost;
-            if (deltaF <= 0) {
-                currentSo = peekedSo;
-                if (peekFunction < bestCost) {
-                    bestCost = peekFunction;
-                    bestSolution = peekedSo;
-                }
-            } else {
-
-            }
-        }
-        return bestSolution;
+        return null;
     }
 
     /**
@@ -126,7 +100,7 @@ public class SimulatedAnnealing extends NeighbourSolver {
         try {
             double temperature = solutions
                     .parallelStream()
-                    .filter(s -> s.isPackable())
+                    .filter(Solution::isPackable)
                     .mapToDouble(s -> ceil(simplex.minimize(s).getCost()))
                     .max()
                     .getAsDouble() * temp_coef;

@@ -87,12 +87,12 @@ public class SimulatedAnnealingTest extends TestCase {
 
 
     public void testGetRandomSolutionFromSolution() throws Exception {
-        Solution retSolution = sAnnealing.getRandomSolutionFromSolution(solution);
+        Solution retSolution = sAnnealing.getRandomSolutionFromSolution(solution, true);
         assertTrue(retSolution.isPackable());
     }
 
     public void testGetRandomSolution() {
-        Solution retSolution = sAnnealing.getRandomSolution(solution);
+        Solution retSolution = sAnnealing.getRandomSolution(solution, true);
         assertTrue(retSolution.isPackable());
     }
 
