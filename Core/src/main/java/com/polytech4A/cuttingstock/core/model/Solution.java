@@ -67,7 +67,7 @@ public class Solution {
         buffer.deleteCharAt(buffer.toString().length() - 1);
         buffer.append("}");
         for (Pattern p : patterns) {
-            if (p.getPlacedBoxes().size() > 0) {
+            if (p.getPlacedBoxes() != null && p.getPlacedBoxes().size() > 0) {
                 buffer.append("\n");
                 buffer.append("Placebox for Pattern nb:" + patterns.indexOf(p) + "\n");
                 for (PlacedBox placedBox : p.getPlacedBoxes()) {
