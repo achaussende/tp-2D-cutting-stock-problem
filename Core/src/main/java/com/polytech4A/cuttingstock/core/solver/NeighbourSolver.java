@@ -27,7 +27,6 @@ import com.polytech4A.cuttingstock.core.solver.neighbour.INeighbourUtils;
 import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 /**
  * Created by Adrien CHAUSSENDE on 28/03/2015.
@@ -53,42 +52,6 @@ public abstract class NeighbourSolver extends Solver {
         this.neighbourGenerator = neighbourGenerator;
     }
 
-    /**
-     * Get a random neighbour from a solution in parameter.
-     *
-     * @param solutions   solutions to generate neighbour.
-     * @param removeEmpty if true, removes empty pattern from solution.
-     * @return a packable solution neighbour of the solution in parameter.
-     */
-    public Solution getRandomSolutionFromNeighbour(final ArrayList<Solution> solutions, final boolean removeEmpty) {
-        Solution packedSolution;
-        Solution retSolution;
-        do {
-            packedSolution = null;
-            retSolution = null;
-            Random random = new Random(System.currentTimeMillis());
-            retSolution = solutions.get(random.nextInt(solutions.size()));
-            if (removeEmpty) {
-                retSolution.removeEmpty();
-            }
-            packedSolution = packer.getPlacing(retSolution);
-        } while (packedSolution == null || !packedSolution.isPackable());
-        return packedSolution;
-    }
-
-    /**
-     * Get list of generated neighbour form a solution.
-     *
-     * @param solution solution onto generate neighbour.
-     * @return ArrayList of solution
-     */
-    protected ArrayList<Solution> generateNeighbour(final Solution solution) {
-        ArrayList<Solution> solutions = new ArrayList<>();
-        for (INeighbourUtils generator : neighbourGenerator) {
-            solutions.addAll(generator.getNeighbourhood(solution));
-        }
-        return solutions;
-    }
 
     /**
      * Generate a random solution from a solution in parameter.
@@ -99,25 +62,13 @@ public abstract class NeighbourSolver extends Solver {
      * @return Random solution generated form neighbour.
      */
     public Solution getRandomSolution(final Solution solution, final boolean removeEmpty) {
-        Solution retSolution = solution.clone();
-
+        Solution retSolution = solution.clone();/**
         for (int i = 0; i < RANDOM_SOLUTION_NB || !retSolution.isPackable(); i++) {
             ArrayList<Solution> solutions = this.generateNeighbour(retSolution);
             retSolution = getRandomSolutionFromNeighbour(solutions, removeEmpty);
             solutions = null;
         }
-        logger.info("Random starting Solution: " + retSolution);
+         logger.info("Random starting Solution: " + retSolution);**/
         return retSolution;
-    }
-
-    /**
-     * Get a random packable solution form neighbours of a solutions.
-     *
-     * @param solution    solution to extract packable neighbours.
-     * @param removeEmpty if true, removes empty pattern from solution.
-     * @return a Random Packable solution from neighbour of a solution.
-     */
-    public Solution getRandomSolutionFromSolution(final Solution solution, final boolean removeEmpty) {
-        return getRandomSolutionFromNeighbour(generateNeighbour(solution), removeEmpty);
     }
 }

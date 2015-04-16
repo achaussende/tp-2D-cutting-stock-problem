@@ -20,22 +20,16 @@
 
 package com.polytech4A.cuttingstock.core.resolution;
 
-import com.polytech4A.cuttingstock.core.method.LinearResolutionMethod;
 import com.polytech4A.cuttingstock.core.model.Box;
 import com.polytech4A.cuttingstock.core.model.Pattern;
 import com.polytech4A.cuttingstock.core.model.Solution;
-import com.polytech4A.cuttingstock.core.packing.GuillotineSortBFF;
 import com.polytech4A.cuttingstock.core.resolution.util.context.Context;
 import com.polytech4A.cuttingstock.core.resolution.util.context.ContextLoaderUtils;
 import com.polytech4A.cuttingstock.core.resolution.util.context.IllogicalContextException;
 import com.polytech4A.cuttingstock.core.resolution.util.context.MalformedContextFileException;
 import com.polytech4A.cuttingstock.core.save.Save;
 import com.polytech4A.cuttingstock.core.save.ToImg;
-import com.polytech4A.cuttingstock.core.solver.SimulatedAnnealing;
 import com.polytech4A.cuttingstock.core.solver.Solver;
-import com.polytech4A.cuttingstock.core.solver.neighbour.INeighbourUtils;
-import com.polytech4A.cuttingstock.core.solver.neighbour.IncrementNeighbour;
-import com.polytech4A.cuttingstock.core.solver.neighbour.MoveNeighbour;
 import org.apache.log4j.Logger;
 
 import java.io.IOException;
@@ -136,7 +130,7 @@ public class Resolution {
      * @return real random packable solution.
      */
     private Solution getStartingSolution() {
-        try {
+        /** try {
             context = loadContext(contextFilePath);
             ArrayList<INeighbourUtils> generators = new ArrayList<>();
             generators.add(new IncrementNeighbour());
@@ -150,7 +144,7 @@ public class Resolution {
             logger.error(e);
         } catch (IllogicalContextException e) {
             logger.error(e);
-        }
+         }**/
         return null;
     }
 }
