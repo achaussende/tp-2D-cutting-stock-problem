@@ -120,4 +120,15 @@ public class Solution {
         }
         return true;
     }
+
+    /**
+     * add a blank pattern (pattern with the same boxes than pattern index 0 but with amounts at 0).
+     */
+    public void addBlankPattern() {
+        if (!patterns.isEmpty()) {
+            Pattern p = patterns.get(0).clone();
+            p.getAmounts().parallelStream().forEach(b -> b.setAmount(0));
+            patterns.add(p);
+        }
+    }
 }
