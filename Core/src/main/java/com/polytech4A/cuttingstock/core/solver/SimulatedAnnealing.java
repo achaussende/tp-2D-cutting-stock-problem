@@ -86,7 +86,7 @@ public class SimulatedAnnealing extends NeighbourSolver {
     }
 
     /**
-     * Set Temperature of SimulateAnnealing Algorithm.
+     * Set Temperature of Simulated Annealing Algorithm.
      *
      * @param solution solution onto generate temperature.
      * @return -1 if definition of the first temperature failed.
@@ -94,7 +94,7 @@ public class SimulatedAnnealing extends NeighbourSolver {
      */
     public double setFirstTemperature(Solution solution) {
         Solution clSolution = solution.clone();
-        ArrayList<Solution> solutionsN = new ArrayList<>(); // Solution from the neighbourhood of the clSolution.
+        ArrayList<Solution> solutionsN = new ArrayList<>(); // Solutions from the neighbourhood of the solution.
         int nbIteration = 1000 * solution.getPatterns().get(0).getAmounts().size();
         for (int i = 0; i < nbIteration; i++) {
             Solution randomSolution = chooseRandomNeihbourUtils().getRandomNeighbour(clSolution);
@@ -126,7 +126,7 @@ public class SimulatedAnnealing extends NeighbourSolver {
      */
     public double setMu() {
         if (temperature != -1) {
-            double mu = temperature / (double) nbIterations;
+            double mu = 1 - (temperature / (double) nbIterations);
             this.mu = mu;
             return mu;
         } else {
