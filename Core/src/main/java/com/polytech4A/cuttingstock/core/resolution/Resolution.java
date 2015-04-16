@@ -33,8 +33,7 @@ import com.polytech4A.cuttingstock.core.save.Save;
 import com.polytech4A.cuttingstock.core.save.ToImg;
 import com.polytech4A.cuttingstock.core.solver.SimulatedAnnealing;
 import com.polytech4A.cuttingstock.core.solver.Solver;
-import com.polytech4A.cuttingstock.core.solver.neighbour.INeighbourUtils;
-import com.polytech4A.cuttingstock.core.solver.neighbour.IncrementNeighbour;
+import com.polytech4A.cuttingstock.core.solver.neighbour.*;
 import org.apache.log4j.Logger;
 
 import java.io.IOException;
@@ -130,12 +129,30 @@ public class Resolution {
         return new Solution(patterns);
     }
 
-    public void solve() {
+    /**
+     * Function to solve the 2D Cutting Stock Problem on a Resolution.
+     *
+     * @param nbofIterations nb of iteration for the solver.
+     */
+    public void solve(Integer nbofIterations) {
         Solution startingSolution = getStartingSolution();
+        logger.info("FirstSolution ----->" + startingSolution);
+        ArrayList<INeighbourUtils> generators = new ArrayList<>();
+        generators.add(new DynPatternIncrementNeighbour());
+        generators.add(new DynPatternMoveNeighbour());
+        generators.add(new RemovePatternNeighbour());
+        solver = new SimulatedAnnealing(
+                new GuillotineSortBFF(boxComparators),
+                new LinearResolutionMethod(context),
+                generators,
+                nbofIterations
+        );
+        Solution bestFound = solver.getSolution(startingSolution, context);
     }
 
     /**
      * Generate the startingSolution for solving.
+     *
      * @return real random packable solution.
      */
     private Solution getStartingSolution() {
@@ -143,7 +160,13 @@ public class Resolution {
             context = loadContext(contextFilePath);
             ArrayList<INeighbourUtils> generators = new ArrayList<>();
             generators.add(new IncrementNeighbour());
-            SimulatedAnnealing realSolutionGenerator = new SimulatedAnnealing(new GuillotineSortBFF(boxComparators), new LinearResolutionMethod(context), generators, 10000);
+            generators.add(new MoveNeighbour());
+            generators.add(new RemovePatternNeighbour());
+            SimulatedAnnealing realSolutionGenerator = new SimulatedAnnealing(
+                    new GuillotineSortBFF(boxComparators),
+                    new LinearResolutionMethod(context),
+                    generators,
+                    10000);
             Solution firstSolution = generateFirstSolution(context);
             return realSolutionGenerator.getRandomSolution(firstSolution, true);
         } catch (IOException e) {

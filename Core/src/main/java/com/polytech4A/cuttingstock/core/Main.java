@@ -45,7 +45,7 @@ public class Main {
     public static void main(String[] args) {
         logger.info("STARTED");
         Resolution resolution = new Resolution(args[0]);
-        resolution.solve();
+        resolution.solve(Integer.parseInt(args[1]));
         logger.info("STOPPED");
     }
 }

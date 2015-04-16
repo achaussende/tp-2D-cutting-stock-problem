@@ -21,6 +21,7 @@
 package com.polytech4A.cuttingstock.core.solver;
 
 import com.polytech4A.cuttingstock.core.method.LinearResolutionMethod;
+import com.polytech4A.cuttingstock.core.method.Result;
 import com.polytech4A.cuttingstock.core.model.Solution;
 import com.polytech4A.cuttingstock.core.packing.Packer;
 import com.polytech4A.cuttingstock.core.resolution.util.context.Context;
@@ -82,7 +83,13 @@ public class SimulatedAnnealing extends NeighbourSolver {
 
     @Override
     public Solution getSolution(Solution solution, Context context) {
-        return null;
+        setFirstTemperature(solution);
+        logger.info("First Temperature " + getTemperature());
+        setMu();
+        logger.info("Mu value " + getMu());
+        Result r = simplex.minimize(solution);
+        logger.info(r.toString());
+        return solution;
     }
 
     /**
@@ -95,7 +102,7 @@ public class SimulatedAnnealing extends NeighbourSolver {
     public double setFirstTemperature(Solution solution) {
         Solution clSolution = solution.clone();
         ArrayList<Solution> solutionsN = new ArrayList<>(); // Solutions from the neighbourhood of the solution.
-        int nbIteration = 1000 * solution.getPatterns().get(0).getAmounts().size();
+        int nbIteration = (1000 * solution.getPatterns().get(0).getAmounts().size()) / solution.getPatterns().size();
         for (int i = 0; i < nbIteration; i++) {
             Solution randomSolution = chooseRandomNeihbourUtils().getRandomNeighbour(clSolution);
             Solution packedSolution = packer.getPlacing(randomSolution);
@@ -107,7 +114,14 @@ public class SimulatedAnnealing extends NeighbourSolver {
         try {
             double temperature = solutionsN
                     .parallelStream()
-                    .mapToDouble(s -> simplex.minimize(s).getCost())
+                    .mapToDouble(s -> {
+                        Result r = simplex.minimize(s);
+                        if (r == null) {
+                            return (double) 0;
+                        } else {
+                            return r.getCost();
+                        }
+                    })
                     .max()
                     .getAsDouble() * temp_coef;
             this.temperature = temperature;

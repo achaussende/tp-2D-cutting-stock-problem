@@ -28,9 +28,9 @@ import com.polytech4A.cuttingstock.core.model.Vector;
 import com.polytech4A.cuttingstock.core.packing.GuillotineSortBFF;
 import com.polytech4A.cuttingstock.core.resolution.util.context.Context;
 import com.polytech4A.cuttingstock.core.solver.neighbour.DynPatternIncrementNeighbour;
+import com.polytech4A.cuttingstock.core.solver.neighbour.DynPatternMoveNeighbour;
 import com.polytech4A.cuttingstock.core.solver.neighbour.INeighbourUtils;
 import junit.framework.TestCase;
-import org.apache.commons.math.optimization.linear.LinearConstraint;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -59,7 +59,7 @@ public class SimulatedAnnealingTest extends TestCase {
         boxComparators.add(Box.Comparators.Y);
         ArrayList<INeighbourUtils> generators = new ArrayList<>();
         generators.add(new DynPatternIncrementNeighbour());
-        //generators.add(new DynPatternMoveNeighbour());
+        generators.add(new DynPatternMoveNeighbour());
         ArrayList<Pattern> patterns = new ArrayList<Pattern>();
         ArrayList<Box> solutionBoxes = new ArrayList<Box>();
         solutionBoxes.add(new Box(new Vector(4, 2), 1));
