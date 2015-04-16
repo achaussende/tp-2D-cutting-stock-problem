@@ -1,0 +1,8 @@
+language: java
+
+jdk:
+  - oraclejdk8
+
+script:
+  - cd Core
+  - mvn test -Dmaven.compiler.target-1.8 -Dmaven.compiler.source-1.8
