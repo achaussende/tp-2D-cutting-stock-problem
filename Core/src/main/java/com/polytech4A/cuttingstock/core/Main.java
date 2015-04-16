@@ -20,6 +20,8 @@
 
 package com.polytech4A.cuttingstock.core;
 
+import com.polytech4A.cuttingstock.core.resolution.Resolution;
+
 /**
  * Created by Antoine on 12/03/2015.
  *
@@ -42,6 +44,8 @@ public class Main {
      */
     public static void main(String[] args) {
         logger.info("STARTED");
+        Resolution resolution = new Resolution(args[0]);
+        resolution.solve();
         logger.info("STOPPED");
     }
 }

@@ -20,19 +20,27 @@
 
 package com.polytech4A.cuttingstock.core.resolution;
 
+import com.polytech4A.cuttingstock.core.method.LinearResolutionMethod;
 import com.polytech4A.cuttingstock.core.model.Box;
 import com.polytech4A.cuttingstock.core.model.Pattern;
 import com.polytech4A.cuttingstock.core.model.Solution;
-import com.polytech4A.cuttingstock.core.resolution.util.IResolutionUtils;
+import com.polytech4A.cuttingstock.core.packing.GuillotineSortBFF;
 import com.polytech4A.cuttingstock.core.resolution.util.context.Context;
 import com.polytech4A.cuttingstock.core.resolution.util.context.ContextLoaderUtils;
 import com.polytech4A.cuttingstock.core.resolution.util.context.IllogicalContextException;
 import com.polytech4A.cuttingstock.core.resolution.util.context.MalformedContextFileException;
 import com.polytech4A.cuttingstock.core.save.Save;
+import com.polytech4A.cuttingstock.core.save.ToImg;
+import com.polytech4A.cuttingstock.core.solver.SimulatedAnnealing;
 import com.polytech4A.cuttingstock.core.solver.Solver;
+import com.polytech4A.cuttingstock.core.solver.neighbour.INeighbourUtils;
+import com.polytech4A.cuttingstock.core.solver.neighbour.IncrementNeighbour;
+import com.polytech4A.cuttingstock.core.solver.neighbour.MoveNeighbour;
+import org.apache.log4j.Logger;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -43,18 +51,47 @@ import java.util.List;
  *          <p>
  *          Representation of a resolution for the 2d cutting stock problem.
  */
-public class Resolution extends Thread {
+public class Resolution {
 
+    /**
+     * Logger.
+     */
+    private static final Logger logger = Logger.getLogger(Resolution.class);
+
+    /**
+     * Context of the resolution.
+     */
     private Context context;
 
-    private ArrayList<Resolution> resolutions;
-    //TODO réfléchir sur l'utilité réelle et/ou la complexité d'implémentation
+    /**
+     * Path of the contextFile.
+     */
+    private String contextFilePath;
 
+    /**
+     * Solver for the problem.
+     */
     private Solver solver;
 
+    /**
+     * Saving methods.
+     */
     private List<Save> saveMethods;
 
-    private IResolutionUtils resolutionUtils;
+    /**
+     *
+     */
+    private ArrayList<Comparator<Box>> boxComparators;
+
+    public Resolution(String contextFilePath) {
+        this.contextFilePath = contextFilePath;
+        saveMethods = new ArrayList<>();
+        saveMethods.add(new ToImg());
+        boxComparators = new ArrayList<>();
+        boxComparators.add(Box.Comparators.AREA);
+        boxComparators.add(Box.Comparators.X);
+        boxComparators.add(Box.Comparators.Y);
+    }
 
     /**
      * Load context function.
@@ -84,9 +121,36 @@ public class Resolution extends Thread {
         ArrayList<Pattern> patterns = new ArrayList<>();
         for (int i = 0; i < nbPatterns; i++) {
             ArrayList<Box> boxes = (ArrayList<Box>) context.getBoxes().clone();
-            boxes.parallelStream().forEach(b -> b.setAmount(1));
+            boxes.parallelStream().forEach(b -> b.setAmount(0));
             patterns.add(new Pattern(context.getPatternSize(), boxes));
         }
         return new Solution(patterns);
+    }
+
+    public void solve() {
+        Solution startingSolution = getStartingSolution();
+    }
+
+    /**
+     * Generate the startingSolution for solving.
+     * @return real random packable solution.
+     */
+    private Solution getStartingSolution() {
+        try {
+            context = loadContext(contextFilePath);
+            ArrayList<INeighbourUtils> generators = new ArrayList<>();
+            generators.add(new IncrementNeighbour());
+            generators.add(new MoveNeighbour());
+            SimulatedAnnealing realSolutionGenerator = new SimulatedAnnealing(new GuillotineSortBFF(boxComparators), new LinearResolutionMethod(context), generators, 10000);
+            Solution firstSolution = generateFirstSolution(context);
+            return realSolutionGenerator.getRandomSolution(firstSolution, false);
+        } catch (IOException e) {
+            logger.error(e);
+        } catch (MalformedContextFileException e) {
+            logger.error(e);
+        } catch (IllogicalContextException e) {
+            logger.error(e);
+        }
+        return null;
     }
 }

@@ -39,7 +39,7 @@ import java.util.Random;
  */
 public abstract class NeighbourSolver extends Solver {
 
-    private static final int RANDOM_SOLUTION_NB = 100;
+    private static final int RANDOM_SOLUTION_NB = 1000;
 
     private static final Logger logger = Logger.getLogger(NeighbourSolver.class);
 
@@ -100,6 +100,7 @@ public abstract class NeighbourSolver extends Solver {
      */
     public Solution getRandomSolution(final Solution solution, final boolean removeEmpty) {
         Solution retSolution = solution.clone();
+
         for (int i = 0; i < RANDOM_SOLUTION_NB || !retSolution.isPackable(); i++) {
             ArrayList<Solution> solutions = this.generateNeighbour(retSolution);
             retSolution = getRandomSolutionFromNeighbour(solutions, removeEmpty);
