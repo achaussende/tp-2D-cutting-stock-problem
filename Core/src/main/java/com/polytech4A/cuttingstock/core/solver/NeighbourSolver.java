@@ -27,6 +27,7 @@ import com.polytech4A.cuttingstock.core.solver.neighbour.INeighbourUtils;
 import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  * Created by Adrien CHAUSSENDE on 28/03/2015.
@@ -52,6 +53,15 @@ public abstract class NeighbourSolver extends Solver {
         this.neighbourGenerator = neighbourGenerator;
     }
 
+    /**
+     * Choose a random Neighbour method.
+     *
+     * @return INeighbourUtils.
+     */
+    private INeighbourUtils chooseRandomNeihbourUtils() {
+        Random rd = new Random(System.currentTimeMillis());
+        return neighbourGenerator.get(rd.nextInt(neighbourGenerator.size()));
+    }
 
     /**
      * Generate a random solution from a solution in parameter.
@@ -62,13 +72,21 @@ public abstract class NeighbourSolver extends Solver {
      * @return Random solution generated form neighbour.
      */
     public Solution getRandomSolution(final Solution solution, final boolean removeEmpty) {
-        Solution retSolution = solution.clone();/**
-        for (int i = 0; i < RANDOM_SOLUTION_NB || !retSolution.isPackable(); i++) {
-            ArrayList<Solution> solutions = this.generateNeighbour(retSolution);
-            retSolution = getRandomSolutionFromNeighbour(solutions, removeEmpty);
-            solutions = null;
-        }
-         logger.info("Random starting Solution: " + retSolution);**/
-        return retSolution;
+        Solution retSolution = solution.clone();
+        Solution packedSolution;
+        Solution bestFoundSolution = solution;
+        int i = 0;
+        do {
+            retSolution = chooseRandomNeihbourUtils().getNeighbourhood(bestFoundSolution);
+            packedSolution = packer.getPlacing(retSolution);
+            i++;
+            if (packedSolution.isPackable() && packedSolution.isValid()) {
+                packedSolution.removeEmpty();
+                if (packedSolution.getPatterns().size() <= bestFoundSolution.getPatterns().size()) {
+                    bestFoundSolution = packedSolution;
+                }
+            }
+        } while (i < RANDOM_SOLUTION_NB);
+        return bestFoundSolution;
     }
 }

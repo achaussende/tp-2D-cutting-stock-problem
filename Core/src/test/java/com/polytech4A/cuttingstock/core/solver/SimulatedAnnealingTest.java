@@ -28,7 +28,6 @@ import com.polytech4A.cuttingstock.core.model.Vector;
 import com.polytech4A.cuttingstock.core.packing.GuillotineSortBFF;
 import com.polytech4A.cuttingstock.core.resolution.util.context.Context;
 import com.polytech4A.cuttingstock.core.solver.neighbour.DynPatternIncrementNeighbour;
-import com.polytech4A.cuttingstock.core.solver.neighbour.DynPatternMoveNeighbour;
 import com.polytech4A.cuttingstock.core.solver.neighbour.INeighbourUtils;
 import junit.framework.TestCase;
 
@@ -59,7 +58,7 @@ public class SimulatedAnnealingTest extends TestCase {
         Context ctx = new Context("test", 20, 1, null, new Vector(2, 30));
         ArrayList<INeighbourUtils> generators = new ArrayList<>();
         generators.add(new DynPatternIncrementNeighbour());
-        generators.add(new DynPatternMoveNeighbour());
+        //generators.add(new DynPatternMoveNeighbour());
         sAnnealing = new SimulatedAnnealing(new GuillotineSortBFF(boxComparators), new LinearResolutionMethod(ctx), generators, 10000);
         ArrayList<Pattern> patterns = new ArrayList<Pattern>();
         ArrayList<Box> solutionBoxes = new ArrayList<Box>();
@@ -85,11 +84,6 @@ public class SimulatedAnnealingTest extends TestCase {
         solution = null;
     }
 
-
-    public void testGetRandomSolutionFromSolution() throws Exception {
-        Solution retSolution = sAnnealing.getRandomSolutionFromSolution(solution, true);
-        assertTrue(retSolution.isPackable());
-    }
 
     public void testGetRandomSolution() {
         Solution retSolution = sAnnealing.getRandomSolution(solution, true);

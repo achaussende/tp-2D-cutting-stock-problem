@@ -20,7 +20,11 @@
 
 package com.polytech4A.cuttingstock.core.solver.neighbour;
 
+import com.polytech4A.cuttingstock.core.model.Box;
+import com.polytech4A.cuttingstock.core.model.Pattern;
 import com.polytech4A.cuttingstock.core.model.Solution;
+
+import java.util.Random;
 
 /**
  * Created by Adrien CHAUSSENDE on 28/03/2015.
@@ -37,7 +41,20 @@ public class IncrementNeighbour implements INeighbourUtils {
      */
     @Override
     public Solution getNeighbourhood(final Solution s) {
-        return s;
+        Solution retSolution = s.clone();
+        Random random = new Random(System.currentTimeMillis());
+        Pattern rdPattern = retSolution.getPatterns().get(random.nextInt(retSolution.getPatterns().size()));
+        Box rdBox = rdPattern.getAmounts().get(random.nextInt(rdPattern.getAmounts().size()));
+        if (rdBox.getAmount() > 0) {
+            if (random.nextBoolean()) {
+                rdBox.setAmount(rdBox.getAmount() + 1);
+            } else {
+                rdBox.setAmount(rdBox.getAmount() - 1);
+            }
+        } else {
+            rdBox.setAmount(rdBox.getAmount() + 1);
+        }
+        return retSolution;
     }
 
 }

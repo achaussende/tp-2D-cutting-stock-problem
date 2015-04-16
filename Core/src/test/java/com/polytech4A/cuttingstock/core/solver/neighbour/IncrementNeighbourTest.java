@@ -24,7 +24,6 @@ import com.polytech4A.cuttingstock.core.model.Box;
 import com.polytech4A.cuttingstock.core.model.Pattern;
 import com.polytech4A.cuttingstock.core.model.Solution;
 import com.polytech4A.cuttingstock.core.model.Vector;
-import junit.framework.TestCase;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -77,18 +76,9 @@ public class IncrementNeighbourTest {
         generator = null;
     }
 
-    @Test
-    public void testGetModifications() throws Exception {
-        Solution solutions = generator.getModifications(solution);
-        TestCase.assertNotNull(solutions);
-        TestCase.assertEquals(solution.getPatterns().size(), solutions.getPatterns().size());
-    }
 
     @Test
     public void testGetNeighbourhood() throws Exception {
-        ArrayList<Solution> solutions = generator.getNeighbourhood(solution);
-        int count = solutions.get(0).getPatterns().parallelStream().mapToInt(p -> p.getAmounts().size()).sum();
-        count += solution.getPatterns().parallelStream().mapToInt(p -> (int) p.getAmounts().parallelStream().filter(b -> b.getAmount() > 0).count()).sum();
-        TestCase.assertEquals(count, solutions.size());
+
     }
 }

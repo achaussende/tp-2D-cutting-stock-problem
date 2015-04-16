@@ -20,16 +20,21 @@
 
 package com.polytech4A.cuttingstock.core.resolution;
 
+import com.polytech4A.cuttingstock.core.method.LinearResolutionMethod;
 import com.polytech4A.cuttingstock.core.model.Box;
 import com.polytech4A.cuttingstock.core.model.Pattern;
 import com.polytech4A.cuttingstock.core.model.Solution;
+import com.polytech4A.cuttingstock.core.packing.GuillotineSortBFF;
 import com.polytech4A.cuttingstock.core.resolution.util.context.Context;
 import com.polytech4A.cuttingstock.core.resolution.util.context.ContextLoaderUtils;
 import com.polytech4A.cuttingstock.core.resolution.util.context.IllogicalContextException;
 import com.polytech4A.cuttingstock.core.resolution.util.context.MalformedContextFileException;
 import com.polytech4A.cuttingstock.core.save.Save;
 import com.polytech4A.cuttingstock.core.save.ToImg;
+import com.polytech4A.cuttingstock.core.solver.SimulatedAnnealing;
 import com.polytech4A.cuttingstock.core.solver.Solver;
+import com.polytech4A.cuttingstock.core.solver.neighbour.INeighbourUtils;
+import com.polytech4A.cuttingstock.core.solver.neighbour.IncrementNeighbour;
 import org.apache.log4j.Logger;
 
 import java.io.IOException;
@@ -109,14 +114,18 @@ public class Resolution {
      * @see com.polytech4A.cuttingstock.core.model.Box
      */
     public static Solution generateFirstSolution(Context context) {
-        double pattern_area = context.getPatternSize().getArea();
-        double boxes_totalArea = context.getBoxes().parallelStream().mapToDouble(b -> b.getSize().getArea()).sum();
-        double nbPatterns = Math.ceil(boxes_totalArea / pattern_area);
+        double nbPatterns = context.getBoxes().size();
         ArrayList<Pattern> patterns = new ArrayList<>();
+        ArrayList<Box> boxes = new ArrayList<>();
+        for (Box b : context.getBoxes()) {
+            boxes.add(b.clone());
+        }
+        boxes.parallelStream().forEach(b -> b.setAmount(0));
+        Pattern p = new Pattern(context.getPatternSize(), boxes);
         for (int i = 0; i < nbPatterns; i++) {
-            ArrayList<Box> boxes = (ArrayList<Box>) context.getBoxes().clone();
-            boxes.parallelStream().forEach(b -> b.setAmount(0));
-            patterns.add(new Pattern(context.getPatternSize(), boxes));
+            Pattern clP = p.clone();
+            clP.getAmounts().get(i).setAmount(1);
+            patterns.add(clP);
         }
         return new Solution(patterns);
     }
@@ -130,21 +139,20 @@ public class Resolution {
      * @return real random packable solution.
      */
     private Solution getStartingSolution() {
-        /** try {
+        try {
             context = loadContext(contextFilePath);
             ArrayList<INeighbourUtils> generators = new ArrayList<>();
             generators.add(new IncrementNeighbour());
-            generators.add(new MoveNeighbour());
             SimulatedAnnealing realSolutionGenerator = new SimulatedAnnealing(new GuillotineSortBFF(boxComparators), new LinearResolutionMethod(context), generators, 10000);
             Solution firstSolution = generateFirstSolution(context);
-            return realSolutionGenerator.getRandomSolution(firstSolution, false);
+            return realSolutionGenerator.getRandomSolution(firstSolution, true);
         } catch (IOException e) {
             logger.error(e);
         } catch (MalformedContextFileException e) {
             logger.error(e);
         } catch (IllogicalContextException e) {
             logger.error(e);
-         }**/
+        }
         return null;
     }
 }

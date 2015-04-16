@@ -64,25 +64,7 @@ public class MoveNeighbourTest extends TestCase {
         generator = null;
     }
 
-    public void testGetModifications() {
-        MoveNeighbour generator = new MoveNeighbour();
-        ArrayList<Pattern> patterns = generator.getModifications(solution).getPatterns();
-        patterns.parallelStream().forEach(p -> {
-            assertEquals(3, p.getAmounts().parallelStream().filter(b -> b.getAmount() == 1).count());
-            assertEquals(3, p.getAmounts().parallelStream().filter(b -> b.getAmount() == 1).mapToInt(b -> b.getAmount()).sum());
-            assertEquals(1, p.getAmounts().parallelStream().filter(b -> b.getAmount() == 0).count());
-            assertEquals(0, p.getAmounts().parallelStream().filter(b -> b.getAmount() < 0).count());
-        });
-    }
-
     public void testGetNeighbourhood() {
-        ArrayList<Solution> solutions = generator.getNeighbourhood(solution);
-        int totalImages = solution.getPatterns().parallelStream().mapToInt(p -> (int) p.getAmounts().parallelStream().filter(b -> b.getAmount() != 0).count()).sum();
-        int nbPattern = solutions.get(0).getPatterns().size();
-        int nbSolutions = 0;
-        for(int i = 0; i < totalImages; ++i) {
-            nbSolutions += (nbPattern - 1);
-        }
-        assertEquals(nbSolutions, solutions.size());
+
     }
 }

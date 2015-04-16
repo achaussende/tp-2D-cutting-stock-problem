@@ -100,8 +100,8 @@ public class Solution {
     }
 
     /**
-     * Boolean Function to dertermine if this solution is valid.
-     * If evry image as an amount à 1 minimum.
+     * Boolean Function to determine if this solution is valid.
+     * If every image as an amount at 1 minimum.
      *
      * @return true/false
      */
@@ -123,12 +123,13 @@ public class Solution {
 
     /**
      * add a blank pattern (pattern with the same boxes than pattern index 0 but with amounts at 0).
+     *
+     * @return Pattern added.
      */
-    public void addBlankPattern() {
-        if (!patterns.isEmpty()) {
-            Pattern p = patterns.get(0).clone();
-            p.getAmounts().parallelStream().forEach(b -> b.setAmount(0));
-            patterns.add(p);
-        }
+    public Pattern addBlankPattern() {
+        Pattern p = patterns.get(0).clone();
+        p.getAmounts().parallelStream().forEach(b -> b.setAmount(0));
+        patterns.add(p);
+        return p;
     }
 }

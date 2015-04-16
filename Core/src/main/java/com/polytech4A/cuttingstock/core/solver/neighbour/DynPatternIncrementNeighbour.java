@@ -20,7 +20,11 @@
 
 package com.polytech4A.cuttingstock.core.solver.neighbour;
 
+import com.polytech4A.cuttingstock.core.model.Box;
+import com.polytech4A.cuttingstock.core.model.Pattern;
 import com.polytech4A.cuttingstock.core.model.Solution;
+
+import java.util.Random;
 
 /**
  * Created by Adrien CHAUSSENDE on 09/04/2015.
@@ -33,11 +37,17 @@ import com.polytech4A.cuttingstock.core.model.Solution;
 public class DynPatternIncrementNeighbour extends IncrementNeighbour {
     @Override
     public Solution getNeighbourhood(final Solution s) {
-        /**  Solution solution = s.clone();
-        Pattern emptyPattern = solution.getPatterns().get(0).clone();
-        emptyPattern.getAmounts().parallelStream().forEach(b -> b.setAmount(0));
-        solution.getPatterns().add(emptyPattern);
-         return super.getNeighbourhood(solution);**/
-        return s;
+        Random random = new Random(System.currentTimeMillis());
+        int nbPattern = s.getPatterns().size();
+        int choosenPattern = random.nextInt(nbPattern + 1);
+        if (choosenPattern == nbPattern) {
+            Solution retSolution = s.clone();
+            Pattern p = retSolution.addBlankPattern();
+            Box rdBox = p.getAmounts().get(random.nextInt(p.getAmounts().size()));
+            rdBox.setAmount(rdBox.getAmount() + 1);
+            return retSolution;
+        } else {
+            return super.getNeighbourhood(s);
+        }
     }
 }
