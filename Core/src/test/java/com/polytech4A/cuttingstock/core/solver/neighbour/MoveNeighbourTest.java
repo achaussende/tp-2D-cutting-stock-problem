@@ -27,6 +27,7 @@ import com.polytech4A.cuttingstock.core.model.Vector;
 import junit.framework.TestCase;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  * Created by Adrien CHAUSSENDE on 30/03/2015.
@@ -65,6 +66,16 @@ public class MoveNeighbourTest extends TestCase {
     }
 
     public void testGetNeighbourhood() {
-
+        Solution neighbour = generator.getNeighbourhood(solution);
+        assertEquals(solution.getPatterns().parallelStream()
+                        .mapToInt(p -> p.getAmounts().parallelStream()
+                                .mapToInt(b -> b.getAmount())
+                                .sum())
+                        .sum(),
+                neighbour.getPatterns().parallelStream()
+                        .mapToInt(p -> p.getAmounts().parallelStream()
+                                .mapToInt(b -> b.getAmount())
+                                .sum())
+                        .sum());
     }
 }

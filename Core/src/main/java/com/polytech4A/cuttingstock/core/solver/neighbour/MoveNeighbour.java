@@ -20,7 +20,12 @@
 
 package com.polytech4A.cuttingstock.core.solver.neighbour;
 
+import com.polytech4A.cuttingstock.core.model.Pattern;
 import com.polytech4A.cuttingstock.core.model.Solution;
+import com.polytech4A.cuttingstock.core.model.Box;
+
+import java.util.ArrayList;
+import java.util.Random;
 
 /**
  * Created by Adrien CHAUSSENDE on 28/03/2015.
@@ -37,34 +42,23 @@ public class MoveNeighbour implements INeighbourUtils {
     @Override
     public Solution getNeighbourhood(final Solution s) {
         Solution solution = s.clone();
-        /**ArrayList<Solution> solutions = new ArrayList<Solution>();
-         ArrayList<Pattern> modifications = getModifications(solution).getPatterns();
-         final int[] count = {0, 0, 0};
-         for (count[0] = 0; count[0] < modifications.size(); ++count[0]) {
-         ArrayList<Box> modificationAmounts = modifications.get(count[0]).getAmounts();
-         ArrayList<Box> patternAmounts = solution.getPatterns().get(count[0]).getAmounts();
-         for (count[1] = 0; count[1] < modificationAmounts.size(); ++count[1]) {
-         Box mBox = modificationAmounts.get(count[1]);
-         Box pBox = patternAmounts.get(count[1]);
-         if (mBox.getAmount() == 1 && mBox.equals(pBox)) {
-         pBox.setAmount(pBox.getAmount() - 1);
-         //Do the thing on other patterns.
-         solution.getPatterns().stream().filter(p -> count[2]++ != count[0]).forEach(p -> {
-         p.getAmounts().stream().forEach(b -> {
-         if (b.equals(pBox)) {
-         b.setAmount(b.getAmount() + 1);
-         solutions.add(solution.clone());
-         b.setAmount(b.getAmount() - 1);
-         }
-         });
-         });
-         pBox.setAmount(pBox.getAmount() + 1);
-         count[2] = 0;
-         }
-         }
-
-         }**/
-        return s;
+        ArrayList<Pattern> patterns = solution.getPatterns();
+        Random random = new Random(System.currentTimeMillis());
+        int rdPatternIndex = random.nextInt(patterns.size());
+        int rdBoxIndex;
+        Pattern rdPattern = patterns.get(rdPatternIndex);
+        Box rdBox;
+        do {
+            rdBoxIndex = random.nextInt(rdPattern.getAmounts().size());
+            rdBox = rdPattern.getAmounts().get(rdBoxIndex);
+        } while (rdBox.getAmount() == 0);
+        int rdPatternNextIndex;
+        do {
+            rdPatternNextIndex = random.nextInt(patterns.size());
+        } while (rdPatternIndex == rdPatternNextIndex);
+        rdBox.setAmount(rdBox.getAmount() - 1);
+        patterns.get(rdPatternNextIndex).getAmounts().get(rdBoxIndex).setAmount(patterns.get(rdPatternNextIndex).getAmounts().get(rdBoxIndex).getAmount() + 1);
+        return solution;
     }
 
 }
