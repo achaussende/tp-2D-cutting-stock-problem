@@ -20,7 +20,12 @@
 
 package com.polytech4A.cuttingstock.core.solver.neighbour;
 
+import com.polytech4A.cuttingstock.core.model.Box;
+import com.polytech4A.cuttingstock.core.model.Pattern;
 import com.polytech4A.cuttingstock.core.model.Solution;
+
+import java.util.ArrayList;
+import java.util.Random;
 
 /**
  * Created by Adrien CHAUSSENDE on 08/04/2015.
@@ -33,6 +38,26 @@ import com.polytech4A.cuttingstock.core.model.Solution;
 public class DynPatternMoveNeighbour extends MoveNeighbour {
     @Override
     public Solution getRandomNeighbour(final Solution s) {
-        return null;
+        Random random = new Random(System.currentTimeMillis());
+        int targetPatternIndex = random.nextInt(s.getPatterns().size() + 1);
+        if (targetPatternIndex != s.getPatterns().size()) {
+            return super.getRandomNeighbour(s);
+        } else {
+            Solution solution = s.clone();
+            ArrayList<Pattern> patterns = solution.getPatterns();
+            int originPatternIndex = random.nextInt(patterns.size());
+            solution.addBlankPattern();
+            Pattern originPattern = patterns.get(originPatternIndex);
+            int originBoxIndex;
+            Box originBox;
+            do {
+                originBoxIndex = random.nextInt(originPattern.getAmounts().size());
+                originBox = originPattern.getAmounts().get(originBoxIndex);
+            } while (originBox.getAmount() == 0);
+            originBox.setAmount(originBox.getAmount() - 1);
+            patterns.get(targetPatternIndex).getAmounts().get(originBoxIndex)
+                    .setAmount(patterns.get(targetPatternIndex).getAmounts().get(originBoxIndex).getAmount() + 1);
+            return solution;
+        }
     }
 }

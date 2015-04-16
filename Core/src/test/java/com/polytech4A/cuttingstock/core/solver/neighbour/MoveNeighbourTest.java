@@ -77,5 +77,6 @@ public class MoveNeighbourTest extends TestCase {
                                 .mapToInt(b -> b.getAmount())
                                 .sum())
                         .sum());
+        System.out.println(neighbour);
     }
 }
