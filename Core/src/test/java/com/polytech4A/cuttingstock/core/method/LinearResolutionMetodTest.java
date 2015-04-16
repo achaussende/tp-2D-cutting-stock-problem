@@ -27,6 +27,7 @@ import com.polytech4A.cuttingstock.core.resolution.util.context.ContextLoaderUti
 import junit.framework.TestCase;
 import org.apache.commons.math.optimization.linear.LinearConstraint;
 import org.apache.commons.math.optimization.linear.LinearObjectiveFunction;
+import org.apache.commons.math.optimization.linear.Relationship;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -57,6 +58,8 @@ public class LinearResolutionMetodTest extends TestCase {
         solutionBoxes.add(new Box(new Vector(4, 2), 2));
         solutionBoxes.add(new Box(new Vector(4,5), 1));
         patterns.add(new Pattern(new Vector(4, 9), solutionBoxes));
+        patterns.add(new Pattern(new Vector(4, 9), solutionBoxes));
+        patterns.add(new Pattern(new Vector(4, 9), solutionBoxes));
         solution = new Solution(patterns);
     }
 
@@ -67,15 +70,18 @@ public class LinearResolutionMetodTest extends TestCase {
 
     @Test
     public void testUpdateFunction() throws NoSuchFieldException, IllegalAccessException {
-        //TODO : Improve with better test case
         LinearResolutionMethod method = new LinearResolutionMethod(context);
         method.updateFunction(solution);
+        // To avoid set attributes in public, we get the field function.
         Field field = method.getClass().getDeclaredField("function");
         field.setAccessible(true);
         LinearObjectiveFunction f = (LinearObjectiveFunction) field.get(method);
+        // Test of the function
+        //  Coefficients value = sheet cost
         for (double d : f.getCoefficients().getData()) {
             assertEquals((double) context.getSheetCost(), d);
         }
+        // Number of coefficients has to equal the number of patterns of the solution.
         assertEquals(solution.getPatterns().size(), f.getCoefficients().getDimension());
     }
 
@@ -83,9 +89,11 @@ public class LinearResolutionMetodTest extends TestCase {
     public void testUpdateConstraints() throws NoSuchFieldException, IllegalAccessException {
         LinearResolutionMethod method = new LinearResolutionMethod(context);
         method.updateConstraints(solution);
+        // To avoid set attributes in public, we get the field function.
         Field field = method.getClass().getDeclaredField("constraints");
         field.setAccessible(true);
         ArrayList<LinearConstraint> constraints = (ArrayList<LinearConstraint>) field.get(method);
+        // Test of value of each constraint's value.
         int i = 0;
         for (LinearConstraint c : constraints) {
             double[] coefficients = c.getCoefficients().getData();
@@ -96,6 +104,7 @@ public class LinearResolutionMetodTest extends TestCase {
                 j++;
             }
             i++;
+            assertEquals(c.getRelationship(), Relationship.GEQ);
         }
     }
 }
