@@ -29,6 +29,7 @@ import com.sun.istack.internal.NotNull;
 import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
+import java.util.NoSuchElementException;
 
 /**
  * Created by Adrien CHAUSSENDE on 13/03/2015.
@@ -93,6 +94,29 @@ public class SimulatedAnnealing extends NeighbourSolver {
      * Temperature generated.
      */
     public double setFirstTemperature(Solution solution) {
+        Solution clSolution = solution.clone();
+        ArrayList<Solution> solutionsN = new ArrayList<>(); // Solution from the neighbourhood of the clSolution.
+        int nbIteration = 1000 * solution.getPatterns().get(0).getAmounts().size();
+        for (int i = 0; i < nbIteration; i++) {
+            Solution randomSolution = chooseRandomNeihbourUtils().getRandomNeighbour(clSolution);
+            Solution packedSolution = packer.getPlacing(randomSolution);
+
+            if (packedSolution.isPackable() && packedSolution.isValid()) {
+                solutionsN.add(packedSolution);
+            }
+        }
+        try {
+            double temperature = solutionsN
+                    .parallelStream()
+                    .mapToDouble(s -> simplex.minimize(s).getCost())
+                    .max()
+                    .getAsDouble() * temp_coef;
+            this.temperature = temperature;
+            return temperature;
+        } catch (NoSuchElementException ex) {
+            logger.error("Generation of first temperature", ex);
+        }
+        this.temperature = -1;
         return -1;
     }
 

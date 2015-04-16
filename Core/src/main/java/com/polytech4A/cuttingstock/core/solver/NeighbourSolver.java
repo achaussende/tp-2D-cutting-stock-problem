@@ -58,7 +58,7 @@ public abstract class NeighbourSolver extends Solver {
      *
      * @return INeighbourUtils.
      */
-    private INeighbourUtils chooseRandomNeihbourUtils() {
+    public INeighbourUtils chooseRandomNeihbourUtils() {
         Random rd = new Random(System.currentTimeMillis());
         return neighbourGenerator.get(rd.nextInt(neighbourGenerator.size()));
     }
@@ -67,14 +67,14 @@ public abstract class NeighbourSolver extends Solver {
      * Generate a random solution from a solution in parameter.
      * (iterate random choice on neighbour of the solution)
      *
-     * @param solution    First solution of the solver.
+     * @param solution    First solution of the solver (has to be packable and valid)
      * @param removeEmpty if true, removes empty pattern from solution.
      * @return Random solution generated form neighbour.
      */
     public Solution getRandomSolution(final Solution solution, final boolean removeEmpty) {
-        Solution retSolution = solution.clone();
+        Solution retSolution;
         Solution packedSolution;
-        Solution bestFoundSolution = solution;
+        Solution bestFoundSolution = packer.getPlacing(solution);
         int i = 0;
         do {
             retSolution = chooseRandomNeihbourUtils().getRandomNeighbour(bestFoundSolution);

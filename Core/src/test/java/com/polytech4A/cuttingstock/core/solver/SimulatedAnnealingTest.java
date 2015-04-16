@@ -55,27 +55,31 @@ public class SimulatedAnnealingTest extends TestCase {
         boxComparators.add(Box.Comparators.AREA);
         boxComparators.add(Box.Comparators.X);
         boxComparators.add(Box.Comparators.Y);
-        Context ctx = new Context("test", 20, 1, null, new Vector(2, 30));
         ArrayList<INeighbourUtils> generators = new ArrayList<>();
         generators.add(new DynPatternIncrementNeighbour());
         //generators.add(new DynPatternMoveNeighbour());
-        sAnnealing = new SimulatedAnnealing(new GuillotineSortBFF(boxComparators), new LinearResolutionMethod(ctx), generators, 10000);
         ArrayList<Pattern> patterns = new ArrayList<Pattern>();
         ArrayList<Box> solutionBoxes = new ArrayList<Box>();
         solutionBoxes.add(new Box(new Vector(4, 2), 1));
-        solutionBoxes.add(new Box(new Vector(4, 5), 1));
-        solutionBoxes.add(new Box(new Vector(4, 3), 1));
+        solutionBoxes.add(new Box(new Vector(4, 5), 0));
+        solutionBoxes.add(new Box(new Vector(4, 3), 0));
         ArrayList<Box> solutionBoxes1 = new ArrayList<Box>();
-        solutionBoxes1.add(new Box(new Vector(4, 2), 1));
+        solutionBoxes1.add(new Box(new Vector(4, 2), 0));
         solutionBoxes1.add(new Box(new Vector(4, 5), 1));
-        solutionBoxes1.add(new Box(new Vector(4, 3), 1));
+        solutionBoxes1.add(new Box(new Vector(4, 3), 0));
         ArrayList<Box> solutionBoxes2 = new ArrayList<Box>();
-        solutionBoxes2.add(new Box(new Vector(4, 2), 1));
-        solutionBoxes2.add(new Box(new Vector(4, 5), 1));
+        solutionBoxes2.add(new Box(new Vector(4, 2), 0));
+        solutionBoxes2.add(new Box(new Vector(4, 5), 0));
         solutionBoxes2.add(new Box(new Vector(4, 3), 1));
         patterns.add(new Pattern(new Vector(20, 30), solutionBoxes));
         patterns.add(new Pattern(new Vector(20, 30), solutionBoxes1));
         patterns.add(new Pattern(new Vector(20, 30), solutionBoxes2));
+        ArrayList<Box> contextBoxes = new ArrayList<>();
+        contextBoxes.add(new Box(new Vector(4, 2), 300));
+        contextBoxes.add(new Box(new Vector(4, 5), 57));
+        contextBoxes.add(new Box(new Vector(4, 3), 220));
+        Context ctx = new Context("test", 20, 1, contextBoxes, new Vector(2, 30));
+        sAnnealing = new SimulatedAnnealing(new GuillotineSortBFF(boxComparators), new LinearResolutionMethod(ctx), generators, 10000);
         solution = new Solution(patterns);
     }
 
@@ -91,6 +95,8 @@ public class SimulatedAnnealingTest extends TestCase {
     }
 
     public void testSetFirstTemperature() throws Exception {
+        sAnnealing.setFirstTemperature(sAnnealing.getRandomSolution(solution, true));
+        assertTrue(sAnnealing.getTemperature() > 0);
     }
 
     public void testSetMu() throws Exception {

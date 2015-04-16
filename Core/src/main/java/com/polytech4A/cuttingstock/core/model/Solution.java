@@ -95,8 +95,11 @@ public class Solution {
     public boolean isPackable() {
         int nbBoxes = patterns.parallelStream()
                 .mapToInt(p -> (int) p.getBoxes().parallelStream().count()).sum();
-        int nbPlacedBox = patterns.parallelStream().mapToInt(p -> p.getPlacedBoxes().size()).sum();
-        return (nbBoxes == nbPlacedBox);
+        if (patterns.parallelStream().allMatch(p -> p.getPlacedBoxes() != null)) {
+            int nbPlacedBox = patterns.parallelStream().mapToInt(p -> p.getPlacedBoxes().size()).sum();
+            return (nbBoxes == nbPlacedBox);
+        }
+        return false;
     }
 
     /**
