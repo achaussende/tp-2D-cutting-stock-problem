@@ -29,7 +29,7 @@ import java.util.ArrayList;
  *
  * @author Antoine CARON
  * @version 1.0
- *          <p/>
+ *          <p>
  *          Representation of a solution for 2D cutting stock problem.
  *          It's a representation of a vector sized by the number of pattern.
  * @see Pattern  for information about structure of a Pattern.
@@ -50,7 +50,7 @@ public class Solution {
     @Override
     public Solution clone() {
         ArrayList<Pattern> clonedPatterns = new ArrayList<Pattern>();
-        for(Pattern p : patterns) {
+        for (Pattern p : patterns) {
             clonedPatterns.add(p.clone());
         }
         return new Solution(clonedPatterns);
@@ -87,10 +87,37 @@ public class Solution {
         }
     }
 
+    /**
+     * Boolean Function to dertermine if this solution is Packable.
+     *
+     * @return true/false
+     */
     public boolean isPackable() {
         int nbBoxes = patterns.parallelStream()
                 .mapToInt(p -> (int) p.getBoxes().parallelStream().count()).sum();
         int nbPlacedBox = patterns.parallelStream().mapToInt(p -> p.getPlacedBoxes().size()).sum();
         return (nbBoxes == nbPlacedBox);
+    }
+
+    /**
+     * Boolean Function to dertermine if this solution is valid.
+     * If evry image as an amount à 1 minimum.
+     *
+     * @return true/false
+     */
+    public boolean isValid() {
+        int nbImages = patterns.get(0).getAmounts().size();
+        for (int i = 0; i < nbImages; i++) {
+            boolean isexisting = false;
+            for (Pattern p : patterns) {
+                if (p.getAmounts().get(i).getAmount() > 0) {
+                    isexisting = true;
+                }
+            }
+            if (!isexisting) {
+                return false;
+            }
+        }
+        return true;
     }
 }

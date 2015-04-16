@@ -70,4 +70,22 @@ public class SolutionTest extends TestCase {
         solution1.removeEmpty();
         assertEquals(2, solution1.getPatterns().size());
     }
+
+    public void testIsValid() throws Exception {
+        ArrayList<Pattern> patterns = new ArrayList<>();
+        ArrayList<Box> solutionBoxes = new ArrayList<Box>();
+        solutionBoxes.add(new Box(new Vector(4, 2), 2));
+        solutionBoxes.add(new Box(new Vector(4, 5), 0));
+        ArrayList<Box> solutionBoxes2 = new ArrayList<Box>();
+        solutionBoxes2.add(new Box(new Vector(4, 2), 0));
+        solutionBoxes2.add(new Box(new Vector(4, 5), 2));
+        ArrayList<Box> solutionBoxes3 = new ArrayList<Box>();
+        solutionBoxes3.add(new Box(new Vector(4, 2), 0));
+        solutionBoxes3.add(new Box(new Vector(4, 5), 0));
+        patterns.add(new Pattern(new Vector(4, 9), solutionBoxes));
+        patterns.add(new Pattern(new Vector(4, 9), solutionBoxes2));
+        patterns.add(new Pattern(new Vector(4, 9), solutionBoxes3));
+        Solution solution1 = new Solution(patterns);
+        assertTrue(solution1.isValid());
+    }
 }
