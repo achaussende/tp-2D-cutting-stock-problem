@@ -20,8 +20,6 @@
 
 package com.polytech4A.cuttingstock.core.model;
 
-import com.sun.istack.internal.NotNull;
-
 import java.util.ArrayList;
 
 /**
@@ -36,10 +34,10 @@ import java.util.ArrayList;
  */
 public class Solution {
 
-    @NotNull
+
     private ArrayList<Pattern> patterns;
 
-    public Solution(@NotNull ArrayList<Pattern> patterns) {
+    public Solution(ArrayList<Pattern> patterns) {
         this.patterns = patterns;
     }
 
@@ -47,7 +45,7 @@ public class Solution {
         return patterns;
     }
 
-    @Override
+
     public Solution clone() {
         ArrayList<Pattern> clonedPatterns = new ArrayList<Pattern>();
         for (Pattern p : patterns) {

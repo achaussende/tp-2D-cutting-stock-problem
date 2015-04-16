@@ -21,8 +21,6 @@
 package com.polytech4A.cuttingstock.core.packing;
 
 import com.polytech4A.cuttingstock.core.model.*;
-import com.sun.istack.internal.NotNull;
-import com.sun.istack.internal.Nullable;
 import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
@@ -54,7 +52,7 @@ public class GuillotineSortBFF extends Packer {
     }
 
     @Override
-    public Solution getPlacing(@NotNull Solution solution) {
+    public Solution getPlacing(Solution solution) {
         Solution clSolution = solution.clone();
         clSolution.getPatterns().parallelStream().forEach(p -> p.getPlacedBoxes().clear());
         ArrayList<Pattern> patterns = clSolution.getPatterns();
@@ -81,7 +79,7 @@ public class GuillotineSortBFF extends Packer {
      * @param boxVector Box to be placed in the bin.
      * @return True if the box can be placed in the bin.
      */
-    public boolean isBinCompatible(@NotNull Vector binVector, @NotNull Vector boxVector) {
+    public boolean isBinCompatible(Vector binVector, Vector boxVector) {
         return boxVector.isSmallerThan(binVector);
     }
 
@@ -92,8 +90,7 @@ public class GuillotineSortBFF extends Packer {
      * @param comparator Comparator to use when sorting boxes.
      * @return A new pattern with the boxes placed on it. Return null if there is no boxes to place.
      */
-    @Nullable
-    public Pattern generatePattern(@NotNull Pattern p, @NotNull Comparator<Box> comparator) {
+    public Pattern generatePattern(Pattern p, Comparator<Box> comparator) {
         ArrayList<Box> boxes = p.getBoxes();
         Collections.sort(boxes, Collections.reverseOrder(comparator));
         Bin bin = new Bin(p.getSize(), p, new Vector(0, 0));
@@ -115,8 +112,7 @@ public class GuillotineSortBFF extends Packer {
      * @param bins  List of bins that will be generated.
      * @return List of placed boxes.
      */
-    @Nullable
-    public ArrayList<PlacedBox> generatePlacedBoxes(@NotNull ArrayList<Box> boxes, @NotNull ArrayList<Bin> bins) {
+    public ArrayList<PlacedBox> generatePlacedBoxes(ArrayList<Box> boxes, ArrayList<Bin> bins) {
         ArrayList<PlacedBox> placedBoxes = new ArrayList<>();
         ListIterator<Box> iterator = boxes.listIterator();
         boolean boxPacked = false;
@@ -143,8 +139,7 @@ public class GuillotineSortBFF extends Packer {
      * @param box  Box to be placed.
      * @return The box that is now placed. Return null if it can't be placed.
      */
-    @Nullable
-    public PlacedBox generatePlacedBox(@NotNull ArrayList<Bin> bins, @NotNull Box box) {
+    public PlacedBox generatePlacedBox(ArrayList<Bin> bins, Box box) {
         for (Bin bin : bins) {
             if (bin.isActive() && (isBinCompatible(bin.getSize(), box.getSize()) || isBinCompatible(bin.getSize(), box.getSize().getInvertedVector()))) {
                 PlacedBox placedBox = generatePlaceBoxForBin(bin, box);
@@ -169,8 +164,7 @@ public class GuillotineSortBFF extends Packer {
      * @param boxToPlace Box to place.
      * @return placebox or null if no place is found.
      */
-    @Nullable
-    public PlacedBox generatePlaceBoxForBin(@NotNull Bin bin, @NotNull Box boxToPlace) {
+    public PlacedBox generatePlaceBoxForBin(Bin bin, Box boxToPlace) {
         if (boxToPlace.getSize().isSmallerThan(bin.getSize())) {
             return new PlacedBox(boxToPlace, bin.getOrigin(), false);
         } else if (boxToPlace.getSize().isSmallerThan(bin.getSize().getInvertedVector())) {

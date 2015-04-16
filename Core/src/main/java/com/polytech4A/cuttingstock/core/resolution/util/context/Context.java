@@ -22,7 +22,6 @@ package com.polytech4A.cuttingstock.core.resolution.util.context;
 
 import com.polytech4A.cuttingstock.core.model.Box;
 import com.polytech4A.cuttingstock.core.model.Vector;
-import com.sun.istack.internal.NotNull;
 
 import java.util.ArrayList;
 
@@ -59,10 +58,9 @@ public class Context {
     /**
      * Boxes with size and amount to print, not the amount per pattern.
      */
-    @NotNull
     private ArrayList<Box> boxes;
 
-    public Context(String label, int patternCost, int sheetCost, @NotNull ArrayList<Box> boxes, Vector patternSize) {
+    public Context(String label, int patternCost, int sheetCost, ArrayList<Box> boxes, Vector patternSize) {
         this.label = label;
         this.patternCost = patternCost;
         this.sheetCost = sheetCost;

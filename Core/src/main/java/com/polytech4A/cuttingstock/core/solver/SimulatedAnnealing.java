@@ -25,7 +25,6 @@ import com.polytech4A.cuttingstock.core.model.Solution;
 import com.polytech4A.cuttingstock.core.packing.Packer;
 import com.polytech4A.cuttingstock.core.resolution.util.context.Context;
 import com.polytech4A.cuttingstock.core.solver.neighbour.INeighbourUtils;
-import com.sun.istack.internal.NotNull;
 import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
@@ -82,7 +81,7 @@ public class SimulatedAnnealing extends NeighbourSolver {
     }
 
     @Override
-    public Solution getSolution(@NotNull Solution solution, @NotNull Context context) {
+    public Solution getSolution(Solution solution, Context context) {
         return null;
     }
 

@@ -22,7 +22,6 @@ package com.polytech4A.cuttingstock.core.packing;
 
 import com.polytech4A.cuttingstock.core.model.Pattern;
 import com.polytech4A.cuttingstock.core.model.Vector;
-import com.sun.istack.internal.NotNull;
 
 import java.util.ArrayList;
 
@@ -127,7 +126,7 @@ public class Bin {
         this.horizontalsubBin = horizontalsubBin;
     }
 
-    public void disableSubBinFromBin(@NotNull ArrayList<Bin> bins) {
+    public void disableSubBinFromBin(ArrayList<Bin> bins) {
         bins.parallelStream().forEach(currentBin -> {
             if (currentBin.horizontalsubBin.contains(this)) {
                 currentBin.verticalsubBin.forEach(vertBin -> {

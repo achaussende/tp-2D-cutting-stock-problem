@@ -20,8 +20,6 @@
 
 package com.polytech4A.cuttingstock.core.model;
 
-import com.sun.istack.internal.NotNull;
-
 import java.util.ArrayList;
 
 /**
@@ -43,17 +41,16 @@ public class Pattern {
     /**
      * List of amount of each Box in the Pattern. This table is size by the total number of different boxes.
      */
-    @NotNull
     private ArrayList<Box> boxes;
 
     private ArrayList<PlacedBox> placedBoxes;
 
-    public Pattern(@NotNull Vector size, @NotNull ArrayList<Box> boxes) {
+    public Pattern(Vector size, ArrayList<Box> boxes) {
         this.size = size;
         this.boxes = boxes;
     }
 
-    public Pattern(@NotNull Vector size, @NotNull ArrayList<Box> boxes, @NotNull ArrayList<PlacedBox> placedBoxes) {
+    public Pattern(Vector size, ArrayList<Box> boxes, ArrayList<PlacedBox> placedBoxes) {
         this.size = size;
         this.boxes = boxes;
         this.placedBoxes = placedBoxes;

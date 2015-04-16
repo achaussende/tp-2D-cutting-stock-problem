@@ -20,8 +20,6 @@
 
 package com.polytech4A.cuttingstock.core.model;
 
-import com.sun.istack.internal.NotNull;
-
 /**
  * Created by Antoine CARON on 12/03/2015.
  *
@@ -35,7 +33,6 @@ public class PlacedBox extends Box {
     /**
      * Position in a Pattern.
      */
-    @NotNull
     private Vector position;
 
     /**
@@ -51,7 +48,7 @@ public class PlacedBox extends Box {
      * @param position Vector corresponding of the position of the box on the pattern.
      * @param rotation Boolean indicating if the Box is turned.
      */
-    public PlacedBox(@NotNull Vector size, int amount, @NotNull Vector position, @NotNull boolean rotation) {
+    public PlacedBox(Vector size, int amount, Vector position, boolean rotation) {
         super(size, amount);
         this.position = position;
         this.rotation = rotation;
@@ -64,13 +61,13 @@ public class PlacedBox extends Box {
      * @param position Vector corresponding of the position of the box on the pattern.
      * @param rotation Boolean indicating if the Box is turned.²
      */
-    public PlacedBox(@NotNull Box box, @NotNull Vector position, @NotNull boolean rotation) {
+    public PlacedBox(Box box, Vector position, boolean rotation) {
         super(box.getSize(), box.getAmount());
         this.position = position;
         this.rotation = rotation;
     }
 
-    @NotNull
+
     public Vector getPosition() {
         return position;
     }
@@ -83,7 +80,7 @@ public class PlacedBox extends Box {
         return rotation;
     }
 
-    public void setRotation(@NotNull boolean rotation) {
+    public void setRotation(boolean rotation) {
         this.rotation = rotation;
     }
 

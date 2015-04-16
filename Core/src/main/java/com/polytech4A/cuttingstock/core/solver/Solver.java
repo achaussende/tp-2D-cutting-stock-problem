@@ -24,14 +24,13 @@ import com.polytech4A.cuttingstock.core.method.LinearResolutionMethod;
 import com.polytech4A.cuttingstock.core.model.Solution;
 import com.polytech4A.cuttingstock.core.packing.Packer;
 import com.polytech4A.cuttingstock.core.resolution.util.context.Context;
-import com.sun.istack.internal.NotNull;
 
 /**
  * Created by Antoine CARON on 12/03/2015.
  *
  * @author Antoine CARON
  * @version 1.0
- *          <p/>
+ *          <p>
  *          Generic solver for 2D cutting stock problem.
  */
 public abstract class Solver {
@@ -58,6 +57,5 @@ public abstract class Solver {
      *                 Contains all information about Patterns, Boxes and Cost.
      * @return
      */
-    @NotNull
-    public abstract Solution getSolution(@NotNull Solution solution, @NotNull Context context);
+    public abstract Solution getSolution(Solution solution, Context context);
 }

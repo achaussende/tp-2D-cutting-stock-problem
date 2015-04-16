@@ -23,7 +23,6 @@ package com.polytech4A.cuttingstock.core.packing;
 import com.polytech4A.cuttingstock.core.model.Box;
 import com.polytech4A.cuttingstock.core.model.PlacedBox;
 import com.polytech4A.cuttingstock.core.model.Vector;
-import com.sun.istack.internal.NotNull;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -57,7 +56,7 @@ public class GuillotineSortBFFRM extends GuillotineSortBFF {
      * @param bin1       Bin to disable.
      * @param bin2       Bin to disable.
      */
-    private static void merge(@NotNull ArrayList<Bin> bins, @NotNull Bin createdBin, @NotNull Bin bin1, @NotNull Bin bin2) {
+    private static void merge(ArrayList<Bin> bins, Bin createdBin, Bin bin1, Bin bin2) {
         bins.add(createdBin);
         bin1.setActive(false);
         bin1.disableSubBinFromBin(bins);
@@ -73,7 +72,7 @@ public class GuillotineSortBFFRM extends GuillotineSortBFF {
      * @return The box that is now placed. Return null if it can't be placed.
      */
     @Override
-    public PlacedBox generatePlacedBox(@NotNull ArrayList<Bin> bins, @NotNull Box box) {
+    public PlacedBox generatePlacedBox(ArrayList<Bin> bins, Box box) {
         for (Bin bin : bins.parallelStream().filter(b -> b.isActive()).collect(Collectors.toList())) {
             if (bin.isActive() && (isBinCompatible(bin.getSize(), box.getSize()) || isBinCompatible(bin.getSize(), box.getSize().getInvertedVector()))) {
                 PlacedBox placedBox = generatePlaceBoxForBin(bin, box);

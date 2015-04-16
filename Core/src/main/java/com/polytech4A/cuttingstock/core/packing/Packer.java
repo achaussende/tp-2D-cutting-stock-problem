@@ -22,7 +22,6 @@ package com.polytech4A.cuttingstock.core.packing;
 
 import com.polytech4A.cuttingstock.core.model.Box;
 import com.polytech4A.cuttingstock.core.model.Solution;
-import com.sun.istack.internal.NotNull;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -55,5 +54,5 @@ public abstract class Packer {
      * @see com.polytech4A.cuttingstock.core.model.PlacedBox
      * @see com.polytech4A.cuttingstock.core.model.Pattern
      */
-    public abstract Solution getPlacing(@NotNull Solution solution);
+    public abstract Solution getPlacing(Solution solution);
 }

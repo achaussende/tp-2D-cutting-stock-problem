@@ -20,8 +20,6 @@
 
 package com.polytech4A.cuttingstock.core.model;
 
-import com.sun.istack.internal.NotNull;
-
 import java.util.Comparator;
 
 /**
@@ -40,7 +38,6 @@ public class Box implements Comparable<Box> {
      *
      * @see com.polytech4A.cuttingstock.core.model.Vector
      */
-    @NotNull
     private Vector size;
 
     /**
