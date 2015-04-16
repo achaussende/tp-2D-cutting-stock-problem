@@ -38,6 +38,6 @@ public interface INeighbourUtils {
      * @param s current solution.
      * @return Generated neighbour for this solution.
      */
-    Solution getNeighbourhood(final Solution s);
+    Solution getRandomNeighbour(final Solution s);
 
 }

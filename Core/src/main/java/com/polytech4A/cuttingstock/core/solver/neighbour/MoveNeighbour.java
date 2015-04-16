@@ -40,7 +40,7 @@ public class MoveNeighbour implements INeighbourUtils {
      * {@inheritDoc}
      */
     @Override
-    public Solution getNeighbourhood(final Solution s) {
+    public Solution getRandomNeighbour(final Solution s) {
         Solution solution = s.clone();
         ArrayList<Pattern> patterns = solution.getPatterns();
         Random random = new Random(System.currentTimeMillis());

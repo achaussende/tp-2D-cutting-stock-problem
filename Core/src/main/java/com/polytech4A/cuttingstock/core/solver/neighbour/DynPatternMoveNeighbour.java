@@ -32,7 +32,7 @@ import com.polytech4A.cuttingstock.core.model.Solution;
  */
 public class DynPatternMoveNeighbour extends MoveNeighbour {
     @Override
-    public Solution getNeighbourhood(final Solution s) {
+    public Solution getRandomNeighbour(final Solution s) {
         return null;
     }
 }

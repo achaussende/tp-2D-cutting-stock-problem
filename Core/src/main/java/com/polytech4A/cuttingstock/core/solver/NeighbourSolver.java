@@ -77,7 +77,7 @@ public abstract class NeighbourSolver extends Solver {
         Solution bestFoundSolution = solution;
         int i = 0;
         do {
-            retSolution = chooseRandomNeihbourUtils().getNeighbourhood(bestFoundSolution);
+            retSolution = chooseRandomNeihbourUtils().getRandomNeighbour(bestFoundSolution);
             packedSolution = packer.getPlacing(retSolution);
             i++;
             if (packedSolution.isPackable() && packedSolution.isValid()) {

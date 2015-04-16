@@ -36,7 +36,7 @@ import java.util.Random;
  */
 public class DynPatternIncrementNeighbour extends IncrementNeighbour {
     @Override
-    public Solution getNeighbourhood(final Solution s) {
+    public Solution getRandomNeighbour(final Solution s) {
         Random random = new Random(System.currentTimeMillis());
         int nbPattern = s.getPatterns().size();
         int choosenPattern = random.nextInt(nbPattern + 1);
@@ -47,7 +47,7 @@ public class DynPatternIncrementNeighbour extends IncrementNeighbour {
             rdBox.setAmount(rdBox.getAmount() + 1);
             return retSolution;
         } else {
-            return super.getNeighbourhood(s);
+            return super.getRandomNeighbour(s);
         }
     }
 }

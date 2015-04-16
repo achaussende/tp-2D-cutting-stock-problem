@@ -66,7 +66,7 @@ public class MoveNeighbourTest extends TestCase {
     }
 
     public void testGetNeighbourhood() {
-        Solution neighbour = generator.getNeighbourhood(solution);
+        Solution neighbour = generator.getRandomNeighbour(solution);
         assertEquals(solution.getPatterns().parallelStream()
                         .mapToInt(p -> p.getAmounts().parallelStream()
                                 .mapToInt(b -> b.getAmount())

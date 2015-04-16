@@ -40,7 +40,7 @@ public class IncrementNeighbour implements INeighbourUtils {
      * {@inheritDoc}
      */
     @Override
-    public Solution getNeighbourhood(final Solution s) {
+    public Solution getRandomNeighbour(final Solution s) {
         Solution retSolution = s.clone();
         Random random = new Random(System.currentTimeMillis());
         Pattern rdPattern = retSolution.getPatterns().get(random.nextInt(retSolution.getPatterns().size()));
