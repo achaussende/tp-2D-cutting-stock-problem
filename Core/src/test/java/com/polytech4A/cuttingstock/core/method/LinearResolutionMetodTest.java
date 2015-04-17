@@ -28,6 +28,7 @@ import junit.framework.TestCase;
 import org.apache.commons.math.optimization.linear.LinearConstraint;
 import org.apache.commons.math.optimization.linear.LinearObjectiveFunction;
 import org.apache.commons.math.optimization.linear.Relationship;
+import org.apache.commons.math.util.FastMath;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -49,18 +50,46 @@ public class LinearResolutionMetodTest extends TestCase {
 
     @Before
     public void setUp() {
-        ArrayList<Box> boxes = new ArrayList<>();
-        boxes.add(new Box(new Vector(4, 2), 200));
-        boxes.add(new Box(new Vector(4, 5), 120));
-        context = new Context("testContext", 20, 1, boxes, new Vector(4, 9));
-        ArrayList<Pattern> patterns = new ArrayList<Pattern>();
-        ArrayList<Box> solutionBoxes = new ArrayList<Box>();
-        solutionBoxes.add(new Box(new Vector(4, 2), 2));
-        solutionBoxes.add(new Box(new Vector(4,5), 1));
-        patterns.add(new Pattern(new Vector(4, 9), solutionBoxes));
-        patterns.add(new Pattern(new Vector(4, 9), solutionBoxes));
-        patterns.add(new Pattern(new Vector(4, 9), solutionBoxes));
-        solution = new Solution(patterns);
+        // Context initialization
+        Vector patternSize = new Vector(40,60);
+        Box box0 = new Box(new Vector(24, 30), 246);
+        Box box1 = new Box(new Vector(13, 56), 562);
+        Box box2 = new Box(new Vector(14, 22), 1000);
+        Box box3 = new Box(new Vector(9, 23), 3498);
+        ArrayList<Box> ctxBoxes = new ArrayList<>();
+        ctxBoxes.add(box0);
+        ctxBoxes.add(box1);
+        ctxBoxes.add(box2);
+        ctxBoxes.add(box3);
+        context = new Context("testConext", 20, 1, ctxBoxes, patternSize);
+
+        // Solution initialization
+        //  List of boxes for each pattern
+        //      Pattern 1
+        ArrayList<Box> pattern1Boxes = new ArrayList<>();
+        pattern1Boxes.add(new Box(new Vector(24, 30), 2));
+        pattern1Boxes.add(new Box(new Vector(13, 56), 1));
+        pattern1Boxes.add(new Box(new Vector(14, 22), 0));
+        pattern1Boxes.add(new Box(new Vector(9, 23), 0));
+        //      Pattern 2
+        ArrayList<Box> pattern2Boxes = new ArrayList<>();
+        pattern2Boxes.add(new Box(new Vector(24, 30), 0));
+        pattern2Boxes.add(new Box(new Vector(13, 56), 1));
+        pattern2Boxes.add(new Box(new Vector(14, 22), 0));
+        pattern2Boxes.add(new Box(new Vector(9, 23), 7));
+        //      Pattern 3
+        ArrayList<Box> pattern3Boxes = new ArrayList<>();
+        pattern3Boxes.add(new Box(new Vector(24, 30), 0));
+        pattern3Boxes.add(new Box(new Vector(13, 56), 0));
+        pattern3Boxes.add(new Box(new Vector(14, 22), 5));
+        pattern3Boxes.add(new Box(new Vector(9, 23), 2));
+        //  Add each pattern to list of patterns for the solution
+        ArrayList<Pattern> solutionPatterns = new ArrayList<>();
+        solutionPatterns.add(new Pattern(patternSize, pattern1Boxes));
+        solutionPatterns.add(new Pattern(patternSize, pattern2Boxes));
+        solutionPatterns.add(new Pattern(patternSize, pattern3Boxes));
+        // Create solution
+        solution = new Solution(solutionPatterns);
     }
 
     @After
@@ -106,5 +135,16 @@ public class LinearResolutionMetodTest extends TestCase {
             i++;
             assertEquals(c.getRelationship(), Relationship.GEQ);
         }
+    }
+
+    @Test
+    public void testMinimize() {
+        LinearResolutionMethod method = new LinearResolutionMethod(context);
+        Result result = method.minimize(solution);
+        int[] printings = {123, 443, 200};
+        for(int i = 0; i < printings.length; ++i) {
+            assertEquals(printings[i], result.getPrintings()[i]);
+        }
+        assertEquals(826, (int) FastMath.ceil(result.getCost()));
     }
 }
