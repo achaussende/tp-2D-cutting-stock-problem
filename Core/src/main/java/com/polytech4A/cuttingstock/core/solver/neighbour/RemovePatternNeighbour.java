@@ -41,7 +41,7 @@ public class RemovePatternNeighbour implements INeighbourUtils {
      */
     @Override
     public Solution getRandomNeighbour(Solution s) {
-        if (s.getPatterns().size() > 0) {
+        if (s.getPatterns().size() > 1) {
             Solution clSolution = s.clone();
             Random random = new Random(System.currentTimeMillis());
             clSolution.getPatterns().remove(random.nextInt(clSolution.getPatterns().size()));
