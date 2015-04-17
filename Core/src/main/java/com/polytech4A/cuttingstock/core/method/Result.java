@@ -20,6 +20,8 @@
 
 package com.polytech4A.cuttingstock.core.method;
 
+import org.apache.commons.math.util.FastMath;
+
 /**
  * Created by Adrien CHAUSSENDE on 27/03/2015.
  *
@@ -32,7 +34,7 @@ public class Result {
     /**
      * Number of printings for each pattern.
      */
-    private double[] printings;
+    private int[] printings;
 
     /**
      * Cost found during the resolution method.
@@ -40,6 +42,15 @@ public class Result {
     private double cost;
 
     public Result(double[] printings, double cost) {
+        int[] buf = new int[printings.length];
+        for (int i = 0; i < printings.length; ++i) {
+            buf[i] = (int) FastMath.ceil(printings[i]);
+        }
+        this.printings = buf;
+        this.cost = cost;
+    }
+
+    public Result(int[] printings, double cost) {
         this.printings = printings;
         this.cost = cost;
     }
@@ -48,16 +59,8 @@ public class Result {
         return cost;
     }
 
-    public void setCost(double cost) {
-        this.cost = cost;
-    }
-
-    public double[] getPrintings() {
+    public int[] getPrintings() {
         return printings;
-    }
-
-    public void setPrintings(double[] printings) {
-        this.printings = printings;
     }
 
     /**
