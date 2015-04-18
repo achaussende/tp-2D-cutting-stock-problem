@@ -138,8 +138,10 @@ public class Resolution {
         Solution startingSolution = getStartingSolution();
         logger.info("FirstSolution ----->" + startingSolution);
         ArrayList<INeighbourUtils> generators = new ArrayList<>();
-        generators.add(new DynPatternIncrementNeighbour());
-        generators.add(new DynPatternMoveNeighbour());
+        for (int i = 0; i < 5; i++) {
+            generators.add(new DynPatternIncrementNeighbour());
+            generators.add(new DynPatternMoveNeighbour());
+        }
         generators.add(new RemovePatternNeighbour());
         solver = new SimulatedAnnealing(
                 new GuillotineSortBFF(boxComparators),
