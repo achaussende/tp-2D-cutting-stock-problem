@@ -52,7 +52,7 @@ public class SimulatedAnnealing extends NeighbourSolver {
     /**
      * Coefficient of multiplication for generation of the first solution.
      */
-    private static final double temp_coef = 1.1;
+    private static final double temp_coef = 2.5;
     /**
      * Limit number of iterations of the algorithm.
      */
@@ -106,40 +106,43 @@ public class SimulatedAnnealing extends NeighbourSolver {
         Result randomSolutionCost;
         Solution currentSolution = solution;
         Result currentCost = bestCost.clone();
-        int step = (int) nbIterations / 10;
+        int step = (int) nbIterations / 1000;
+        int progress = 1000 / 100;
         logger.info("First Cost = " + bestCost);
         double deltaF;
-        for (int i = 0; i < nbIterations; i++) {
-            do {
-                randomSolutionCost = null;
-                randomSolution = chooseRandomNeihbourUtils().getRandomNeighbour(currentSolution);
-                randomSolution = packer.getPlacing(randomSolution);
-                if (randomSolution.isValid() && randomSolution.isPackable()) {
-                    randomSolutionCost = simplex.minimize(randomSolution);
-                }
-            } while (randomSolutionCost == null);
-            deltaF = currentCost.getCost() - randomSolutionCost.getCost();
-            if (deltaF <= 0) {
-                currentSolution = randomSolution;
-                currentCost = randomSolutionCost;
-                if (currentCost.getCost() < bestCost.getCost()) {
-                    bestSolution = currentSolution;
-                    bestCost = currentCost;
-                }
-            } else {
-                Random random = new Random(System.currentTimeMillis());
-                double p = random.nextDouble();
-                double exp = FastMath.exp((-deltaF) / temperature);
-                if (p <= exp) {
+        for (int j = 0; j < step; j++) {
+            for (int i = 0; i < step; i++) {
+                do {
+                    randomSolutionCost = null;
+                    randomSolution = chooseRandomNeihbourUtils().getRandomNeighbour(currentSolution);
+                    randomSolution = packer.getPlacing(randomSolution);
+                    if (randomSolution.isValid() && randomSolution.isPackable()) {
+                        randomSolutionCost = simplex.minimize(randomSolution);
+                    }
+                } while (randomSolutionCost == null);
+                deltaF = currentCost.getCost() - randomSolutionCost.getCost();
+                if (deltaF <= 0) {
                     currentSolution = randomSolution;
                     currentCost = randomSolutionCost;
+                    if (currentCost.getCost() < bestCost.getCost()) {
+                        bestSolution = currentSolution;
+                        bestCost = currentCost;
+                    }
+                } else {
+                    Random random = new Random(System.currentTimeMillis());
+                    double p = random.nextDouble();
+                    double exp = FastMath.exp((-deltaF) / temperature);
+                    if (p <= exp) {
+                        currentSolution = randomSolution;
+                        currentCost = randomSolutionCost;
+                    }
                 }
             }
             temperature *= mu;
-            if (i % step == 0) {
-                int pourcent = i / step;
+            if (j % progress == 0) {
+                int pourcent = j / progress;
                 pourcent *= 10;
-                logger.info(pourcent + "%...");
+                logger.info(pourcent + "%... current tempreature =" + temperature);
 
             }
         }
