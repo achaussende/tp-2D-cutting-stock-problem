@@ -106,11 +106,11 @@ public class SimulatedAnnealing extends NeighbourSolver {
         Result randomSolutionCost;
         Solution currentSolution = solution;
         Result currentCost = bestCost.clone();
-        int step = (int) nbIterations / 1000;
-        int progress = 1000 / 100;
+        int step = (int) nbIterations / 100;
+        int progress = 10;
         logger.info("First Cost = " + bestCost);
         double deltaF;
-        for (int j = 0; j < step; j++) {
+        for (int j = 0; j < 100; j++) {
             for (int i = 0; i < step; i++) {
                 do {
                     randomSolutionCost = null;
@@ -121,7 +121,7 @@ public class SimulatedAnnealing extends NeighbourSolver {
                     }
                 } while (randomSolutionCost == null);
                 deltaF = currentCost.getCost() - randomSolutionCost.getCost();
-                if (deltaF <= 0) {
+                if (deltaF >= 0) {
                     currentSolution = randomSolution;
                     currentCost = randomSolutionCost;
                     if (currentCost.getCost() < bestCost.getCost()) {
@@ -142,8 +142,10 @@ public class SimulatedAnnealing extends NeighbourSolver {
             if (j % progress == 0) {
                 int pourcent = j / progress;
                 pourcent *= 10;
-                logger.info(pourcent + "%... current tempreature =" + temperature);
-
+                StringBuffer stbf = new StringBuffer();
+                stbf.append("CSV;").append(temperature).append(";temperature;").append(bestCost.getCost()).append(";bestcost;")
+                        .append(pourcent).append("%...");
+                logger.info(stbf.toString());
             }
         }
         logger.info("Best Cost :" + bestCost);
