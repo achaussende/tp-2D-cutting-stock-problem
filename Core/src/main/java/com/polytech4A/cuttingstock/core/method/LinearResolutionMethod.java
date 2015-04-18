@@ -80,7 +80,7 @@ public class LinearResolutionMethod {
         updateConstraints(solution);
         try {
             RealPointValuePair result = new SimplexSolver().optimize(function, constraints, GoalType.MINIMIZE, true);
-            return new Result(result.getPoint(), result.getValue());
+            return new Result(result.getPoint(), context.getSheetCost());
         } catch (OptimizationException e) {
             e.printStackTrace();
         }

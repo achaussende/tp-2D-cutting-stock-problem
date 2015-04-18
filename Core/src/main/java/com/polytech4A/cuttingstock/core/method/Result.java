@@ -39,18 +39,19 @@ public class Result {
     /**
      * Cost found during the resolution method.
      */
-    private double cost;
+    private int cost;
 
-    public Result(double[] printings, double cost) {
+    public Result(double[] printings, int sheetCost) {
         int[] buf = new int[printings.length];
+        this.cost = 0;
         for (int i = 0; i < printings.length; ++i) {
             buf[i] = (int) FastMath.ceil(printings[i]);
+            this.cost += buf[i] * sheetCost;
         }
         this.printings = buf;
-        this.cost = cost;
     }
 
-    public Result(int[] printings, double cost) {
+    public Result(int[] printings, int cost) {
         this.printings = printings;
         this.cost = cost;
     }
