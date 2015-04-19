@@ -41,13 +41,14 @@ public class Result {
      */
     private int cost;
 
-    public Result(double[] printings, int sheetCost) {
+    public Result(double[] printings, int sheetCost, int patternCost) {
         int[] buf = new int[printings.length];
         this.cost = 0;
         for (int i = 0; i < printings.length; ++i) {
             buf[i] = (int) FastMath.ceil(printings[i]);
             this.cost += buf[i] * sheetCost;
         }
+        this.cost += patternCost * printings.length;
         this.printings = buf;
     }
 

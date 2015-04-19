@@ -90,7 +90,7 @@ public class LinearResolutionMethod {
                     return null;
                 }
             }
-            return new Result(point, context.getSheetCost());
+            return new Result(point, context.getSheetCost(), context.getPatternCost());
         } catch (OptimizationException e) {
             e.printStackTrace();
         }
