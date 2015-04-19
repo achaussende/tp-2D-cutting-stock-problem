@@ -31,6 +31,7 @@ import org.apache.commons.math.optimization.linear.LinearConstraint;
 import org.apache.commons.math.optimization.linear.LinearObjectiveFunction;
 import org.apache.commons.math.optimization.linear.Relationship;
 import org.apache.commons.math.optimization.linear.SimplexSolver;
+import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -45,6 +46,11 @@ import java.util.Arrays;
  *          It is a linear programming problem resolution.
  */
 public class LinearResolutionMethod {
+
+    /**
+     * Logger.
+     */
+    private static Logger logger = Logger.getLogger(LinearResolutionMethod.class);
 
     /**
      * Function to minimize.
@@ -92,7 +98,7 @@ public class LinearResolutionMethod {
             }
             return new Result(point, context.getSheetCost(), context.getPatternCost());
         } catch (OptimizationException e) {
-            e.printStackTrace();
+            logger.debug("LinearResolutionMethod.minimize: " + e.getMessage());
         }
         return null;
     }
