@@ -32,7 +32,6 @@ import com.polytech4A.cuttingstock.core.solver.neighbour.DynPatternMoveNeighbour
 import com.polytech4A.cuttingstock.core.solver.neighbour.INeighbourUtils;
 import junit.framework.TestCase;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Comparator;
 
@@ -99,18 +98,5 @@ public class SimulatedAnnealingTest extends TestCase {
     public void testSetFirstTemperature() throws Exception {
         sAnnealing.setFirstTemperature(sAnnealing.getRandomSolution(solution, true));
         assertTrue(sAnnealing.getTemperature() > 0);
-    }
-
-    public void testSetMu() throws Exception {
-        sAnnealing.setFirstTemperature(sAnnealing.getRandomSolution(solution, true));
-        Field field = sAnnealing.getClass().getDeclaredField("nbIterations");
-        field.setAccessible(true);
-        long nbIterations = (long) field.get(sAnnealing);
-        sAnnealing.setMu();
-        double inf = sAnnealing.getTemperature() * (0.9);
-        double sup = sAnnealing.getTemperature() * (1.1);
-        double value = (sAnnealing.getMu() - 1) * (-nbIterations);
-        assert value >= inf;
-        assert value <= sup;
     }
 }
