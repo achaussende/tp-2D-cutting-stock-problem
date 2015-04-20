@@ -1,5 +1,5 @@
 Logs/
-
+OUTPUT/
 
 #Parameters for IDE
 # Eclipse
@@ -12,6 +12,7 @@ Logs/
 *.iml
 *.iws
 out
+
 
 # Mac
 .DS_Store
