@@ -52,7 +52,7 @@ public class SimulatedAnnealing extends NeighbourSolver {
     /**
      * Coefficient of multiplication for generation of the first solution.
      */
-    private static final double temp_coef = 2.5;
+    private static final double temp_coef = 1.5;
     /**
      * Limit number of iterations of the algorithm.
      */
@@ -200,7 +200,7 @@ public class SimulatedAnnealing extends NeighbourSolver {
      */
     public double setMu() {
         if (temperature != -1) {
-            double mu = 1 - (temperature / (double) nbIterations);
+            double mu = 0.989;
             this.mu = mu;
             return mu;
         } else {
