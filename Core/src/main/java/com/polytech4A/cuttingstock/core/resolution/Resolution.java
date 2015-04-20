@@ -151,6 +151,7 @@ public class Resolution {
         );
         Solution bestFound = solver.getSolution(startingSolution, context);
         logger.info("Best Solution found :" + bestFound);
+        saveMethods.parallelStream().forEach(s -> s.save("BestSolution", bestFound));
     }
 
     /**
