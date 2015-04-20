@@ -222,7 +222,7 @@ public class GuillotineSortBFF extends Packer {
         }
         //Second bin
         sizeBin = new Vector(bin.getSize().getX() - sizeBox.getX(), sizeBox.getY());
-        originBin = new Vector(bin.getOrigin().getX() + placedBox.getPosition().getX(), bin.getOrigin().getY());
+        originBin = new Vector(bin.getOrigin().getX() + sizeBox.getX(), bin.getOrigin().getY());
         if (!sizeBin.isDimensionNull() && !perfectFit) {
             bintoCreate = new Bin(sizeBin, bin.getPattern(), originBin);
             bin.getHorizontalsubBin().add(bintoCreate);
