@@ -24,7 +24,6 @@ import com.polytech4A.cuttingstock.core.model.Pattern;
 import com.polytech4A.cuttingstock.core.model.PlacedBox;
 import com.polytech4A.cuttingstock.core.model.Solution;
 import com.polytech4A.cuttingstock.core.model.Vector;
-import com.polytech4A.cuttingstock.core.model.Box;
 import org.apache.log4j.Logger;
 
 import javax.imageio.ImageIO;
@@ -33,9 +32,8 @@ import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Optional;
+import java.util.NoSuchElementException;
 
 /**
  * Created by Antoine CARON on 24/03/2015.
@@ -207,6 +205,27 @@ public class ToImg extends Save {
         graph.dispose();
     }
 
+    public static String getLabel(PlacedBox currentBox, Pattern pattern) {
+        try {
+            int index = pattern.getAmounts().indexOf(pattern.
+                    getAmounts().parallelStream()
+                    .filter(b -> b.equals(currentBox))
+                    .findFirst()
+                    .get());
+            String label = String.valueOf(index);
+            if (currentBox.isRotation()) {
+                label += "*";
+            }
+            return label;
+        } catch (NoSuchElementException ex) {
+            int index = pattern.getPlacedBoxes().indexOf(currentBox);
+            String label = String.valueOf(index);
+            if (currentBox.isRotation()) {
+                label += "*";
+            }
+            return label;
+        }
+    }
 
     /**
      * Save Method.
@@ -233,11 +252,11 @@ public class ToImg extends Save {
                 Vector size = placedBox.getSize();
                 if (!placedBox.isRotation()) {
                     drawRectangle(img, (int) (position.getX() * coeff), (int) (position.getY() * coeff),
-                            (int) (size.getX() * coeff), (int) (size.getY() * coeff), getLabel(placedBox, cur_patt.getAmounts()),
+                            (int) (size.getX() * coeff), (int) (size.getY() * coeff), getLabel(placedBox, cur_patt),
                             getColor(i, cur_patt.getPlacedBoxes().size()));
                 } else {
                     drawRectangle(img, (int) (position.getX() * coeff), (int) (position.getY() * coeff),
-                            (int) (size.getY() * coeff), (int) (size.getX() * coeff), getLabel(placedBox, cur_patt.getAmounts()),
+                            (int) (size.getY() * coeff), (int) (size.getX() * coeff), getLabel(placedBox, cur_patt),
                             getColor(i, cur_patt.getPlacedBoxes().size()));
                 }
                 i++;
@@ -256,15 +275,6 @@ public class ToImg extends Save {
             }
             y++;
         }
-    }
-
-    public static String getLabel(PlacedBox currentBox, ArrayList<Box> boxes) {
-        int index = boxes.indexOf(boxes.parallelStream().filter(b -> b.equals(currentBox)).findFirst().get());
-        String label = String.valueOf(index);
-        if(currentBox.isRotation()) {
-            label += "*";
-        }
-        return label;
     }
 
 
