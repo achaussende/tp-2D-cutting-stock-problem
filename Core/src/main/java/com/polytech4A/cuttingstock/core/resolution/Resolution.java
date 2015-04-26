@@ -24,7 +24,7 @@ import com.polytech4A.cuttingstock.core.method.LinearResolutionMethod;
 import com.polytech4A.cuttingstock.core.model.Box;
 import com.polytech4A.cuttingstock.core.model.Pattern;
 import com.polytech4A.cuttingstock.core.model.Solution;
-import com.polytech4A.cuttingstock.core.packing.GuillotineSortBFF;
+import com.polytech4A.cuttingstock.core.packing.GuillotineSortBFFSortBin;
 import com.polytech4A.cuttingstock.core.resolution.util.context.Context;
 import com.polytech4A.cuttingstock.core.resolution.util.context.ContextLoaderUtils;
 import com.polytech4A.cuttingstock.core.resolution.util.context.IllogicalContextException;
@@ -144,7 +144,7 @@ public class Resolution {
         }
         generators.add(new RemovePatternNeighbour());
         solver = new SimulatedAnnealing(
-                new GuillotineSortBFF(boxComparators),
+                new GuillotineSortBFFSortBin(boxComparators),
                 new LinearResolutionMethod(context),
                 generators,
                 nbofIterations
@@ -167,7 +167,7 @@ public class Resolution {
             generators.add(new MoveNeighbour());
             generators.add(new RemovePatternNeighbour());
             SimulatedAnnealing realSolutionGenerator = new SimulatedAnnealing(
-                    new GuillotineSortBFF(boxComparators),
+                    new GuillotineSortBFFSortBin(boxComparators),
                     new LinearResolutionMethod(context),
                     generators,
                     10000);
