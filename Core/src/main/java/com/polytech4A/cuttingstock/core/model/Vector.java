@@ -20,6 +20,8 @@
 
 package com.polytech4A.cuttingstock.core.model;
 
+import java.util.Comparator;
+
 /**
  * Created by Antoine CARON on 12/03/2015.
  *
@@ -28,7 +30,7 @@ package com.polytech4A.cuttingstock.core.model;
  *          <p>
  *          Representation of a classic mathematical 2D vector for Position of Size.
  */
-public class Vector {
+public class Vector implements Comparable<Vector> {
 
     /**
      * Horizontal value.
@@ -102,6 +104,7 @@ public class Vector {
 
     /**
      * Check if one of dimensions equals 0.
+     *
      * @return True if one of x or y equals 0.
      */
     public boolean isDimensionNull() {
@@ -119,5 +122,49 @@ public class Vector {
     @Override
     public Vector clone() {
         return new Vector(getX(), getY());
+    }
+
+
+    @Override
+    public int compareTo(Vector o) {
+        return Comparators.AREA.compare(this, o);
+    }
+
+    public static class Comparators {
+        /**
+         * Compares the X sizes of the boxes.
+         *
+         * @see com.polytech4A.cuttingstock.core.model.Vector
+         */
+        public static Comparator<Vector> X = new Comparator<Vector>() {
+            @Override
+            public int compare(Vector o1, Vector o2) {
+                return (int) (o1.getX() - o2.getX());
+            }
+        };
+
+        /**
+         * Compares the X sizes of the boxes.
+         *
+         * @see com.polytech4A.cuttingstock.core.model.Vector
+         */
+        public static Comparator<Vector> Y = new Comparator<Vector>() {
+            @Override
+            public int compare(Vector o1, Vector o2) {
+                return (int) (o1.getY() - o2.getY());
+            }
+        };
+
+        /**
+         * Compares the X sizes of the boxes.
+         *
+         * @see com.polytech4A.cuttingstock.core.model.Vector
+         */
+        public static Comparator<Vector> AREA = new Comparator<Vector>() {
+            @Override
+            public int compare(Vector o1, Vector o2) {
+                return (int) (o1.getArea() - o2.getArea());
+            }
+        };
     }
 }

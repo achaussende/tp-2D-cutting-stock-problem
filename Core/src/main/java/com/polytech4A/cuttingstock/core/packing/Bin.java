@@ -31,7 +31,7 @@ import java.util.ArrayList;
  * @author Antoine CARON
  * @version 1.0
  */
-public class Bin {
+public class Bin implements Comparable<Bin> {
     /**
      * Size of the Bin.
      */
@@ -139,5 +139,11 @@ public class Bin {
                 });
             }
         });
+    }
+
+
+    @Override
+    public int compareTo(Bin o) {
+        return this.size.compareTo(o.getSize());
     }
 }
