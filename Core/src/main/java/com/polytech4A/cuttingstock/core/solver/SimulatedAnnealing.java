@@ -115,9 +115,11 @@ public class SimulatedAnnealing extends NeighbourSolver {
                 do {
                     randomSolutionCost = null;
                     randomSolution = chooseRandomNeihbourUtils().getRandomNeighbour(currentSolution);
-                    randomSolution = packer.getPlacing(randomSolution);
-                    if (randomSolution.isValid() && randomSolution.isPackable()) {
-                        randomSolutionCost = simplex.minimize(randomSolution);
+                    if (randomSolution.isValid()) {
+                        randomSolution = packer.getPlacing(randomSolution);
+                        if (randomSolution.isPackable()) {
+                            randomSolutionCost = simplex.minimize(randomSolution);
+                        }
                     }
                 } while (randomSolutionCost == null);
                 deltaF = currentCost.getCost() - randomSolutionCost.getCost();
