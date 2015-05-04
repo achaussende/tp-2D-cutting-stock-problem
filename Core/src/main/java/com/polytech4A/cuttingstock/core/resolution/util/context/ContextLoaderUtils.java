@@ -106,7 +106,14 @@ public class ContextLoaderUtils {
         MalformedContextFileException mctx = new MalformedContextFileException();
         if (line.matches("[0-9]{1,13}(\\.[0-9]*)?\\t[0-9]{1,13}(\\.[0-9]*)?\\t\\d{1,5}")) {
             String[] array = line.split("\\t");
-            return new Box(new Vector(Double.parseDouble(array[0]), Double.parseDouble(array[1])), Integer.parseInt(array[2]));
+            double x = Double.parseDouble(array[0]);
+            double y = Double.parseDouble(array[1]);
+            if (x <= y) {
+                double buf = x;
+                x = y;
+                y = buf;
+            }
+            return new Box(new Vector(x, y), Integer.parseInt(array[2]));
         } else throw mctx;
     }
 
