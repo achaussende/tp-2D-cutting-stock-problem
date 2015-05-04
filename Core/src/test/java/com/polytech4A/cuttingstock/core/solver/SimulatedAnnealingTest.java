@@ -94,9 +94,5 @@ public class SimulatedAnnealingTest extends TestCase {
         Solution retSolution = sAnnealing.getRandomSolution(solution, true);
         assertTrue(retSolution.isPackable());
     }
-
-    public void testSetFirstTemperature() throws Exception {
-        sAnnealing.setFirstTemperature(sAnnealing.getRandomSolution(solution, true));
-        assertTrue(sAnnealing.getTemperature() > 0);
-    }
+    
 }
