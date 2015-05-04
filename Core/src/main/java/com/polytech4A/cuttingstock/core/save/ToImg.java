@@ -261,7 +261,7 @@ public class ToImg extends Save {
                 }
                 i++;
             }
-            String filename = OUTPUT_PATH + contextId + "_pattern_" + y + ".png";
+            String filename = OUTPUT_PATH + "/" + contextId + "/" + "pattern_" + y + ".png";
             try {
                 File file = new File(filename);
                 if (!file.exists()) {
