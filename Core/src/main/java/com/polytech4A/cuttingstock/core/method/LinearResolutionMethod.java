@@ -96,7 +96,9 @@ public class LinearResolutionMethod {
                     return null;
                 }
             }
-            return new Result(point, context.getSheetCost(), context.getPatternCost());
+            Result r = new Result(point, context.getSheetCost(), context.getPatternCost());
+            solution.setResult(r);
+            return r;
         } catch (OptimizationException e) {
             logger.debug("LinearResolutionMethod.minimize: " + e.getMessage());
         }

@@ -112,20 +112,16 @@ public class SimulatedAnnealing extends NeighbourSolver {
         double deltaF;
         for (int j = 0; j < 100; j++) {
             for (int i = 0; i < step; i++) {
-                do {
-                    randomSolutionCost = null;
-                    randomSolution = chooseRandomNeihbourUtils().getRandomNeighbour(currentSolution);
-                    if (randomSolution.isValid()) {
-                        randomSolution = packer.getPlacing(randomSolution);
-                        if (randomSolution.isPackable()) {
-                            randomSolutionCost = simplex.minimize(randomSolution);
-                        }
-                    }
-                } while (randomSolutionCost == null);
-                deltaF = currentCost.getCost() - randomSolutionCost.getCost();
+                randomSolution = null;
+                ArrayList<Solution> peekSolutions = new ArrayList<>(10);
+                for (int k = 0; k < 10; k++) {
+                    peekSolutions.add(this.getRandomValidPackableSolution(currentSolution));
+                }
+                randomSolution = peekSolutions.parallelStream().min(Solution.Comparators.Cost).get();
+                deltaF = currentCost.getCost() - randomSolution.getResult().getCost();
                 if (deltaF >= 0) {
                     currentSolution = randomSolution;
-                    currentCost = randomSolutionCost;
+                    currentCost = randomSolution.getResult();
                     if (currentCost.getCost() < bestCost.getCost()) {
                         bestSolution = currentSolution;
                         bestCost = currentCost;
@@ -136,7 +132,7 @@ public class SimulatedAnnealing extends NeighbourSolver {
                     double exp = FastMath.exp((-deltaF) / temperature);
                     if (p <= exp) {
                         currentSolution = randomSolution;
-                        currentCost = randomSolutionCost;
+                        currentCost = randomSolution.getResult();
                     }
                 }
             }

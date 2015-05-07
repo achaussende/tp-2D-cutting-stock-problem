@@ -20,7 +20,10 @@
 
 package com.polytech4A.cuttingstock.core.model;
 
+import com.polytech4A.cuttingstock.core.method.Result;
+
 import java.util.ArrayList;
+import java.util.Comparator;
 
 /**
  * Created by Antoine CARON on 12/03/2015.
@@ -32,10 +35,12 @@ import java.util.ArrayList;
  *          It's a representation of a vector sized by the number of pattern.
  * @see Pattern  for information about structure of a Pattern.
  */
-public class Solution {
+public class Solution implements Comparable<Solution> {
 
 
     private ArrayList<Pattern> patterns;
+
+    private Result result;
 
     public Solution(ArrayList<Pattern> patterns) {
         this.patterns = patterns;
@@ -45,6 +50,13 @@ public class Solution {
         return patterns;
     }
 
+    public Result getResult() {
+        return result;
+    }
+
+    public void setResult(Result result) {
+        this.result = result;
+    }
 
     public Solution clone() {
         ArrayList<Pattern> clonedPatterns = new ArrayList<Pattern>();
@@ -132,5 +144,25 @@ public class Solution {
         p.getAmounts().parallelStream().forEach(b -> b.setAmount(0));
         patterns.add(p);
         return p;
+    }
+
+
+    @Override
+    public int compareTo(Solution o) {
+        return Comparators.Cost.compare(this, o);
+    }
+
+    public static class Comparators {
+        /**
+         * Compares the X sizes of the boxes.
+         *
+         * @see com.polytech4A.cuttingstock.core.model.Vector
+         */
+        public static Comparator<Solution> Cost = new Comparator<Solution>() {
+            @Override
+            public int compare(Solution o1, Solution o2) {
+                return o1.getResult().getCost() - o2.getResult().getCost();
+            }
+        };
     }
 }

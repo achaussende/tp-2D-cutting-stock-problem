@@ -57,7 +57,7 @@ public class Result {
         this.cost = cost;
     }
 
-    public double getCost() {
+    public int getCost() {
         return cost;
     }
 
