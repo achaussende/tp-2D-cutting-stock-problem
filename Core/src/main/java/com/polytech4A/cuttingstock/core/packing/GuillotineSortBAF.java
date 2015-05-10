@@ -42,7 +42,7 @@ import java.util.*;
 public class GuillotineSortBAF extends Packer {
 
     private static final Logger logger = Logger.getLogger(GuillotineSortBAF.class);
-
+    
     private Solution solution;
 
     public GuillotineSortBAF(ArrayList<Comparator<Box>> boxComparators) {

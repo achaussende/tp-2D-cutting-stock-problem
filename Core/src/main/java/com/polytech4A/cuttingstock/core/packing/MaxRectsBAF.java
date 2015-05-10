@@ -32,6 +32,13 @@ import java.util.Comparator;
  *
  * @author Adrien CHAUSSENDE
  * @version 1.0
+ *          <p>
+ *          Implementation of the MAXRECTS-BAF Algorithmdeclared in
+ *          A Thousand Ways to Pack the Bin - A
+ *          Practical Approach to Two-Dimensional
+ *          Rectangle Bin Packing
+ *          Jukka Jylänki
+ *          February 27, 2010
  */
 public class MaxRectsBAF extends GuillotineSortBAF {
 
