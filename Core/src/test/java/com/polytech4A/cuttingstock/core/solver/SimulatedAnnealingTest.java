@@ -25,7 +25,7 @@ import com.polytech4A.cuttingstock.core.model.Box;
 import com.polytech4A.cuttingstock.core.model.Pattern;
 import com.polytech4A.cuttingstock.core.model.Solution;
 import com.polytech4A.cuttingstock.core.model.Vector;
-import com.polytech4A.cuttingstock.core.packing.GuillotineSortBFF;
+import com.polytech4A.cuttingstock.core.packing.GuillotineSortBAF;
 import com.polytech4A.cuttingstock.core.resolution.util.context.Context;
 import com.polytech4A.cuttingstock.core.solver.neighbour.DynPatternIncrementNeighbour;
 import com.polytech4A.cuttingstock.core.solver.neighbour.DynPatternMoveNeighbour;
@@ -80,7 +80,7 @@ public class SimulatedAnnealingTest extends TestCase {
         contextBoxes.add(new Box(new Vector(4, 5), 57));
         contextBoxes.add(new Box(new Vector(4, 3), 220));
         Context ctx = new Context("test", 20, 1, contextBoxes, new Vector(2, 30));
-        sAnnealing = new SimulatedAnnealing(new GuillotineSortBFF(boxComparators), new LinearResolutionMethod(ctx), generators, 10000);
+        sAnnealing = new SimulatedAnnealing(new GuillotineSortBAF(boxComparators), new LinearResolutionMethod(ctx), generators, 10000);
         solution = new Solution(patterns);
     }
 

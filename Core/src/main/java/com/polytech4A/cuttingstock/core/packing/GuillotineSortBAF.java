@@ -21,12 +21,10 @@
 package com.polytech4A.cuttingstock.core.packing;
 
 import com.polytech4A.cuttingstock.core.model.*;
+import com.polytech4A.cuttingstock.core.model.Vector;
 import org.apache.log4j.Logger;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.ListIterator;
+import java.util.*;
 
 /**
  * Created by Antoine CARON on 13/03/2015.
@@ -41,13 +39,13 @@ import java.util.ListIterator;
  *          Jukka Jylänki
  *          February 27, 2010
  */
-public class GuillotineSortBFF extends Packer {
+public class GuillotineSortBAF extends Packer {
 
-    private static final Logger logger = Logger.getLogger(GuillotineSortBFF.class);
+    private static final Logger logger = Logger.getLogger(GuillotineSortBAF.class);
 
     private Solution solution;
 
-    public GuillotineSortBFF(ArrayList<Comparator<Box>> boxComparators) {
+    public GuillotineSortBAF(ArrayList<Comparator<Box>> boxComparators) {
         super(boxComparators);
     }
 
@@ -140,19 +138,21 @@ public class GuillotineSortBFF extends Packer {
      * @return The box that is now placed. Return null if it can't be placed.
      */
     public PlacedBox generatePlacedBox(ArrayList<Bin> bins, Box box) {
-        for (Bin bin : bins) {
-            if (bin.isActive() && (isBinCompatible(bin.getSize(), box.getSize()) || isBinCompatible(bin.getSize(), box.getSize().getInvertedVector()))) {
-                PlacedBox placedBox = generatePlaceBoxForBin(bin, box);
-                if (placedBox != null) {
-                    //mark Current Bin
-                    bin.setActive(false);
-                    //Disable bin borthers from other cutting (Vertical or horizontal
-                    bin.disableSubBinFromBin(bins);
-                    //Generate subBins and adds it
-                    generateSubBins(bin, placedBox, bins);
-                    return placedBox;
-                }
-            }
+        Optional<Bin> test = bins.parallelStream()
+                .filter(b -> b.isActive() && (isBinCompatible(b.getSize(), box.getSize()) || isBinCompatible(b.getSize(), box.getSize().getInvertedVector())))
+                .reduce((b1, b2) -> b1.getSize().isSmallerThan(b2.getSize()) ? b1 : b2);
+        PlacedBox placedBox = null;
+        if (test.isPresent()) {
+            placedBox = generatePlaceBoxForBin(test.get(), box);
+        }
+        if (placedBox != null) {
+            //mark Current Bin
+            test.get().setActive(false);
+            //Disable bin borthers from other cutting (Vertical or horizontal
+            test.get().disableSubBinFromBin(bins);
+            //Generate subBins and adds it
+            generateSubBins(test.get(), placedBox, bins);
+            return placedBox;
         }
         return null;
     }
@@ -189,6 +189,7 @@ public class GuillotineSortBFF extends Packer {
         } else {
             sizeBox = placedBox.getSize();
         }
+
         //Vertical cut.
         //First bin.
         Vector sizeBin = new Vector(bin.getSize().getX() - sizeBox.getX(), bin.getSize().getY());

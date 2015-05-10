@@ -24,7 +24,9 @@ import com.polytech4A.cuttingstock.core.method.LinearResolutionMethod;
 import com.polytech4A.cuttingstock.core.model.Box;
 import com.polytech4A.cuttingstock.core.model.Pattern;
 import com.polytech4A.cuttingstock.core.model.Solution;
-import com.polytech4A.cuttingstock.core.packing.GuillotineSortBFFSortBin;
+import com.polytech4A.cuttingstock.core.packing.GuillotineSortBAF;
+import com.polytech4A.cuttingstock.core.packing.MaxRectsBAF;
+import com.polytech4A.cuttingstock.core.packing.Packer;
 import com.polytech4A.cuttingstock.core.resolution.util.context.Context;
 import com.polytech4A.cuttingstock.core.resolution.util.context.ContextLoaderUtils;
 import com.polytech4A.cuttingstock.core.resolution.util.context.IllogicalContextException;
@@ -133,9 +135,25 @@ public class Resolution {
      * Function to solve the 2D Cutting Stock Problem on a Resolution.
      *
      * @param nbofIterations nb of iteration for the solver.
+     * @param intPacker integer that defined the type of packer that will be used.
      */
-    public void solve(Integer nbofIterations) {
-        Solution startingSolution = getStartingSolution();
+    public void solve(Integer nbofIterations, Integer intPacker) {
+        Packer packer = null;
+        switch (intPacker) {
+            case 1:
+                packer = new GuillotineSortBAF(boxComparators);
+                logger.info("Parameters - Packing : Guillotine Sort BAF");
+                break;
+            case 2:
+                packer = new MaxRectsBAF(boxComparators);
+                logger.info("Parameters - Packing : Maximum Rectangles Sort BAF");
+                break;
+            default:
+                packer = new GuillotineSortBAF(boxComparators);
+                logger.info("Parameters - Packing : Guillotine Sort BAF");
+                break;
+        }
+        Solution startingSolution = getStartingSolution(packer);
         logger.info("FirstSolution ----->" + startingSolution);
         ArrayList<INeighbourUtils> generators = new ArrayList<>();
         for (int i = 0; i < 5; i++) {
@@ -144,7 +162,7 @@ public class Resolution {
         }
         generators.add(new RemovePatternNeighbour());
         solver = new SimulatedAnnealing(
-                new GuillotineSortBFFSortBin(boxComparators),
+                packer,
                 new LinearResolutionMethod(context),
                 generators,
                 nbofIterations
@@ -159,7 +177,7 @@ public class Resolution {
      *
      * @return real random packable solution.
      */
-    private Solution getStartingSolution() {
+    private Solution getStartingSolution(Packer packer) {
         try {
             context = loadContext(contextFilePath);
             ArrayList<INeighbourUtils> generators = new ArrayList<>();
@@ -167,7 +185,7 @@ public class Resolution {
             generators.add(new MoveNeighbour());
             generators.add(new RemovePatternNeighbour());
             SimulatedAnnealing realSolutionGenerator = new SimulatedAnnealing(
-                    new GuillotineSortBFFSortBin(boxComparators),
+                    packer,
                     new LinearResolutionMethod(context),
                     generators,
                     10000);

@@ -44,8 +44,14 @@ public class Main {
      */
     public static void main(String[] args) {
         logger.info("STARTED");
+        logger.info("Parameters - File : " + args[0]);
         Resolution resolution = new Resolution(args[0]);
-        resolution.solve(Integer.parseInt(args[1]));
+        logger.info("Parameters - Number of iterations : " + args[1]);
+        if (args.length == 3) {
+            resolution.solve(Integer.parseInt(args[1]), Integer.valueOf(args[2]));
+        } else {
+            resolution.solve(Integer.parseInt(args[1]), 1);
+        }
         logger.info("STOPPED");
     }
 }

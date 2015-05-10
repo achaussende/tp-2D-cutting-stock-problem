@@ -32,12 +32,22 @@ import java.util.Comparator;
  * @author Antoine CARON
  * @version 1.0
  */
-public class GuillotineSortBFFTest extends TestCase {
+public class GuillotineSortBAFTest extends TestCase {
 
     private ArrayList<Comparator<Box>> boxComparators;
+    private GuillotineSortBAF guillotineSortBFF;
 
-    private GuillotineSortBFF guillotineSortBFF;
+    public ArrayList<Comparator<Box>> getBoxComparators() {
+        return boxComparators;
+    }
 
+    public GuillotineSortBAF getGuillotineSortBFF() {
+        return guillotineSortBFF;
+    }
+
+    public void setGuillotineSortBFF(GuillotineSortBAF guillotineSortBFF) {
+        this.guillotineSortBFF = guillotineSortBFF;
+    }
 
     @Override
     public void setUp() throws Exception {
@@ -46,7 +56,7 @@ public class GuillotineSortBFFTest extends TestCase {
         boxComparators.add(Box.Comparators.AREA);
         boxComparators.add(Box.Comparators.X);
         boxComparators.add(Box.Comparators.Y);
-        guillotineSortBFF = new GuillotineSortBFF(boxComparators);
+        guillotineSortBFF = new GuillotineSortBAF(boxComparators);
     }
 
     @Override
