@@ -29,9 +29,7 @@ import com.polytech4A.cuttingstock.core.solver.neighbour.INeighbourUtils;
 import org.apache.commons.math.util.FastMath;
 import org.apache.log4j.Logger;
 
-import java.util.ArrayList;
-import java.util.NoSuchElementException;
-import java.util.Random;
+import java.util.*;
 
 /**
  * Created by Adrien CHAUSSENDE on 13/03/2015.
@@ -52,7 +50,7 @@ public class SimulatedAnnealing extends NeighbourSolver {
     /**
      * Coefficient of multiplication for generation of the first solution.
      */
-    private static final double temp_coef = 1.1;
+    private static final double temp_coef = 0.9;
     /**
      * Limit number of iterations of the algorithm.
      */
@@ -112,16 +110,8 @@ public class SimulatedAnnealing extends NeighbourSolver {
         double deltaF;
         for (int j = 0; j < 100; j++) {
             for (int i = 0; i < step; i++) {
-                do {
-                    randomSolutionCost = null;
-                    randomSolution = chooseRandomNeihbourUtils().getRandomNeighbour(currentSolution);
-                    if (randomSolution.isValid()) {
-                        randomSolution = packer.getPlacing(randomSolution);
-                        if (randomSolution.isPackable()) {
-                            randomSolutionCost = simplex.minimize(randomSolution);
-                        }
-                    }
-                } while (randomSolutionCost == null);
+                randomSolution = generateBetterNeighbour(currentSolution);
+                randomSolutionCost = randomSolution.getCost();
                 deltaF = currentCost.getCost() - randomSolutionCost.getCost();
                 if (deltaF >= 0) {
                     currentSolution = randomSolution;
@@ -208,5 +198,33 @@ public class SimulatedAnnealing extends NeighbourSolver {
         } else {
             throw new NullPointerException("Temperature isn't defined");
         }
+    }
+
+    public Solution generateBetterNeighbour(Solution solution) {
+        Map<Result, Solution> best = new HashMap<>(10);
+        Solution randomSolution;
+        Result randomSolutionCost;
+        for (int i = 0; i < 10; i++) {
+            do {
+                randomSolutionCost = null;
+                randomSolution = chooseRandomNeihbourUtils().getRandomNeighbour(solution);
+                if (randomSolution.isValid()) {
+                    randomSolution = packer.getPlacing(randomSolution);
+                    if (randomSolution.isPackable()) {
+                        randomSolutionCost = simplex.minimize(randomSolution);
+                    }
+                }
+            } while (randomSolutionCost == null);
+            best.put(randomSolutionCost, randomSolution);
+        }
+        Result r = best.keySet().parallelStream().min(new Comparator<Result>() {
+            @Override
+            public int compare(Result o1, Result o2) {
+                return (int) (o1.getCost() - o2.getCost());
+            }
+        }).get();
+        Solution s = best.get(r);
+        s.setCost(r);
+        return s;
     }
 }

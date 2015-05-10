@@ -20,6 +20,8 @@
 
 package com.polytech4A.cuttingstock.core.model;
 
+import com.polytech4A.cuttingstock.core.method.Result;
+
 import java.util.ArrayList;
 
 /**
@@ -34,6 +36,7 @@ import java.util.ArrayList;
  */
 public class Solution {
 
+    private Result cost;
 
     private ArrayList<Pattern> patterns;
 
@@ -52,6 +55,14 @@ public class Solution {
             clonedPatterns.add(p.clone());
         }
         return new Solution(clonedPatterns);
+    }
+
+    public Result getCost() {
+        return cost;
+    }
+
+    public void setCost(Result cost) {
+        this.cost = cost;
     }
 
     @Override
